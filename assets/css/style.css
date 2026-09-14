@@ -61,12 +61,16 @@ ul{margin:0;padding:0;}
 .cols-2{grid-template-columns:1fr 1fr;}
 .cols-3{grid-template-columns:repeat(3,1fr);}
 .cols-4{grid-template-columns:repeat(4,1fr);}
+/* Main column with a fixed sidebar. Declared as classes, never inline styles —
+   an inline grid-template-columns cannot be overridden by a media query. */
+.cols-side-right{grid-template-columns:1fr 340px;}
+.cols-side-left{grid-template-columns:340px 1fr;}
 
 /* --- Section title -------------------------------------------------------- *
    The original pattern, scaled up: Arial Black italic, blue first word,
    dark remainder, red arrow marker.                                          */
 .mtitle{
-  display:flex;align-items:center;gap:11px;
+  display:flex;align-items:center;flex-wrap:wrap;gap:0 11px;
   font-family:var(--black);font-size:28px;font-style:italic;font-weight:normal;
   line-height:1.2;color:var(--grey-title);text-transform:uppercase;
   margin:0 0 14px;
@@ -288,7 +292,7 @@ b,strong{font-weight:bold;color:var(--ink);}
 .sector-media img{width:100%;height:100%;object-fit:cover;}
 .sector-body{display:block;padding:20px 22px 24px;}
 .sector h3{
-  display:flex;align-items:center;gap:10px;
+  display:flex;align-items:center;flex-wrap:wrap;gap:0 10px;
   font-family:var(--black);font-style:italic;font-size:22px;color:var(--blue-title);
   text-transform:uppercase;font-weight:normal;margin-bottom:10px;
 }
@@ -353,6 +357,13 @@ b,strong{font-weight:bold;color:var(--ink);}
    email, copyright. Everything else already appears on the page above.       */
 .foot{background:var(--red);color:#fff;}
 .foot .wrap{padding-block:30px;}
+.foot-nav{
+  font-size:17px;font-weight:bold;
+  padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,.3);
+}
+.foot-nav a{color:#fff;}
+.foot-nav a:hover{color:#fff;text-decoration:underline;}
+.foot-nav .sep{margin-inline:12px;opacity:.5;font-weight:normal;}
 .foot-top{
   display:flex;align-items:flex-start;justify-content:space-between;
   gap:32px;flex-wrap:wrap;padding-block:22px;
@@ -429,6 +440,7 @@ b,strong{font-weight:bold;color:var(--ink);}
   .mainnav .wrap{justify-content:flex-end;padding-inline:var(--gutter);min-height:66px;}
   .burger{display:grid;margin-right:0;}
   .cols-3,.cols-4{grid-template-columns:repeat(2,1fr);}
+  .cols-side-right,.cols-side-left{grid-template-columns:1fr;}
   .u-contact .mail{display:none;}
   .u-brand img{width:230px;}
 }
