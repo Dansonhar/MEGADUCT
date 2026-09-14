@@ -162,18 +162,18 @@ b,strong{font-weight:bold;color:var(--ink);}
 
 /* --- Hero ----------------------------------------------------------------- */
 .hero{
-  position:relative;min-height:420px;display:flex;align-items:center;
-  background-color:#0b2050;overflow:hidden;
-}
-.hero::before{
-  content:"";position:absolute;right:0;top:0;bottom:0;width:48%;
-  background:url(../img/site/hero-map.jpg) right center/cover no-repeat;
-  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 60%);
-  mask-image:linear-gradient(90deg,transparent 0%,#000 60%);
+  position:relative;min-height:440px;display:flex;align-items:center;
+  overflow:hidden;
+  background-color:#04102e;
+  background-image:url(../img/site/hero-bg.jpg);
+  background-size:cover;
+  background-position:right center;
+  background-repeat:no-repeat;
 }
 .hero::after{
+  /* Keeps the white headline legible over the photograph. */
   content:"";position:absolute;inset:0;
-  background:linear-gradient(90deg,#0b2050 0%,rgba(11,32,80,.6) 55%,rgba(11,32,80,0) 80%);
+  background:linear-gradient(90deg,rgba(4,16,46,.94) 0%,rgba(4,16,46,.82) 38%,rgba(4,16,46,.45) 66%,rgba(4,16,46,.15) 100%);
 }
 .hero .wrap{position:relative;z-index:2;padding-block:56px;}
 .hero-copy{max-width:660px;color:#fff;}
@@ -276,25 +276,24 @@ b,strong{font-weight:bold;color:var(--ink);}
 .feat h3{font-size:21px;margin-bottom:10px;}
 .feat p{font-size:17px;line-height:1.6;color:var(--muted);margin:0;}
 
-/* --- Sector cards --------------------------------------------------------- */
+/* --- Sector cards --------------------------------------------------------- *
+   Photograph first, then the written detail beneath it — text over a photo
+   is hard to read, and these lists of project names need to be legible.      */
 .sector{
-  position:relative;display:block;overflow:hidden;border:1px solid var(--line);
-  background:#0d2a6b;color:inherit;
+  display:flex;flex-direction:column;background:#fff;
+  border:1px solid var(--line);color:inherit;
 }
-.sector img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.5;}
-.sector::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,26,66,.25),rgba(8,26,66,.92));}
-.sector:hover{text-decoration:none;color:inherit;border-color:var(--blue);}
-.sector-in{
-  position:relative;z-index:2;padding:22px;display:flex;flex-direction:column;
-  justify-content:flex-end;min-height:210px;
-}
+.sector:hover{border-color:var(--blue);text-decoration:none;color:inherit;}
+.sector-media{display:block;aspect-ratio:16/10;overflow:hidden;background:var(--tint);}
+.sector-media img{width:100%;height:100%;object-fit:cover;}
+.sector-body{display:block;padding:20px 22px 24px;}
 .sector h3{
   display:flex;align-items:center;gap:10px;
-  font-family:var(--black);font-style:italic;font-size:22px;color:#fff;
-  text-transform:uppercase;font-weight:normal;margin-bottom:8px;
+  font-family:var(--black);font-style:italic;font-size:22px;color:var(--blue-title);
+  text-transform:uppercase;font-weight:normal;margin-bottom:10px;
 }
-.sector h3 img{width:26px;height:26px;filter:brightness(0) invert(1);}
-.sector p{font-size:16px;line-height:1.5;color:#ccd9ee;margin:0;}
+.sector h3 img{width:26px;height:26px;flex:none;}
+.sector p{font-size:16px;line-height:1.6;color:var(--text);margin:0;}
 
 /* --- Certificates --------------------------------------------------------- */
 .cert{display:block;border:1px solid var(--line);background:#fff;padding:22px;text-align:center;color:inherit;}
@@ -349,38 +348,23 @@ b,strong{font-weight:bold;color:var(--ink);}
 .map{border:1px solid var(--line);line-height:0;}
 .map iframe{width:100%;height:400px;border:0;display:block;}
 
-/* --- Contact band --------------------------------------------------------- */
-.cta{background:var(--red);color:#fff;}
-.cta .wrap{
-  display:flex;align-items:center;justify-content:space-between;gap:28px;
-  flex-wrap:wrap;padding-block:40px;
-}
-.cta h2{
-  font-family:var(--black);font-style:italic;font-size:30px;line-height:1.2;
-  color:#fff;text-transform:uppercase;font-weight:normal;margin-bottom:8px;
-}
-.cta p{font-size:18px;color:#ffe1e2;margin:0;max-width:620px;}
-.cta-act{display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
-.cta-tel{font-family:var(--black);font-style:italic;font-size:28px;color:#fff;}
-.cta-tel a{color:#fff;}
-.cta-tel a:hover{text-decoration:none;}
-
-/* --- Footer --------------------------------------------------------------- */
+/* --- Footer --------------------------------------------------------------- *
+   Deliberately minimal: navigation, who and where we are, one phone, one
+   email, copyright. Everything else already appears on the page above.       */
 .foot{background:var(--red);color:#fff;}
-.foot .wrap{padding-block:36px;}
-.foot-top{display:flex;align-items:flex-start;justify-content:space-between;gap:36px;flex-wrap:wrap;}
-.foot-nav{font-size:17px;font-weight:bold;color:#fff;margin-bottom:16px;}
-.foot-nav a{color:#fff;}
-.foot-nav .sep{margin-inline:10px;opacity:.55;font-weight:normal;}
-.foot-addr{font-size:16px;line-height:1.7;color:#ffe1e2;max-width:620px;}
-.foot-addr b{color:#fff;}
-.foot-addr a{color:#fff;}
-.foot-logo img{width:200px;}
-.foot-cert{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px;}
-.foot-cert span{border:1px solid rgba(255,255,255,.5);padding:6px 12px;font-size:13px;font-weight:bold;letter-spacing:.07em;}
+.foot .wrap{padding-block:30px;}
+.foot-top{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:32px;flex-wrap:wrap;padding-block:22px;
+}
+.foot-addr{font-size:16px;line-height:1.7;color:#ffe1e2;}
+.foot-addr b{color:#fff;font-size:18px;}
+.foot-reach{display:grid;gap:4px;text-align:right;}
+.foot-reach a{color:#fff;font-size:16px;}
+.foot-reach a.foot-tel{font-size:26px;font-weight:bold;line-height:1.35;}
 .foot-bottom{
-  margin-top:26px;padding-top:20px;border-top:1px solid rgba(255,255,255,.32);
-  font-size:15px;color:#ffe7e8;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  padding-top:18px;border-top:1px solid rgba(255,255,255,.3);
+  font-size:15px;color:#ffe7e8;
 }
 
 /* --- Back to top ---------------------------------------------------------- */
@@ -461,19 +445,17 @@ b,strong{font-weight:bold;color:var(--ink);}
   .hero h1{font-size:34px;}
   .hero p{font-size:18px;}
   .hero .wrap{padding-block:40px;}
-  .hero::before{width:70%;opacity:.3;}
-  .hero::after{background:linear-gradient(90deg,#0b2050 0%,rgba(11,32,80,.88) 70%,rgba(11,32,80,.6) 100%);}
+  .hero::after{background:linear-gradient(180deg,rgba(4,16,46,.9) 0%,rgba(4,16,46,.82) 100%);}
   .fact{flex-basis:50%;border-left:0;padding:18px 0;}
   .mtitle{font-size:23px;}
   .pagehead h1{font-size:30px;}
-  .cta h2{font-size:24px;}
   .btn{width:100%;}
   /* Full-width buttons must stack, or two in a flex row overflow the screen. */
-  .cta-act,.hero-actions{width:100%;flex-direction:column;align-items:stretch;}
-  .cta-tel{text-align:center;margin-top:4px;}
+  .hero-actions{width:100%;flex-direction:column;align-items:stretch;}
   .fact{padding:18px 10px 18px 0;}
   .map iframe{height:300px;}
-  .foot-bottom{flex-direction:column;}
+  .foot-reach{text-align:left;}
+  .foot-top{gap:20px;}
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -481,6 +463,6 @@ b,strong{font-weight:bold;color:var(--ink);}
 }
 
 @media print{
-  .mainnav,.burger,.drawer,.scrim,.to-top,.cta,.hero::before{display:none;}
+  .mainnav,.burger,.drawer,.scrim,.to-top{display:none;}
   body{font-size:12pt;color:#000;}
 }
