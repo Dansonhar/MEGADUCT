@@ -2,13 +2,14 @@
   "name": "megaduct",
   "version": "1.0.0",
   "private": true,
-  "description": "Corporate website for MEGADUCT busduct trunking systems — LINKK Busway Systems (M) Sdn Bhd",
+  "description": "Corporate website for MEGADUCT busduct trunking systems \u2014 LINKK Busway Systems (M) Sdn Bhd",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "bash scripts/dev.sh",
     "build": "vite build",
     "preview": "vite preview",
-    "check": "bash scripts/check-site.sh"
+    "check": "bash scripts/check-site.sh",
+    "dev:once": "vite"
   },
   "devDependencies": {
     "vite": "^8.3.0"

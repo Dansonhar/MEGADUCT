@@ -302,8 +302,8 @@ b,strong{font-weight:bold;color:var(--ink);}
 /* --- Certificates --------------------------------------------------------- */
 .cert{display:block;border:1px solid var(--line);background:#fff;padding:22px;text-align:center;color:inherit;}
 .cert:hover{border-color:var(--blue);text-decoration:none;color:inherit;}
-.cert-media{margin:0 auto 16px;width:fit-content;border:1px solid var(--line-soft);}
-.cert-media img{max-height:210px;width:auto;display:block;}
+.cert-media{display:block;width:fit-content;max-width:100%;margin:0 auto 16px;border:1px solid var(--line-soft);}
+.cert-media img{display:block;max-height:210px;width:auto;max-width:100%;}
 .cert h3{font-size:21px;margin-bottom:8px;text-transform:uppercase;}
 .cert p{font-size:16px;line-height:1.5;color:var(--muted);margin:0;}
 .cert .open{
@@ -450,9 +450,11 @@ b,strong{font-weight:bold;color:var(--ink);}
   .pgrid{grid-template-columns:repeat(2,1fr);}
   .frow{grid-template-columns:1fr;gap:0;}
   .band{padding-block:40px;}
-  .utility .wrap{flex-direction:column;gap:14px;text-align:center;}
-  .u-contact{text-align:center;}
-  .u-cert{display:none;}
+  /* Logo alone in the header on a phone. The number is still one tap away in
+     the menu, and again in the footer, so nothing is lost. */
+  .utility .wrap{justify-content:center;padding-block:16px;}
+  .u-right{display:none;}
+  .u-brand img{width:220px;}
   .hero{min-height:0;}
   .hero h1{font-size:34px;}
   .hero p{font-size:18px;}

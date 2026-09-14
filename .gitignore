@@ -21,3 +21,5 @@ yarn-error.log*
 # Build output
 dist/
 build/
+
+.dev-server.log
