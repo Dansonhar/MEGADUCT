@@ -1,5 +1,30 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'node:path';
+import { cp, access } from 'node:fs/promises';
+
+/**
+ * Vite bundles assets it finds in src/href on tags it processes, but it does not
+ * follow <a href="...pdf">. The certificate PDFs are linked that way, so copy
+ * them into the build verbatim — otherwise they 404 on the built site.
+ */
+function copyStaticDirs(dirs) {
+  return {
+    name: 'megaduct-copy-static',
+    apply: 'build',
+    async closeBundle() {
+      for (const dir of dirs) {
+        const from = resolve(import.meta.dirname, dir);
+        try {
+          await access(from);
+        } catch {
+          this.warn(`skipped missing directory: ${dir}`);
+          continue;
+        }
+        await cp(from, resolve(import.meta.dirname, 'dist', dir), { recursive: true });
+      }
+    },
+  };
+}
 
 /**
  * MEGADUCT — Vite config.
@@ -12,6 +37,8 @@ export default defineConfig({
   // Relative asset URLs so the build works from a subdirectory
   // (e.g. a GitHub Pages project site) as well as from a domain root.
   base: './',
+
+  plugins: [copyStaticDirs(['assets/cert'])],
 
   server: {
     port: 5173,

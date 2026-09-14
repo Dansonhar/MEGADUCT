@@ -7,16 +7,18 @@
 
   /* ---- Mobile navigation ------------------------------------------------ */
   var burger = doc.querySelector('.burger');
-  var mnav = doc.querySelector('.mobile-nav');
+  var mnav = doc.querySelector('.drawer');
   var scrim = doc.querySelector('.scrim');
-  var mclose = doc.querySelector('.m-close');
+  var mclose = doc.querySelector('.drawer-close');
 
   function setNav(open) {
     if (!mnav) return;
     mnav.classList.toggle('is-open', open);
-    scrim.classList.toggle('is-open', open);
-    burger.classList.toggle('is-open', open);
-    burger.setAttribute('aria-expanded', String(open));
+    if (scrim) scrim.classList.toggle('is-open', open);
+    if (burger) {
+      burger.classList.toggle('is-open', open);
+      burger.setAttribute('aria-expanded', String(open));
+    }
     doc.body.style.overflow = open ? 'hidden' : '';
   }
 
@@ -27,7 +29,7 @@
   if (mclose) mclose.addEventListener('click', function () { setNav(false); });
 
   /* ---- Sticky header shadow --------------------------------------------- */
-  var header = doc.querySelector('.site-header');
+  var header = doc.querySelector('.mainnav');
   var toTop = doc.querySelector('.to-top');
 
   function onScroll() {
@@ -41,48 +43,6 @@
   if (toTop) toTop.addEventListener('click', function () {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
-
-  /* ---- Scroll reveal ----------------------------------------------------- */
-  var revealables = doc.querySelectorAll('.reveal');
-  if ('IntersectionObserver' in window && revealables.length) {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        var el = e.target;
-        var delay = parseInt(el.getAttribute('data-delay') || '0', 10);
-        setTimeout(function () { el.classList.add('is-in'); }, delay);
-        io.unobserve(el);
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
-    Array.prototype.forEach.call(revealables, function (el) { io.observe(el); });
-  } else {
-    Array.prototype.forEach.call(revealables, function (el) { el.classList.add('is-in'); });
-  }
-
-  /* ---- Animated stat counters ------------------------------------------- */
-  var counters = doc.querySelectorAll('[data-count]');
-  if ('IntersectionObserver' in window && counters.length) {
-    var cio = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        var el = e.target;
-        var target = parseInt(el.getAttribute('data-count'), 10);
-        var suffix = el.getAttribute('data-suffix') || '';
-        var start = null;
-        var dur = 1500;
-        function step(ts) {
-          if (start === null) start = ts;
-          var p = Math.min((ts - start) / dur, 1);
-          var eased = 1 - Math.pow(1 - p, 3);
-          el.textContent = Math.round(target * eased).toLocaleString('en-US') + suffix;
-          if (p < 1) requestAnimationFrame(step);
-        }
-        requestAnimationFrame(step);
-        cio.unobserve(el);
-      });
-    }, { threshold: 0.5 });
-    Array.prototype.forEach.call(counters, function (el) { cio.observe(el); });
-  }
 
   /* ---- Product filtering -------------------------------------------------- */
   var pills = doc.querySelectorAll('.pill[data-filter]');
@@ -109,7 +69,7 @@
   if (lb) {
     var lbImg = lb.querySelector('img');
     var lbTitle = lb.querySelector('.lb-cap h3');
-    var lbCat = lb.querySelector('.lb-cap .p-cat');
+    var lbCat = lb.querySelector('.lb-cap .cat');
 
     function closeLb() {
       lb.classList.remove('is-open');
