@@ -76,6 +76,76 @@
   --sans:"Barlow","Helvetica Neue",Arial,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
 
+  /* --- Type scale --------------------------------------------------------- *
+     Fourteen tokens replace the 59 ad-hoc font sizes this sheet used to carry.
+     Nothing sets a raw px size any more: a component picks a step, and the
+     step decides how it behaves from 390px to 1920px.
+
+     The five condensed steps are spaced 1.26-1.45x apart at 1440, so no two
+     levels can be mistaken for each other. The three Barlow steps never drop
+     below 15px and the three mono steps never drop below 11px.
+
+                       390px    768px   1440px   1920px
+       display          41.6     41.6     66.2     72
+       h1               34.4     34.4     49.7     56
+       h2               30.4     30.4     39.6     47.2
+       h3               22.4     22.4     28.1     32.8
+       h4               19.2     19.2     20.9     24.8
+       h5 (Barlow)      16.3     16.3     17.2     18.4
+       body-lg          17       17       18       19
+       body             16       16       16.6     18
+       body-sm          15       15       16       16
+       label            12       12       13       13
+       technical        11.5     11.5     12.3     12.5
+       micro            11       11       11.8     12                        */
+
+  /* Condensed — headings only. */
+  --t-display:clamp(2.6rem,4.6vw,4.5rem);
+  --t-h1:clamp(2.15rem,3.45vw,3.5rem);
+  --t-h2:clamp(1.9rem,2.75vw,2.95rem);
+  --t-h3:clamp(1.4rem,1.95vw,2.05rem);
+  --t-h4:clamp(1.2rem,1.45vw,1.55rem);
+  /* h5 is Barlow, not condensed: at 16-17px the condensed face stops being
+     worth its narrower counters. */
+  --t-h5:clamp(1.02rem,.85vw,1.15rem);
+
+  /* Barlow — everything you actually read. */
+  --t-body-lg:clamp(1.0625rem,1.25vw,1.1875rem);
+  --t-body:clamp(1rem,.35vw + .72rem,1.125rem);
+  --t-body-sm:clamp(.9375rem,.25vw + .78rem,1rem);
+
+  /* UI. One button size for primary and secondary alike. */
+  --t-nav:clamp(.9375rem,.08vw + .91rem,1rem);
+  --t-button:clamp(.875rem,.1vw + .84rem,.9375rem);
+
+  /* IBM Plex Mono — technical labels. --t-micro is the floor and is only for
+     metadata that is genuinely secondary: index numerals, country codes. */
+  --t-label:clamp(.75rem,.12vw + .705rem,.8125rem);
+  --t-technical:clamp(.71875rem,.1vw + .68rem,.78125rem);
+  --t-micro:clamp(.6875rem,.08vw + .665rem,.75rem);
+
+  /* Line-height. Condensed headings tighten as they grow, not as they shrink —
+     1.02 everywhere meant a 20px h3 was as tight as a 72px h1. */
+  --lh-display:1.0;
+  --lh-head:1.06;
+  --lh-head-sm:1.16;
+  --lh-head-xs:1.35;   /* h5: heading weight, body size, can wrap */
+  --lh-body:1.65;
+  --lh-body-sm:1.6;
+  --lh-dense:1.45;
+  --lh-label:1.4;
+
+  --ls-display:-.018em;
+  --ls-head:-.012em;
+  --ls-label:.14em;      /* was .2em on the eyebrow — spaced-out blueprint text */
+  --ls-tech:.12em;
+  --ls-btn:.04em;
+
+  /* Only weight 500 of IBM Plex Mono is loaded. Asking for 400, as ~30 rules
+     used to, gets it synthesised or snapped; 500 is also the better weight at
+     11-13px. */
+  --fw-mono:500;
+
   --ease:cubic-bezier(.22,.7,.28,1);
   --ease-out:cubic-bezier(.16,1,.3,1);
 }
@@ -84,13 +154,17 @@
 *,*::before,*::after{box-sizing:border-box;}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
 body{
-  margin:0;font-family:var(--sans);font-size:16.5px;line-height:1.62;
+  margin:0;font-family:var(--sans);font-size:var(--t-body);line-height:var(--lh-body);
   color:var(--text-secondary);background:var(--page-bg);overflow-x:hidden;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
 }
 img{max-width:100%;height:auto;display:block;border:0;}
 a{color:inherit;text-decoration:none;}
-h1,h2,h3,h4{margin:0;font-weight:600;line-height:1.02;letter-spacing:-.01em;}
+/* The line-height belongs to the step, not to the tag: h3 and h4 sit at
+   19-28px where 1.02 is cramped, while the display steps want it tight. Tags
+   get the small-heading default and the .d* classes override upward. */
+h1,h2,h3,h4{margin:0;font-weight:600;line-height:var(--lh-head-sm);
+  letter-spacing:var(--ls-head);}
 p{margin:0 0 18px;}p:last-child{margin-bottom:0;}
 ul,ol{margin:0;padding:0;list-style:none;}
 button{font:inherit;color:inherit;}
@@ -105,7 +179,7 @@ button{font:inherit;color:inherit;}
   position:absolute;left:var(--gutter);top:8px;z-index:1200;
   transform:translateY(-200%);transition:transform .2s var(--ease);
   padding:12px 20px;background:var(--text-primary);color:#fff;border-radius:var(--r-btn);
-  font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+  font-family:var(--mono);font-size:var(--t-label);letter-spacing:var(--ls-label);text-transform:uppercase;
 }
 .skip:focus{transform:translateY(0);}
 #main:focus{outline:none;}
@@ -131,7 +205,13 @@ button{font:inherit;color:inherit;}
    section that follows one. Pairs with .sec--dark to avoid a hard edge. */
 /* Doubled class: these have to outrank a section's own .lg-sec/.mg background,
    which is declared later in the sheet. */
-.sec.sec--to-dark{background:linear-gradient(180deg,var(--section-light) 0%,var(--section-light) 55%,var(--section-muted) 100%);}
+.sec.sec--to-dark{
+  /* Fade only — the section keeps whatever base colour its band class gave it,
+     so this composes onto --light, --soft or --surface alike. The top stop is
+     the destination colour at zero alpha, not `transparent`, which would
+     interpolate through transparent black and grey the middle of the ramp. */
+  background-image:linear-gradient(180deg,rgba(232,238,229,0) 56%,var(--section-muted) 100%);
+}
 .sec.sec--from-dark{background:linear-gradient(180deg,#e3eade 0%,var(--section-muted) 16%,var(--section-muted) 100%);}
 
 /* Section transition device. A low offset panel carrying the PREVIOUS
@@ -144,13 +224,9 @@ button{font:inherit;color:inherit;}
    an overlay needs a z-index on .wrap to sit under the content, and that
    z-index would isolate the section's blend group, which is what makes the
    product renders show their white JPEG rectangle again. */
-.sec.sec--step{
-  background-image:linear-gradient(var(--step-bg,transparent),var(--step-bg,transparent));
-  background-repeat:no-repeat;
-  background-size:58% clamp(56px,6.5vw,112px);
-  background-position:left top;
-}
-.sec.sec--step--right{background-position:right top;}
+/* Retired. See the note above: this painted a visible rectangle rather than a
+   transition. Bands now change on a full-width edge or a full-width ramp. */
+.sec.sec--step,.sec.sec--step--right{background-image:none;}
 @media (max-width:760px){.sec.sec--step{background-image:none;}}
 
 /* The body of a section: whatever follows the eyebrow + heading block. */
@@ -162,14 +238,41 @@ button{font:inherit;color:inherit;}
 /* Display: Barlow Condensed, tight, uppercase-capable. The industrial voice. */
 /* Sized so a headline states the section without consuming the screen.
    d1 tops out at 4.75rem, d2 at 3.4rem — see the scale note in the README. */
-.d1{font-family:var(--display);font-size:clamp(3.25rem,5vw,4.75rem);font-weight:600;
-    line-height:.94;letter-spacing:-.018em;}
-.d2{font-family:var(--display);font-size:clamp(2.3rem,3.5vw,3.4rem);font-weight:600;
-    line-height:1;letter-spacing:-.015em;}
-.d3{font-family:var(--display);font-size:clamp(1.65rem,2.3vw,2.3rem);font-weight:600;
-    line-height:1.06;letter-spacing:-.012em;}
-.d4{font-family:var(--display);font-size:clamp(1.3rem,1.55vw,1.55rem);font-weight:600;
-    line-height:1.12;letter-spacing:-.01em;}
+/* --- Named type classes --------------------------------------------------- *
+   Every one of these is a step from the token scale. The .d* names are what
+   the markup already uses; the .t-* aliases name the same steps for anything
+   added later, so nothing has to invent a size again.
+
+   .d1/.t-display  hero headline          .t-body-lg   standfirst / lede
+   .t-h1           closing-CTA headline    .t-body      paragraphs
+   .d2/.t-h2       section heading         .t-body-sm   dense copy, meta blocks
+   .d3/.t-h3       subsection / row name   .t-eyebrow   section labels
+   .d4/.t-h4       component heading       .t-technical captions, chips, units
+   .t-h5           small label heading     .t-micro     index numerals, codes  */
+.d1,.t-display{font-family:var(--display);font-size:var(--t-display);font-weight:600;
+  line-height:var(--lh-display);letter-spacing:var(--ls-display);
+  color:var(--text-primary);text-wrap:balance;}
+.t-h1{font-family:var(--display);font-size:var(--t-h1);font-weight:600;
+  line-height:var(--lh-display);letter-spacing:var(--ls-display);
+  color:var(--text-primary);text-wrap:balance;}
+.d2,.t-h2{font-family:var(--display);font-size:var(--t-h2);font-weight:600;
+  line-height:var(--lh-head);letter-spacing:var(--ls-head);
+  color:var(--text-primary);text-wrap:balance;}
+.d3,.t-h3{font-family:var(--display);font-size:var(--t-h3);font-weight:600;
+  line-height:var(--lh-head);letter-spacing:var(--ls-head);color:var(--text-primary);}
+.d4,.t-h4{font-family:var(--display);font-size:var(--t-h4);font-weight:600;
+  line-height:var(--lh-head-sm);letter-spacing:var(--ls-head);color:var(--text-primary);}
+.t-h5{font-family:var(--sans);font-size:var(--t-h5);font-weight:600;
+  line-height:var(--lh-head-xs);color:var(--text-primary);}
+.t-body-lg{font-size:var(--t-body-lg);line-height:var(--lh-body);}
+.t-body{font-size:var(--t-body);line-height:var(--lh-body);}
+.t-body-sm{font-size:var(--t-body-sm);line-height:var(--lh-body-sm);}
+.t-eyebrow{font-family:var(--mono);font-size:var(--t-label);
+  letter-spacing:var(--ls-label);text-transform:uppercase;line-height:var(--lh-label);}
+.t-technical{font-family:var(--mono);font-size:var(--t-technical);
+  letter-spacing:var(--ls-tech);line-height:var(--lh-label);}
+.t-micro{font-family:var(--mono);font-size:var(--t-micro);
+  letter-spacing:var(--ls-tech);line-height:var(--lh-label);}
 h1,h2,h3,h4{color:var(--text-primary);}
 .sec--dark h1,.sec--dark h2,.sec--dark h3,.sec--dark h4{color:var(--on-dark);}
 
@@ -177,8 +280,8 @@ h1,h2,h3,h4{color:var(--text-primary);}
    section index throughout the page. */
 .eyebrow{
   display:flex;align-items:center;gap:11px;margin:0 0 18px;
-  font-family:var(--mono);font-size:11.5px;font-weight:500;
-  letter-spacing:.2em;text-transform:uppercase;color:var(--linkk-green-dark);
+  font-family:var(--mono);font-size:var(--t-label);font-weight:500;
+  letter-spacing:var(--ls-label);text-transform:uppercase;color:var(--linkk-green-dark);
 }
 .eyebrow::before{content:"";width:26px;height:1px;background:var(--linkk-green-dark);flex:none;}
 .eyebrow .idx{color:var(--text-muted);}
@@ -186,10 +289,10 @@ h1,h2,h3,h4{color:var(--text-primary);}
 .sec--dark .eyebrow::before{background:var(--linkk-green);}
 .sec--dark .eyebrow .idx{color:var(--on-dark-muted);}
 
-.lede{font-size:clamp(1rem,1.15vw,1.125rem);line-height:1.62;max-width:60ch;
+.lede{font-size:var(--t-body-lg);line-height:var(--lh-body);max-width:62ch;
   color:var(--text-secondary);}
 .sec--dark .lede{color:var(--on-dark-body);}
-.meta{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;
+.meta{font-family:var(--mono);font-size:var(--t-label);letter-spacing:var(--ls-label);
       text-transform:uppercase;color:var(--text-muted);}
 .sec--dark .meta{color:var(--on-dark-muted);}
 
@@ -197,7 +300,7 @@ h1,h2,h3,h4{color:var(--text-primary);}
 .b{
   display:inline-flex;align-items:center;justify-content:center;gap:11px;
   padding:14px 26px;border:1px solid transparent;border-radius:var(--r-btn);
-  font-family:var(--sans);font-size:15px;font-weight:600;letter-spacing:.04em;
+  font-family:var(--sans);font-size:var(--t-button);font-weight:600;letter-spacing:var(--ls-btn);
   text-transform:uppercase;cursor:pointer;position:relative;overflow:hidden;
   transition:background .22s var(--ease),color .22s var(--ease),
              border-color .22s var(--ease);
@@ -219,7 +322,7 @@ h1,h2,h3,h4{color:var(--text-primary);}
 /* Text link with a rule that draws on hover */
 .tlink{
   display:inline-flex;align-items:center;gap:9px;padding-bottom:4px;
-  font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  font-family:var(--mono);font-size:var(--t-label);letter-spacing:var(--ls-label);text-transform:uppercase;
   color:var(--linkk-green-dark);position:relative;
 }
 .tlink::after{
@@ -263,7 +366,7 @@ h1,h2,h3,h4{color:var(--text-primary);}
    linkk.css puts a near-white strip here because the LINKK identity is airy;
    the 2026 sheet does the same rather than the dark strip MEGADUCT uses.     */
 .topbar{background:var(--section-soft);color:var(--text-muted);
-        border-bottom:1px solid var(--border-soft);font-size:12.5px;}
+        border-bottom:1px solid var(--border-soft);font-size:var(--t-technical);}
 .topbar .wrap{display:flex;align-items:center;justify-content:space-between;
               gap:20px;min-height:42px;}
 .topbar a{color:var(--text-muted);transition:color .18s var(--ease);}
@@ -279,14 +382,14 @@ h1,h2,h3,h4{color:var(--text-primary);}
   background:var(--surface);border:1px solid var(--border);border-radius:var(--r-btn);}
 .brandswitch a{
   display:inline-flex;align-items:center;gap:7px;padding:5px 13px;border-radius:1px;
-  font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.14em;
+  font-family:var(--mono);font-size:var(--t-technical);font-weight:500;letter-spacing:var(--ls-tech);
   text-transform:uppercase;color:var(--text-muted);white-space:nowrap;
   transition:background .2s var(--ease),color .2s var(--ease);
 }
 .brandswitch a:hover{color:var(--text-primary);background:var(--section-soft);}
 .brandswitch a.is-on{background:var(--linkk-green);color:var(--text-primary);}
 .brandswitch a.is-on:hover{background:var(--linkk-green-bright);}
-.brandswitch .tag{font-size:8.5px;font-weight:600;letter-spacing:.1em;
+.brandswitch .tag{font-size:var(--t-micro);font-weight:600;letter-spacing:var(--ls-tech);
   padding:2px 5px;border-radius:1px;background:rgba(255,255,255,.55);color:inherit;}
 
 /* --- Header --------------------------------------------------------------- *
@@ -311,10 +414,10 @@ h1,h2,h3,h4{color:var(--text-primary);}
 .brand-linkk{display:flex;align-items:center;flex:none;}
 .brand-linkk img{height:44px;width:auto;display:block;}
 
-.nav-main{display:flex;align-items:center;gap:2px;margin-inline:auto;}
+.nav-main{display:flex;align-items:center;gap:0;margin-inline:auto;}
 .nav-main a{
-  position:relative;display:block;padding:10px 13px;
-  font-size:14px;font-weight:500;letter-spacing:.035em;text-transform:uppercase;
+  position:relative;display:block;padding:10px clamp(7px,.72vw,11px);
+  font-size:var(--t-nav);font-weight:500;letter-spacing:.02em;text-transform:uppercase;
   color:var(--text-secondary);white-space:nowrap;transition:color .2s var(--ease);
 }
 .nav-main a:hover{color:var(--text-primary);}
@@ -324,7 +427,9 @@ h1,h2,h3,h4{color:var(--text-primary);}
   background:var(--linkk-green);
 }
 .head-actions{flex:none;display:flex;align-items:center;gap:14px;}
-.head-cta{padding:12px 20px;font-size:13px;}
+/* Tighter padding than an in-page button, the same type. The old 13px
+   override is why the header CTA and the page CTAs never matched. */
+.head-cta{padding:12px 20px;}
 
 .burger{display:none;width:44px;height:44px;flex:none;background:var(--surface);
   border:1px solid var(--border);border-radius:var(--r-btn);cursor:pointer;padding:0;place-items:center;}
@@ -352,19 +457,21 @@ h1,h2,h3,h4{color:var(--text-primary);}
 .drawer nav{display:flex;flex-direction:column;}
 .drawer nav a{
   padding:16px 2px;border-bottom:1px solid var(--border-soft);
-  font-family:var(--display);font-size:24px;font-weight:600;letter-spacing:.01em;
+  font-family:var(--display);font-size:var(--t-h3);font-weight:600;
+  line-height:var(--lh-head);letter-spacing:var(--ls-head);
   color:var(--text-primary);text-transform:uppercase;
 }
 .drawer nav a.is-active{color:var(--linkk-green-dark);}
 .drawer-switch{margin-top:26px;}
-.drawer-switch .lbl{display:block;font-family:var(--mono);font-size:10px;
-  letter-spacing:.18em;text-transform:uppercase;color:var(--text-muted);margin-bottom:11px;}
+.drawer-switch .lbl{display:block;font-family:var(--mono);font-size:var(--t-technical);
+  letter-spacing:var(--ls-tech);text-transform:uppercase;color:var(--text-muted);margin-bottom:11px;}
 .drawer-switch .brandswitch{width:100%;background:var(--section-soft);}
 .drawer-switch .brandswitch a{flex:1;justify-content:center;}
 .drawer-foot{margin-top:28px;padding-top:22px;border-top:1px solid var(--border-soft);
-  font-size:14.5px;line-height:1.65;color:var(--text-muted);}
+  font-size:var(--t-body-sm);line-height:var(--lh-body);color:var(--text-muted);}
 .drawer-foot b{display:block;color:var(--text-primary);margin-bottom:7px;font-weight:600;}
-.drawer-foot .tel{display:block;font-family:var(--display);font-size:26px;
+.drawer-foot .tel{display:block;font-family:var(--display);font-size:var(--t-h3);
+  line-height:var(--lh-head);
   font-weight:600;color:var(--text-primary);margin-top:14px;}
 
 /* ==========================================================================
@@ -423,14 +530,14 @@ h1,h2,h3,h4{color:var(--text-primary);}
 .hero-parent{display:inline-flex;align-items:center;gap:10px;margin-bottom:22px;
   padding:8px 14px 8px 12px;background:var(--surface);
   border:1px solid var(--border);border-radius:var(--r-sm);
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  font-family:var(--mono);font-size:var(--t-technical);letter-spacing:var(--ls-tech);text-transform:uppercase;
   color:var(--text-muted);}
 .hero-parent .mark{width:9px;height:9px;background:var(--legrand);flex:none;}
-.hero-parent b{color:var(--text-primary);font-weight:600;letter-spacing:.02em;font-size:11.5px;}
+.hero-parent b{color:var(--text-primary);font-weight:600;letter-spacing:var(--ls-tech);font-size:var(--t-technical);}
 
 .hero h1{margin-bottom:20px;}
 .hero h1 .accent{color:var(--linkk-green-dark);}
-.hero-lede{font-size:clamp(1rem,1.15vw,1.125rem);line-height:1.6;color:var(--text-secondary);
+.hero-lede{font-size:var(--t-body-lg);line-height:var(--lh-body);color:var(--text-secondary);
   max-width:52ch;margin-bottom:28px;}
 .hero-cta{display:flex;flex-wrap:wrap;gap:14px;}
 
@@ -438,10 +545,10 @@ h1,h2,h3,h4{color:var(--text-primary);}
 .hero-rail{display:flex;flex-wrap:wrap;gap:0;margin-top:clamp(26px,2.6vw,38px);
   border-top:1px solid var(--border);}
 .hero-rail li{flex:1 1 auto;min-width:140px;padding:15px 24px 0 0;}
-.hero-rail .k{display:block;font-family:var(--display);font-size:clamp(1.35rem,1.65vw,1.65rem);
+.hero-rail .k{display:block;font-family:var(--display);font-size:var(--t-h4);
   font-weight:600;color:var(--text-primary);line-height:1;}
-.hero-rail .v{display:block;margin-top:7px;font-family:var(--mono);font-size:10px;
-  letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted);}
+.hero-rail .v{display:block;margin-top:7px;font-family:var(--mono);font-size:var(--t-technical);
+  letter-spacing:var(--ls-tech);text-transform:uppercase;color:var(--text-muted);}
 
 /* PRODUCT STAGE ------------------------------------------------------------
    The render used to sit in a white card with a border, a shadow and a
@@ -489,9 +596,9 @@ h1,h2,h3,h4{color:var(--text-primary);}
 .hero-panel figcaption::after{
   content:"";position:absolute;left:66px;right:0;top:1px;height:1px;background:var(--border);
 }
-.hero-panel .t{font-family:var(--display);font-size:19px;font-weight:600;color:var(--text-primary);
+.hero-panel .t{font-family:var(--display);font-size:var(--t-h4);line-height:var(--lh-head-sm);font-weight:600;color:var(--text-primary);
   text-transform:uppercase;letter-spacing:.01em;}
-.hero-panel .s{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+.hero-panel .s{font-family:var(--mono);font-size:var(--t-technical);letter-spacing:var(--ls-tech);
   text-transform:uppercase;color:var(--linkk-green-dark);}
 /* Measurement ticks — the industrial cue the border used to carry. */
 .hero-panel .ticks{position:absolute;right:2%;top:10%;bottom:22%;width:1px;
@@ -501,8 +608,8 @@ h1,h2,h3,h4{color:var(--text-primary);}
 .hero-panel .ticks::before{top:12%;}.hero-panel .ticks::after{bottom:12%;}
 
 .hero-scroll{position:absolute;left:var(--gutter);bottom:26px;z-index:3;
-  display:flex;align-items:center;gap:11px;font-family:var(--mono);font-size:10px;
-  letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted);}
+  display:flex;align-items:center;gap:11px;font-family:var(--mono);font-size:var(--t-technical);
+  letter-spacing:var(--ls-tech);text-transform:uppercase;color:var(--text-muted);}
 .hero-scroll .line{display:block;width:44px;height:1px;background:var(--border);position:relative;overflow:hidden;}
 .hero-scroll .line::after{content:"";position:absolute;inset:0;background:var(--linkk-green);
   transform:translateX(-100%);animation:railSweep 2.6s var(--ease) infinite;}
@@ -521,10 +628,10 @@ h1,h2,h3,h4{color:var(--text-primary);}
       border-left:1px solid var(--border-soft);padding-left:clamp(18px,1.7vw,28px);}
 .stat:first-child{border-left:0;padding-left:0;}
 .stat .n{display:block;font-family:var(--display);font-weight:600;
-  font-size:clamp(2.1rem,3vw,3.1rem);line-height:.96;color:var(--text-primary);letter-spacing:-.02em;}
+  font-size:var(--t-h2);line-height:var(--lh-display);color:var(--text-primary);letter-spacing:-.02em;}
 .stat .n .suf{color:var(--linkk-green-dark);}
-.stat .l{display:block;margin-top:9px;font-family:var(--mono);font-size:10.5px;
-  letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted);line-height:1.5;}
+.stat .l{display:block;margin-top:9px;font-family:var(--mono);font-size:var(--t-technical);
+  letter-spacing:var(--ls-tech);text-transform:uppercase;color:var(--text-muted);line-height:1.5;}
 
 /* ==========================================================================
    03 — INDUSTRIES
@@ -558,10 +665,10 @@ h1,h2,h3,h4{color:var(--text-primary);}
 .ind-row:hover::after,.ind-row:focus-within::after{transform:scaleY(1);}
 .ind-row > *{position:relative;z-index:1;}
 .ind-row:hover::before,.ind-row:focus-within::before{transform:scaleX(1);}
-.ind-row .ix{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--text-muted);
+.ind-row .ix{font-family:var(--mono);font-size:var(--t-micro);letter-spacing:var(--ls-tech);color:var(--text-muted);
   transition:color .34s var(--ease),transform .4s var(--ease-out);}
 .ind-row:hover .ix,.ind-row:focus-within .ix{transform:translateX(4px);}
-.ind-row .nm{font-family:var(--display);font-size:clamp(1.5rem,2.15vw,2.1rem);font-weight:600;
+.ind-row .nm{font-family:var(--display);font-size:var(--t-h3);line-height:var(--lh-head);font-weight:600;
   color:var(--text-primary);text-transform:uppercase;letter-spacing:-.008em;
   transition:color .34s var(--ease),transform .4s var(--ease-out);}
 .ind-row:hover .nm,.ind-row:focus-within .nm{transform:translateX(8px);}
@@ -569,7 +676,7 @@ h1,h2,h3,h4{color:var(--text-primary);}
 /* These are verified reference projects, so they are readable at rest.
    The row still brightens on hover — the interaction is unchanged, it just
    no longer starts at 2.5:1. */
-.ind-row .refs{font-size:14px;line-height:1.55;color:var(--text-muted);
+.ind-row .refs{font-size:var(--t-body-sm);line-height:var(--lh-dense);color:var(--text-muted);
   transition:color .34s var(--ease),transform .4s var(--ease-out);}
 .ind-row:hover .refs,.ind-row:focus-within .refs{transform:translateX(4px);}
 
@@ -665,13 +772,12 @@ h1,h2,h3,h4{color:var(--text-primary);}
   content:"";position:absolute;left:-2%;top:0;bottom:14%;width:1px;
   background:linear-gradient(180deg,transparent,var(--border) 14%,var(--border) 86%,transparent);
 }
-.mg-guide::after{
-  content:"";position:absolute;left:-2%;right:34%;bottom:14%;height:1px;background:var(--border);
-}
-/* Small hard-edged registration block — the one square element in the
-   composition, and deliberately far smaller than the render it sits beside. */
-.mg-guide span{position:absolute;left:-2%;bottom:14%;width:74px;height:8px;
-  background:var(--linkk-green);}
+/* No horizontal rule and no registration block here: .mg-cap below already
+   draws a green tick and a rule, 24px lower. Two of each stacked that close
+   read as a duplicated element rather than as a frame, so the guide keeps the
+   vertical edge line only. */
+.mg-guide::after{content:none;}
+.mg-guide span{display:none;}
 
 .mg-stage{position:relative;aspect-ratio:8/5;min-height:0;
   width:116%;max-width:none;}
@@ -708,9 +814,9 @@ h1,h2,h3,h4{color:var(--text-primary);}
   background:var(--linkk-green);}
 .mg-cap::after{content:"";position:absolute;left:66px;right:0;top:1px;height:1px;
   background:var(--border);}
-.mg-cap .t{font-family:var(--display);font-size:19px;font-weight:600;
+.mg-cap .t{font-family:var(--display);font-size:var(--t-h4);line-height:var(--lh-head-sm);font-weight:600;
   text-transform:uppercase;color:var(--text-primary);}
-.mg-cap .n{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--text-muted);}
+.mg-cap .n{font-family:var(--mono);font-size:var(--t-technical);letter-spacing:var(--ls-tech);color:var(--text-muted);}
 
 .mg-item{
   position:relative;display:grid;grid-template-columns:44px 1fr;gap:18px;align-items:start;
@@ -718,11 +824,11 @@ h1,h2,h3,h4{color:var(--text-primary);}
   padding:15px 0;border-bottom:1px solid var(--border);
 }
 .mg-item:first-child{border-top:1px solid var(--border);}
-.mg-item .ix{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--text-muted);
+.mg-item .ix{font-family:var(--mono);font-size:var(--t-micro);letter-spacing:var(--ls-tech);color:var(--text-muted);
   padding-top:4px;transition:color .25s var(--ease);}
-.mg-item h3{font-family:var(--display);font-size:20px;font-weight:600;text-transform:uppercase;
+.mg-item h3{font-family:var(--display);font-size:var(--t-h4);line-height:var(--lh-head-sm);font-weight:600;text-transform:uppercase;
   color:var(--text-primary);margin-bottom:0;transition:color .25s var(--ease);}
-.mg-item p{font-size:14px;line-height:1.55;color:var(--text-secondary);margin:0;
+.mg-item p{font-size:var(--t-body-sm);line-height:var(--lh-body-sm);color:var(--text-secondary);margin:0;
   max-height:0;opacity:0;overflow:hidden;
   transition:max-height .5s var(--ease-out),opacity .4s var(--ease),margin .4s var(--ease);}
 .mg-item[aria-selected="true"],.mg-item.is-on{border-bottom-color:var(--linkk-green);}
@@ -777,7 +883,7 @@ h1,h2,h3,h4{color:var(--text-primary);}
 /* The badge rides the render's edge instead of a card corner. */
 .fam-media .badge{position:absolute;left:0;top:clamp(4px,1vw,14px);z-index:2;
   padding:6px 0 6px 15px;background:none;color:var(--text-muted);
-  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;}
+  font-family:var(--mono);font-size:var(--t-technical);letter-spacing:var(--ls-tech);text-transform:uppercase;}
 .fam-media .badge::before{content:"";position:absolute;left:0;top:50%;translate:0 -50%;
   width:8px;height:2px;background:var(--linkk-green);}
 .fam-row:nth-child(even) .fam-media .badge{left:auto;right:0;padding:6px 15px 6px 0;}
@@ -794,7 +900,7 @@ h1,h2,h3,h4{color:var(--text-primary);}
 /* Specification chips: a hairline and a tick rather than four small boxes. */
 .fam-spec{display:flex;flex-wrap:wrap;gap:7px 20px;margin:18px 0 22px;}
 .fam-spec li{position:relative;padding-left:15px;border:0;background:none;
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;
+  font-family:var(--mono);font-size:var(--t-technical);letter-spacing:var(--ls-tech);text-transform:uppercase;
   color:var(--text-secondary);}
 .fam-spec li::before{content:"";position:absolute;left:0;top:.52em;
   width:7px;height:1px;background:var(--linkk-green);}
@@ -826,7 +932,7 @@ h1,h2,h3,h4{color:var(--text-primary);}
 .jrn-step{position:relative;padding:0 24px 0 0;}
 .jrn-step .dot{position:relative;z-index:2;width:46px;height:46px;display:grid;place-items:center;
   background:var(--dark-section);border:1px solid var(--dark-rule);border-radius:50%;
-  font-family:var(--mono);font-size:12px;color:var(--on-dark-muted);
+  font-family:var(--mono);font-size:var(--t-technical);color:var(--on-dark-muted);
   transition:border-color .45s var(--ease),color .45s var(--ease),
              background .45s var(--ease),transform .45s var(--ease-out),
              box-shadow .45s var(--ease);}
@@ -836,9 +942,9 @@ h1,h2,h3,h4{color:var(--text-primary);}
    progressing rather than as six items that change colour. */
 .jrn-step h3,.jrn-step p{transition:opacity .5s var(--ease-out),transform .5s var(--ease-out);}
 .jrn-step:not(.is-in) h3,.jrn-step:not(.is-in) p{opacity:.42;transform:translateY(5px);}
-.jrn-step h3{margin-top:16px;font-family:var(--display);font-size:19px;font-weight:600;
+.jrn-step h3{margin-top:16px;font-family:var(--display);font-size:var(--t-h4);line-height:var(--lh-head-sm);font-weight:600;
   text-transform:uppercase;color:var(--on-dark);}
-.jrn-step p{margin-top:8px;font-size:13.5px;line-height:1.55;color:var(--on-dark-muted);max-width:26ch;}
+.jrn-step p{margin-top:8px;font-size:var(--t-body-sm);line-height:var(--lh-body-sm);color:var(--on-dark-muted);max-width:26ch;}
 
 /* ==========================================================================
    07 — R&D / TESTING
@@ -860,7 +966,7 @@ h1,h2,h3,h4{color:var(--text-primary);}
   background:var(--border);}
 .rnd-trace svg{width:100%;height:auto;display:block;}
 .rnd-trace .tl{display:flex;justify-content:space-between;margin-top:14px;
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+  font-family:var(--mono);font-size:var(--t-micro);letter-spacing:var(--ls-tech);
   text-transform:uppercase;color:var(--text-muted);}
 .trace-path{fill:none;stroke:var(--linkk-green-dark);stroke-width:1.8;
   stroke-dasharray:var(--len,600);stroke-dashoffset:var(--len,600);}
@@ -869,9 +975,11 @@ h1,h2,h3,h4{color:var(--text-primary);}
 .trace-grid{stroke:var(--border);stroke-width:1;}
 
 .tests{display:grid;grid-template-columns:repeat(2,1fr);gap:0 clamp(24px,3vw,48px);}
-.tests li{display:flex;align-items:baseline;gap:13px;padding:11px 0;
-  border-bottom:1px solid var(--border);font-size:14.5px;color:var(--text-secondary);}
-.tests li .no{font-family:var(--mono);font-size:10.5px;color:var(--linkk-green-dark);flex:none;}
+.tests li{display:flex;align-items:baseline;gap:13px;padding:12px 0;
+  font-size:var(--t-body-sm);line-height:var(--lh-body-sm);
+  border-bottom:1px solid var(--border);font-size:var(--t-body-sm);
+  color:var(--text-secondary);}
+.tests li .no{font-family:var(--mono);font-size:var(--t-technical);color:var(--linkk-green-dark);flex:none;}
 
 .certs-label{margin:clamp(28px,2.8vw,42px) 0 14px;}
 /* Rules top and bottom with cell dividers between — a tally, not a bordered
@@ -881,10 +989,10 @@ h1,h2,h3,h4{color:var(--text-primary);}
 .certs li{padding:18px 8px;text-align:center;position:relative;}
 .certs li + li::before{content:"";position:absolute;left:0;top:26%;bottom:26%;width:1px;
   background:var(--border);}
-.certs .n{display:block;font-family:var(--display);font-size:clamp(1.45rem,1.8vw,1.95rem);
+.certs .n{display:block;font-family:var(--display);font-size:var(--t-h3);
   font-weight:600;color:var(--text-primary);line-height:1;}
-.certs .s{display:block;margin-top:7px;font-family:var(--mono);font-size:9.5px;
-  letter-spacing:.14em;color:var(--text-muted);}
+.certs .s{display:block;margin-top:7px;font-family:var(--mono);font-size:var(--t-technical);
+  letter-spacing:var(--ls-tech);color:var(--text-muted);}
 
 /* ==========================================================================
    08 — GLOBAL PROJECTS
@@ -910,7 +1018,10 @@ h1,h2,h3,h4{color:var(--text-primary);}
       The current assets/img/site/project-*.jpg are 300px wide and do not
       correspond to these six projects, so none is used.
    ========================================================================== */
-.gp{background:var(--page-bg);}
+/* .gp is a JS/markup hook only. It used to also set a background, which
+   silently outranked the band class on any page that wanted the project
+   list on a different tone — on Our Projects that produced two adjacent
+   bands of the same colour. The band class owns the background. */
 .gp-head{display:flex;align-items:flex-end;justify-content:space-between;
   gap:28px;flex-wrap:wrap;margin-bottom:clamp(20px,2vw,28px);}
 
@@ -919,13 +1030,13 @@ h1,h2,h3,h4{color:var(--text-primary);}
 .gp-chip{
   padding:9px 16px;background:var(--surface);border:1px solid var(--border);
   border-radius:var(--r-btn);cursor:pointer;color:var(--text-secondary);
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  font-family:var(--mono);font-size:var(--t-technical);letter-spacing:var(--ls-tech);text-transform:uppercase;
   transition:background .2s var(--ease),border-color .2s var(--ease),color .2s var(--ease);
 }
 .gp-chip:hover{border-color:var(--linkk-green-dark);color:var(--linkk-green-dark);}
 .gp-chip[aria-pressed="true"]{background:var(--linkk-green-soft);
   border-color:var(--linkk-green);color:var(--linkk-green-dark);}
-.gp-count{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+.gp-count{font-family:var(--mono);font-size:var(--t-technical);letter-spacing:var(--ls-tech);
   text-transform:uppercase;color:var(--text-muted);margin-bottom:14px;}
 
 .gp-list{border-top:1px solid var(--border);}
@@ -937,13 +1048,13 @@ h1,h2,h3,h4{color:var(--text-primary);}
 /* Filtered out rather than removed, so the list keeps its place and the
    transition has something to animate. */
 .gp-item[hidden]{display:none;}
-.gp-item .cc{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--linkk-green-dark);}
-.gp-item .nm{font-family:var(--display);font-size:clamp(1.15rem,1.4vw,1.45rem);font-weight:600;
+.gp-item .cc{font-family:var(--mono);font-size:var(--t-micro);letter-spacing:var(--ls-tech);color:var(--linkk-green-dark);}
+.gp-item .nm{font-family:var(--display);font-size:var(--t-h4);line-height:var(--lh-head-sm);font-weight:600;
   color:var(--text-primary);text-transform:uppercase;
   transition:transform .4s var(--ease-out);}
 .gp-item:hover .nm{transform:translateX(6px);}
-.gp-item .sector,.gp-item .loc{font-family:var(--mono);font-size:11px;
-  letter-spacing:.11em;text-transform:uppercase;color:var(--text-muted);}
+.gp-item .sector,.gp-item .loc{font-family:var(--mono);font-size:var(--t-technical);
+  letter-spacing:var(--ls-tech);text-transform:uppercase;color:var(--text-muted);}
 .gp-item .loc{text-align:right;}
 
 /* Thumbnail slot — present only on rows that have real photography. */
@@ -952,7 +1063,7 @@ h1,h2,h3,h4{color:var(--text-primary);}
   border-radius:var(--r-sm);background:var(--section-soft);
   transition:transform .6s var(--ease-out);}
 .gp-item:hover .gp-thumb{transform:scale(1.03);}
-.gp-empty{padding:28px 0;color:var(--text-muted);font-size:14.5px;}
+.gp-empty{padding:28px 0;color:var(--text-muted);font-size:var(--t-body-sm);}
 
 /* ==========================================================================
    09 — LEGRAND
@@ -961,7 +1072,7 @@ h1,h2,h3,h4{color:var(--text-primary);}
 .lg-inner{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
   gap:clamp(26px,3vw,52px);align-items:center;}
 .lg-mark{display:inline-flex;align-items:center;gap:12px;
-  font-family:var(--display);font-size:clamp(1.9rem,2.5vw,2.6rem);font-weight:600;
+  font-family:var(--display);font-size:var(--t-h2);line-height:var(--lh-head);font-weight:600;
   color:var(--text-primary);letter-spacing:-.01em;}
 .lg-mark .sq{width:19px;height:19px;background:var(--legrand);flex:none;}
 .lg-inner p{color:var(--text-secondary);max-width:56ch;}
@@ -978,10 +1089,10 @@ h1,h2,h3,h4{color:var(--text-primary);}
   background:radial-gradient(70% 120% at 85% 110%,rgba(106,174,44,.16),transparent 62%);}
 .cta .wrap{position:relative;z-index:2;}
 .cta h2{color:var(--on-dark);max-width:18ch;margin-bottom:20px;
-  font-size:clamp(2.5rem,3.6vw,3.6rem);}
+  font-size:var(--t-h1);}
 .cta .lede{margin-bottom:28px;}
 .cta-actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center;}
-.cta-tel{font-family:var(--display);font-size:clamp(1.6rem,1.9vw,2.1rem);font-weight:600;
+.cta-tel{font-family:var(--display);font-size:var(--t-h3);line-height:var(--lh-head);font-weight:600;
   color:var(--on-dark);}
 .cta-tel:hover{color:var(--linkk-green);}
 
@@ -992,21 +1103,23 @@ h1,h2,h3,h4{color:var(--text-primary);}
 .foot .wrap{padding-block:64px 30px;}
 .foot-nav{display:flex;flex-wrap:wrap;gap:0;padding-bottom:32px;
   border-bottom:1px solid rgba(255,255,255,.08);
-  font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;}
+  font-family:var(--mono);font-size:var(--t-label);letter-spacing:var(--ls-label);text-transform:uppercase;}
 .foot-nav a{color:var(--on-dark-body);transition:color .18s var(--ease);}
 .foot-nav a:hover{color:var(--linkk-green);}
 .foot-nav .sep{margin-inline:14px;color:#68746a;}
 .foot-top{display:flex;align-items:flex-start;justify-content:space-between;
   gap:44px;flex-wrap:wrap;padding-block:38px;}
-.foot-addr{font-size:15px;line-height:1.75;max-width:460px;color:var(--on-dark-muted);}
-.foot-addr b{display:block;color:var(--on-dark);font-family:var(--display);font-size:22px;
+.foot-addr{font-size:var(--t-body-sm);line-height:var(--lh-body);max-width:460px;color:var(--on-dark-muted);}
+.foot-addr b{display:block;color:var(--on-dark);font-family:var(--display);font-size:var(--t-h4);
+  line-height:var(--lh-head-sm);
   font-weight:600;margin-bottom:10px;letter-spacing:.01em;}
 .foot-reach{display:grid;gap:6px;text-align:right;justify-items:end;}
-.foot-reach a{color:var(--on-dark-body);font-size:15px;}
+.foot-reach a{color:var(--on-dark-body);font-size:var(--t-body-sm);}
 .foot-reach a:hover{color:var(--linkk-green);}
-.foot-reach a.foot-tel{font-family:var(--display);font-size:32px;font-weight:600;color:var(--on-dark);}
+.foot-reach a.foot-tel{font-family:var(--display);font-size:var(--t-h3);font-weight:600;
+  line-height:var(--lh-head);color:var(--on-dark);}
 .foot-bottom{padding-top:24px;border-top:1px solid rgba(255,255,255,.08);
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--on-dark-muted);
+  font-family:var(--mono);font-size:var(--t-technical);letter-spacing:var(--ls-tech);color:var(--on-dark-muted);
   display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;}
 .foot-bottom a{color:var(--on-dark-body);}
 .foot-bottom a:hover{color:var(--linkk-green);}
@@ -1061,7 +1174,6 @@ h1,h2,h3,h4{color:var(--text-primary);}
 }
 @media (max-width:760px){
   :root{--gutter:18px;}
-  body{font-size:16px;}
   .brand-linkk img{height:36px;}
   .topbar-right{display:none;}
   .topbar .wrap{justify-content:center;min-height:38px;}
@@ -1076,14 +1188,12 @@ h1,h2,h3,h4{color:var(--text-primary);}
   /* Industries: no hover on touch, so rows are permanently open and quiet. */
   .ind-row{grid-template-columns:1fr;gap:6px;padding:22px 0;}
   .ind-row::before{display:none;}
-  .ind-row .ix{font-size:10px;}
-  .ind-row .refs{opacity:1;grid-column:1;margin-top:4px;font-size:13.5px;}
+  .ind-row .refs{opacity:1;grid-column:1;margin-top:4px;}
   .ind-row .go{display:none;}
 
   /* Component breakdown: plate first, then the list. */
   .mg-grid{gap:26px;}
   .mg-item{padding:18px 0;grid-template-columns:34px 1fr;gap:14px;}
-  .mg-item h3{font-size:20px;}
 
   /* Tests to one column; certificate tally scrolls sideways rather than
      becoming a nine-row stack. */
@@ -1104,7 +1214,7 @@ h1,h2,h3,h4{color:var(--text-primary);}
 
   /* Projects: name over meta, no four-column squeeze. */
   .gp-item{grid-template-columns:44px 1fr;gap:4px 14px;padding:20px 0;}
-  .gp-item .nm{grid-column:2;font-size:20px;}
+  .gp-item .nm{grid-column:2;}
   .gp-item .sector{grid-column:2;}
   .gp-item .loc{grid-column:2;text-align:left;}
 
@@ -1113,6 +1223,11 @@ h1,h2,h3,h4{color:var(--text-primary);}
      widths or the CTA pushes the burger off-screen. */
   .hero-cta .b,.cta-actions .b{width:100%;}
   .hero-cta,.cta-actions{flex-direction:column;align-items:stretch;width:100%;}
+  /* .tlink is nowrap so its arrow never orphans, which is fine for a short
+     label and overflows the viewport for a long one. Let it wrap on narrow
+     screens and keep the arrow aligned to the last line. */
+  .tlink{white-space:normal;align-items:flex-start;}
+  .tlink svg{margin-top:.28em;}
   /* The drawer carries the full nav and the CTA repeats in the hero, the
      closing section and the footer, so the header CTA is redundant here. */
   .head-cta{display:none;}
@@ -1152,3 +1267,735 @@ h1,h2,h3,h4{color:var(--text-primary);}
 }
 /* If JS never runs, nothing stays invisible. */
 .no-js [data-reveal],.no-js .hero [data-enter]{opacity:1;transform:none;}
+
+/* ==========================================================================
+   INTERNAL PAGES
+   Shared components for pages other than Home. Nothing above this line is
+   touched: the Home page is the source of truth for the system, and these
+   build on it rather than varying it.
+
+   The blend rule in the README applies here too — every product render on
+   these pages uses mix-blend-mode:multiply, so nothing between the image and
+   its section may form an isolated group.
+   ========================================================================== */
+
+/* --- Page hero ------------------------------------------------------------ *
+   The Home hero's gradient and grid, at two thirds the height, carrying a
+   breadcrumb and one isolated product render instead of a banner photograph. */
+.phero{
+  position:relative;color:var(--text-secondary);
+  background:
+    radial-gradient(56% 74% at 90% 6%,rgba(106,174,44,.12),transparent 62%),
+    linear-gradient(170deg,var(--section-light) 0%,var(--page-bg) 42%,var(--section-soft) 100%);
+  overflow:hidden;
+}
+.phero::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(29,36,31,.045) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(29,36,31,.045) 1px,transparent 1px);
+  background-size:78px 78px;
+  mask-image:radial-gradient(120% 90% at 20% 46%,#000 24%,transparent 76%);
+  -webkit-mask-image:radial-gradient(120% 90% at 20% 46%,#000 24%,transparent 76%);
+}
+.phero .wrap{position:relative;width:100%;}
+.phero-grid{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr);
+  gap:clamp(24px,3vw,52px);align-items:center;
+  padding-block:clamp(38px,4.4vw,72px) clamp(44px,5vw,80px);}
+.crumbs{display:flex;align-items:center;gap:10px;margin-bottom:20px;
+  font-family:var(--mono);font-size:var(--t-technical);letter-spacing:var(--ls-tech);text-transform:uppercase;
+  color:var(--text-muted);}
+.crumbs a{color:var(--text-muted);}
+.crumbs a:hover{color:var(--linkk-green-dark);}
+.crumbs .sep{color:var(--border);}
+.phero h1{margin-bottom:18px;}
+.phero-lede{font-size:var(--t-body-lg);line-height:var(--lh-body);
+  color:var(--text-secondary);max-width:64ch;margin-bottom:26px;}
+.phero-cta{display:flex;flex-wrap:wrap;gap:14px;}
+
+/* Same stage construction as the Home hero: no container, soft lift, contact
+   shadow, and the render free to run past the content column. */
+.phero-stage{position:relative;}
+.phero-stage::before{
+  content:"";position:absolute;inset:-6% -4% 0;pointer-events:none;
+  background:radial-gradient(44% 40% at 52% 46%,rgba(255,255,255,.5),rgba(255,255,255,0) 72%);
+}
+.phero-stage::after{
+  content:"";position:absolute;left:18%;right:18%;bottom:6%;height:20px;
+  background:radial-gradient(50% 50% at 50% 50%,rgba(29,36,31,.16),transparent 70%);
+}
+.phero-stage img{width:110%;max-width:none;margin-inline:-5%;
+  aspect-ratio:4/3;object-fit:contain;mix-blend-mode:multiply;}
+
+/* --- Family index --------------------------------------------------------- *
+   An editorial index, not four cards. Rows carry an index numeral, the family
+   name, a one-line role and a state. A family with no confirmed specification
+   says so rather than being given invented copy. */
+.findex{border-top:1px solid var(--border);}
+.findex-row{
+  position:relative;display:grid;
+  grid-template-columns:62px minmax(0,1fr) minmax(0,1.1fr) 34px;
+  gap:clamp(14px,2vw,34px);align-items:center;
+  padding:clamp(16px,1.7vw,24px) 0;border-bottom:1px solid var(--border);
+  transition:padding .4s var(--ease-out);
+}
+a.findex-row:hover,a.findex-row:focus-within{padding-block:clamp(22px,2.3vw,32px);}
+.findex-row::before{
+  content:"";position:absolute;left:calc(var(--gutter) * -1);right:calc(var(--gutter) * -1);
+  top:0;bottom:0;background:var(--linkk-green-soft);transform:scaleX(0);transform-origin:left;
+  transition:transform .5s var(--ease-out);z-index:0;
+}
+a.findex-row:hover::before,a.findex-row:focus-within::before{transform:scaleX(1);}
+.findex-row > *{position:relative;z-index:1;}
+.findex-row .ix{font-family:var(--mono);font-size:var(--t-micro);letter-spacing:var(--ls-tech);color:var(--text-muted);}
+.findex-row .nm{font-family:var(--display);font-size:var(--t-h3);line-height:var(--lh-head);font-weight:600;
+  color:var(--text-primary);text-transform:uppercase;letter-spacing:-.008em;
+  transition:color .34s var(--ease),transform .4s var(--ease-out);}
+a.findex-row:hover .nm,a.findex-row:focus-within .nm{color:var(--linkk-green-dark);transform:translateX(8px);}
+.findex-row .role{font-size:var(--t-body-sm);line-height:var(--lh-body-sm);color:var(--text-muted);}
+.findex-row .go{justify-self:end;width:20px;height:20px;color:var(--text-muted);
+  transition:color .34s var(--ease),transform .34s var(--ease);}
+a.findex-row:hover .go,a.findex-row:focus-within .go{color:var(--linkk-green-dark);transform:translateX(5px);}
+.findex-row .go svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.6;}
+/* A family whose specification is not confirmed yet. Deliberately reads as an
+   engineering TBC rather than as a finished entry. The status chip needs a
+   real track of its own — sharing the 34px arrow column made it overlap the
+   role text. */
+.findex-row--tbc{color:var(--text-muted);
+  grid-template-columns:62px minmax(0,1fr) minmax(0,.95fr) auto;}
+.findex-row--tbc .nm{color:var(--text-muted);}
+.findex-row .tbc{justify-self:end;font-family:var(--mono);font-size:var(--t-micro);
+  letter-spacing:var(--ls-tech);text-transform:uppercase;color:var(--text-muted);
+  border:1px solid var(--border);border-radius:var(--r-btn);padding:5px 9px;white-space:nowrap;}
+
+/* --- Product feature ------------------------------------------------------ *
+   A family in full. Same stage construction as the MEGADUCT section on Home,
+   including the data-plate contract, so a hardware breakdown video drops in
+   without re-authoring. */
+.pfeat{display:grid;gap:clamp(22px,3vw,48px);align-items:center;}
+.pfeat--left{grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);}
+.pfeat--right{grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);}
+.pfeat--right .pfeat-stage{order:-1;}
+.pfeat-stage{position:relative;padding-block:clamp(8px,1.2vw,20px);}
+.pfeat-stage::before{
+  content:"";position:absolute;left:-6%;right:-2%;top:-2%;bottom:2%;pointer-events:none;
+  background:
+    radial-gradient(46% 42% at 46% 46%,rgba(29,36,31,.06) 0%,rgba(29,36,31,.02) 48%,rgba(29,36,31,0) 74%),
+    radial-gradient(24% 5% at 44% 80%,rgba(29,36,31,.17),transparent 70%);
+}
+.pfeat-media{position:relative;aspect-ratio:8/5;width:108%;max-width:none;}
+.pfeat-media > [data-plate]{
+  position:absolute;inset:0;width:100%;height:100%;border:0;opacity:0;
+  transform:scale(.97);pointer-events:none;
+  transition:opacity .45s var(--ease-out),transform .6s var(--ease-out);
+}
+.pfeat-media img[data-plate]{object-fit:contain;mix-blend-mode:multiply;}
+.pfeat-media video[data-plate],.pfeat-media iframe[data-plate],
+.pfeat-media [data-viewer]{object-fit:cover;background:var(--section-soft);border-radius:var(--r-md);}
+.pfeat-media > [data-plate].is-on{opacity:1;transform:none;pointer-events:auto;}
+.pfeat-guide{position:absolute;inset:0;pointer-events:none;}
+.pfeat-guide::before{content:"";position:absolute;left:-2%;top:2%;bottom:12%;width:1px;
+  background:linear-gradient(180deg,transparent,var(--border) 14%,var(--border) 86%,transparent);}
+/* Same as .mg-guide — .pfeat-cap owns the tick and the rule. */
+.pfeat-guide::after{content:none;}
+.pfeat-guide span{display:none;}
+.pfeat-cap{display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+  margin-top:8px;padding-top:12px;position:relative;width:72%;}
+.pfeat-cap::before{content:"";position:absolute;left:0;top:0;width:50px;height:2px;
+  background:var(--linkk-green);}
+.pfeat-cap::after{content:"";position:absolute;left:62px;right:0;top:1px;height:1px;
+  background:var(--border);}
+.pfeat-cap .t{font-family:var(--display);font-size:var(--t-h4);line-height:var(--lh-head-sm);font-weight:600;
+  text-transform:uppercase;color:var(--text-primary);}
+.pfeat-cap .n{font-family:var(--mono);font-size:var(--t-technical);letter-spacing:var(--ls-tech);color:var(--text-muted);}
+.pfeat-body h2,.pfeat-body h3{position:relative;margin-bottom:14px;}
+.pfeat-body h2::before,.pfeat-body h3::before{content:"";position:absolute;left:0;top:-14px;
+  width:40px;height:2px;background:var(--linkk-green);}
+.pfeat-body p{color:var(--text-secondary);max-width:54ch;}
+/* Verified attributes as tick-rules, matching the Home spec chips. */
+.speclist{display:grid;gap:9px;margin:20px 0 22px;}
+.speclist li{position:relative;padding-left:17px;font-size:var(--t-body-sm);line-height:var(--lh-body-sm);
+  color:var(--text-secondary);}
+.speclist li::before{content:"";position:absolute;left:0;top:.62em;width:9px;height:1px;
+  background:var(--linkk-green);}
+.speclist li b{color:var(--text-primary);font-weight:600;}
+.applist{display:flex;flex-wrap:wrap;gap:7px 20px;margin:0 0 22px;}
+.applist li{position:relative;padding-left:15px;font-family:var(--mono);font-size:var(--t-technical);
+  letter-spacing:var(--ls-tech);text-transform:uppercase;color:var(--text-secondary);}
+.applist li::before{content:"";position:absolute;left:0;top:.52em;width:7px;height:1px;
+  background:var(--linkk-green);}
+
+/* --- System flow ---------------------------------------------------------- *
+   The one intentional dark band on the page. A single line with seven stages
+   on it, read left to right; it becomes a swipe rail on mobile the same way
+   the Home timeline does. */
+.flow{position:relative;overflow:hidden;}
+.flow::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:78px 78px;
+  mask-image:radial-gradient(110% 80% at 50% 0%,#000 20%,transparent 80%);
+  -webkit-mask-image:radial-gradient(110% 80% at 50% 0%,#000 20%,transparent 80%);
+}
+.flow .wrap{position:relative;}
+.flow-track{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(126px,1fr);
+  margin-top:clamp(26px,3vw,44px);position:relative;}
+.flow-line{position:absolute;left:0;right:0;top:25px;height:1px;background:var(--dark-rule);}
+.flow-line::after{content:"";position:absolute;inset:0;background:var(--linkk-green);
+  transform:scaleX(var(--p,0));transform-origin:left;
+  transition:transform .5s var(--ease-out);}
+.flow-step{position:relative;padding-right:18px;}
+.flow-step .dot{position:relative;z-index:2;width:50px;height:50px;display:grid;place-items:center;
+  background:var(--dark-section);border:1px solid var(--dark-rule);border-radius:50%;
+  color:var(--on-dark-muted);
+  transition:border-color .45s var(--ease),color .45s var(--ease),
+             transform .45s var(--ease-out),box-shadow .45s var(--ease);}
+.flow-step .dot svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;}
+.flow-step.is-in .dot{border-color:var(--linkk-green);color:var(--linkk-green);
+  transform:scale(1.06);box-shadow:0 0 0 5px rgba(106,174,44,.12);}
+.flow-step h3{margin-top:15px;font-family:var(--display);font-size:var(--t-h4);line-height:var(--lh-head-sm);font-weight:600;
+  text-transform:uppercase;color:var(--on-dark);}
+.flow-step p{margin-top:6px;font-size:var(--t-body-sm);line-height:var(--lh-body-sm);color:var(--on-dark-muted);max-width:22ch;}
+.flow-step h3,.flow-step p{transition:opacity .5s var(--ease-out),transform .5s var(--ease-out);}
+.flow-step:not(.is-in) h3,.flow-step:not(.is-in) p{opacity:.42;transform:translateY(5px);}
+.flow-note{margin-top:clamp(24px,2.6vw,38px);color:var(--on-dark-muted);max-width:62ch;}
+
+/* --- Component gallery ---------------------------------------------------- *
+   Not an ecommerce grid. Each component is an isolated render floating on the
+   section with a name and a one-line purpose; the only container is the
+   hairline between rows. Each is a <button> so a future detail panel or page
+   can be wired up without re-authoring the markup — see the data-component
+   attribute and the `comp:open` event in main.js. */
+.comp-grid{display:grid;grid-template-columns:repeat(4,1fr);
+  gap:clamp(18px,2vw,32px) clamp(14px,1.8vw,28px);}
+.comp{
+  position:relative;display:block;width:100%;text-align:left;padding:0 0 18px;
+  background:none;border:0;border-bottom:1px solid var(--border);cursor:pointer;
+  transition:border-color .3s var(--ease);
+}
+.comp:hover,.comp:focus-visible{border-bottom-color:var(--linkk-green);}
+.comp-media{position:relative;margin-bottom:12px;}
+.comp-media::before{          /* soft lift + contact shadow, no container */
+  content:"";position:absolute;inset:-4% -2% 0;pointer-events:none;
+  background:
+    radial-gradient(42% 38% at 50% 48%,rgba(29,36,31,.05),rgba(29,36,31,0) 72%),
+    radial-gradient(22% 5% at 50% 92%,rgba(29,36,31,.15),transparent 70%);
+}
+/* 1:1 because every product render is square — a 4:3 box would only add empty
+   margin either side of the same picture. */
+.comp-media img{width:100%;height:auto;aspect-ratio:1/1;object-fit:contain;
+  mix-blend-mode:multiply;transition:transform .5s var(--ease-out);}
+.comp:hover .comp-media img,.comp:focus-visible .comp-media img{transform:translateY(-6px) scale(1.03);}
+.comp .ix{position:absolute;left:0;top:0;font-family:var(--mono);font-size:var(--t-micro);
+  letter-spacing:var(--ls-tech);color:var(--text-muted);}
+.comp .nm{display:block;font-family:var(--display);font-size:var(--t-h4);line-height:var(--lh-head-sm);font-weight:600;
+  text-transform:uppercase;color:var(--text-primary);
+  transition:color .25s var(--ease);}
+.comp:hover .nm,.comp:focus-visible .nm{color:var(--linkk-green-dark);}
+.comp .purpose{display:block;margin-top:6px;font-size:var(--t-body-sm);line-height:var(--lh-body-sm);
+  color:var(--text-muted);}
+
+/* --- Applications --------------------------------------------------------- *
+   Editorial rows keyed to the verified project sectors, with an image slot
+   that reveals on hover when real sector photography exists (none does yet —
+   the slot is documented in the markup). */
+.app-list{border-top:1px solid var(--border);}
+.app-row{position:relative;display:grid;
+  grid-template-columns:62px minmax(0,1fr) minmax(0,1.25fr);
+  gap:clamp(14px,2vw,34px);align-items:baseline;
+  padding:clamp(16px,1.7vw,24px) 0;border-bottom:1px solid var(--border);}
+.app-row .ix{font-family:var(--mono);font-size:var(--t-micro);letter-spacing:var(--ls-tech);color:var(--text-muted);}
+.app-row .nm{font-family:var(--display);font-size:var(--t-h3);line-height:var(--lh-head);font-weight:600;
+  color:var(--text-primary);text-transform:uppercase;}
+.app-row .what{font-size:var(--t-body-sm);line-height:var(--lh-body-sm);color:var(--text-secondary);}
+.app-row .what b{color:var(--text-primary);font-weight:600;}
+
+/* --- Technical resources -------------------------------------------------- *
+   Only documents that exist are listed as documents. Anything not yet
+   supplied is shown as pending rather than linked to a file that is not
+   there. */
+.res-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:0 clamp(24px,3vw,52px);}
+.res{display:flex;align-items:center;gap:16px;padding:16px 0;
+  border-bottom:1px solid var(--border);}
+.res .ic{flex:none;width:34px;height:34px;display:grid;place-items:center;
+  border:1px solid var(--border);border-radius:var(--r-btn);color:var(--text-muted);}
+.res .ic svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;}
+a.res:hover .ic{border-color:var(--linkk-green);color:var(--linkk-green-dark);}
+.res .t{display:block;font-size:var(--t-h5);font-weight:600;
+  line-height:var(--lh-head-xs);color:var(--text-primary);}
+a.res:hover .t{color:var(--linkk-green-dark);}
+.res .m{display:block;margin-top:3px;font-family:var(--mono);font-size:var(--t-technical);
+  letter-spacing:var(--ls-tech);text-transform:uppercase;color:var(--text-muted);}
+.res--pending{color:var(--text-muted);}
+.res--pending .t{color:var(--text-muted);font-weight:500;}
+
+/* --- Internal pages: responsive ------------------------------------------- */
+@media (max-width:1180px){
+  .comp-grid{grid-template-columns:repeat(3,1fr);}
+}
+@media (max-width:980px){
+  /* Bleed and overlap only make sense with two columns. */
+  .phero-grid{grid-template-columns:1fr;gap:34px;
+    padding-block:34px 44px;}
+  .phero-stage img{width:100%;margin-inline:0;aspect-ratio:3/2;}
+  .pfeat--left,.pfeat--right{grid-template-columns:1fr;}
+  .pfeat--right .pfeat-stage{order:0;}
+  .pfeat-media{width:100%;}
+  .pfeat-cap{width:100%;}
+  .findex-row{grid-template-columns:48px minmax(0,1fr) 28px;}
+  .findex-row .role{grid-column:2/4;margin-top:6px;}
+  .findex-row .tbc{grid-column:2/4;justify-self:start;margin-top:8px;}
+  .app-row{grid-template-columns:48px minmax(0,1fr);}
+  .app-row .what{grid-column:2;margin-top:7px;}
+  .res-grid{grid-template-columns:1fr;}
+}
+@media (max-width:760px){
+  .comp-grid{grid-template-columns:repeat(2,1fr);}
+  .findex-row{grid-template-columns:1fr;gap:5px;padding:20px 0;}
+  a.findex-row:hover,a.findex-row:focus-within{padding-block:20px;}
+  .findex-row::before{display:none;}   /* no hover on touch */
+  .findex-row .role{grid-column:1;}
+  .findex-row .tbc{grid-column:1;}
+  .findex-row .go{display:none;}
+  .app-row{grid-template-columns:1fr;gap:5px;padding:20px 0;}
+  .app-row .what{grid-column:1;}
+  .phero-cta .b{width:100%;}
+  .phero-cta{flex-direction:column;align-items:stretch;width:100%;}
+
+  /* The flow becomes a swipe rail, matching the Home timeline. */
+  .flow-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;
+    margin-inline:calc(var(--gutter) * -1);padding-inline:var(--gutter);}
+  .flow-track::-webkit-scrollbar{display:none;}
+  .flow-step{flex:0 0 66%;scroll-snap-align:start;}
+  .flow-line{display:none;}
+}
+@media (max-width:420px){
+  .comp-grid{grid-template-columns:1fr;}
+  .flow-step{flex:0 0 78%;}
+}
+
+/* ==========================================================================
+   INTERNAL PAGES — PART 2
+   Components for About, R&D, Support, Projects, Media and Contact. Same rule
+   as part one: nothing above is touched, Home stays the source of truth, and
+   each page gets one dominant device of its own rather than a fourth copy of
+   the same grid.
+
+   Every one of these is built from the tokens already declared at the top of
+   this file. No new colour, no new radius, no new type size.
+   ========================================================================== */
+
+/* --- Hero variants --------------------------------------------------------- *
+   The product hero's stage assumes an isolated render on white: a light pool
+   and a contact shadow underneath it. A drawing, a photograph or an SVG needs
+   neither, so --plain drops both pseudo-elements rather than fighting them. */
+.phero-stage--plain::before,.phero-stage--plain::after{content:none;}
+.phero-stage--plain{width:100%;}
+/* A photograph in the hero slot. It is a real container, so it takes the
+   large-media radius — this is the one place a picture is framed. */
+.phero-shot{position:relative;width:106%;max-width:none;margin-inline:-3%;
+  aspect-ratio:4/3;object-fit:cover;border-radius:var(--r-md);
+  box-shadow:var(--shadow);}
+/* Hero rail, reused from Home but declared here so a page can carry facts
+   without pulling in .hero. */
+.phero-rail{display:flex;flex-wrap:wrap;gap:0;margin-top:clamp(24px,2.4vw,34px);
+  border-top:1px solid var(--border);}
+.phero-rail li{flex:1 1 auto;min-width:140px;padding:15px 24px 0 0;}
+.phero-rail .k{display:block;font-family:var(--display);
+  font-size:var(--t-h4);line-height:var(--lh-head-sm);font-weight:600;color:var(--text-primary);
+  text-transform:uppercase;letter-spacing:-.01em;}
+.phero-rail .v{display:block;margin-top:7px;font-family:var(--mono);font-size:var(--t-technical);
+  letter-spacing:var(--ls-tech);text-transform:uppercase;color:var(--text-muted);}
+
+/* --- Company timeline (About) ---------------------------------------------- *
+   A continuous rail with the year set large against it. Deliberately vertical:
+   the Home journey and the Products flow are both horizontal rails, and a
+   third one would make the three pages read as the same page.
+
+   A milestone whose date is not confirmed uses --tbc, which swaps the year for
+   a status chip. It is not given a plausible-looking year. */
+.tline{--rail:clamp(104px,11vw,164px);position:relative;}
+.tline::before{
+  content:"";position:absolute;left:var(--rail);top:14px;bottom:14px;width:1px;
+  background:var(--border);
+}
+.tline-item{
+  position:relative;display:grid;
+  grid-template-columns:var(--rail) minmax(0,1fr);
+  gap:clamp(26px,3.4vw,60px);
+  padding:clamp(22px,2.6vw,40px) 0;
+}
+.tline-item + .tline-item{border-top:1px solid var(--border-soft);}
+.tline-item::after{           /* the node on the rail */
+  content:"";position:absolute;left:var(--rail);top:calc(clamp(22px,2.6vw,40px) + .62em);
+  translate:-50% 0;width:9px;height:9px;border-radius:50%;
+  background:var(--page-bg);border:1.5px solid var(--border);
+  transition:background-color .5s var(--ease),border-color .5s var(--ease),
+             box-shadow .5s var(--ease);
+}
+.tline-item.is-in::after{background:var(--linkk-green);border-color:var(--linkk-green);
+  box-shadow:0 0 0 4px rgba(106,174,44,.15);}
+.tline-item .yr{justify-self:end;font-family:var(--display);
+  font-size:var(--t-h2);font-weight:600;line-height:1;
+  color:var(--text-primary);letter-spacing:-.015em;}
+.tline-item .yr small{display:block;margin-top:8px;font-family:var(--mono);
+  font-size:var(--t-micro);font-weight:500;letter-spacing:var(--ls-tech);text-transform:uppercase;
+  color:var(--text-muted);}
+.tline-item h3{font-family:var(--display);font-size:var(--t-h4);line-height:var(--lh-head-sm);
+  font-weight:600;color:var(--text-primary);margin-bottom:9px;}
+.tline-item p{color:var(--text-secondary);max-width:60ch;
+  font-size:var(--t-body);line-height:var(--lh-body);}
+.tline-item .src{display:block;margin-top:10px;font-family:var(--mono);font-size:var(--t-technical);
+  letter-spacing:var(--ls-tech);text-transform:uppercase;color:var(--text-muted);}
+/* Date not confirmed. Reads as an engineering TBC, not as a finished entry. */
+.tline-item--tbc .yr{font-family:var(--mono);font-size:var(--t-micro);letter-spacing:var(--ls-tech);
+  text-transform:uppercase;color:var(--text-muted);border:1px solid var(--border);
+  border-radius:var(--r-btn);padding:6px 9px;line-height:1.3;text-align:center;
+  align-self:start;margin-top:.4em;}
+.tline-item--tbc::after{background:var(--page-bg);border-style:dashed;}
+.tline-item--tbc.is-in::after{background:var(--page-bg);border-color:var(--border);
+  box-shadow:none;}
+
+/* --- Principles (About) ---------------------------------------------------- *
+   Vision, mission and quality policy. Asymmetric on purpose — the first column
+   is wider, so it does not read as three equal cards. No boxes: a hairline
+   above each and a green tick under the heading. */
+.prin{display:grid;grid-template-columns:minmax(0,1.22fr) minmax(0,1fr) minmax(0,1fr);
+  gap:0 clamp(24px,3.2vw,56px);}
+.prin > *{position:relative;padding-top:clamp(20px,2.2vw,30px);
+  border-top:1px solid var(--border);}
+.prin > * + *::before{
+  content:"";position:absolute;left:calc(clamp(24px,3.2vw,56px) / -2);
+  top:0;bottom:0;width:1px;background:var(--border-soft);
+}
+.prin .ix{display:block;font-family:var(--mono);font-size:var(--t-technical);letter-spacing:var(--ls-tech);
+  text-transform:uppercase;color:var(--text-muted);margin-bottom:12px;}
+.prin h3{font-family:var(--display);font-size:var(--t-h4);line-height:var(--lh-head-sm);font-weight:600;
+  color:var(--text-primary);margin-bottom:14px;position:relative;}
+.prin h3::after{content:"";display:block;width:34px;height:2px;
+  background:var(--linkk-green);margin-top:12px;}
+.prin p{color:var(--text-secondary);font-size:var(--t-body);line-height:var(--lh-body);}
+
+/* A statement, not a card. Used for the people paragraph. */
+.pquote{position:relative;padding-left:clamp(18px,2.2vw,32px);
+  font-family:var(--display);font-weight:600;text-transform:none;
+  font-size:var(--t-h3);line-height:1.22;letter-spacing:-.012em;
+  color:var(--text-primary);max-width:22ch;}
+.pquote::before{content:"";position:absolute;left:0;top:.16em;bottom:.16em;width:3px;
+  background:var(--linkk-green);}
+
+/* --- Workflow (Support) ---------------------------------------------------- *
+   Eight stages down a left rail, with every second stage stepped in. Vertical
+   and staggered, so it is legible at eight items where the horizontal rails on
+   Home and Products would be crushed. */
+.wf{position:relative;}
+.wf::before{content:"";position:absolute;left:18px;top:34px;bottom:34px;width:1px;
+  background:var(--border);}
+.wf-step{position:relative;display:grid;grid-template-columns:37px minmax(0,1fr);
+  gap:clamp(18px,2.4vw,38px);padding:clamp(15px,1.7vw,24px) 0;}
+.wf-step .no{position:relative;z-index:1;width:37px;height:37px;display:grid;
+  place-items:center;border-radius:50%;background:var(--surface);
+  border:1px solid var(--border);font-family:var(--mono);font-size:var(--t-technical);
+  color:var(--text-muted);
+  transition:border-color .5s var(--ease),color .5s var(--ease),
+             box-shadow .5s var(--ease);}
+.wf-step.is-in .no{border-color:var(--linkk-green);color:var(--linkk-green-dark);
+  box-shadow:0 0 0 4px rgba(106,174,44,.12);}
+/* The stagger. Every second stage steps in, which turns a list into a
+   composition without adding a single border. */
+.wf-step:nth-child(even) .wf-body{padding-left:clamp(0px,3.4vw,58px);}
+.wf-body h3{font-family:var(--display);font-size:var(--t-h4);line-height:var(--lh-head-sm);
+  font-weight:600;color:var(--text-primary);margin-bottom:8px;}
+.wf-body p{color:var(--text-secondary);font-size:var(--t-body);
+  line-height:var(--lh-body);max-width:62ch;}
+/* What you get out of the stage. Mono, so it reads as a deliverable. */
+.wf-out{display:inline-flex;align-items:center;gap:9px;margin-top:12px;
+  font-family:var(--mono);font-size:var(--t-technical);letter-spacing:var(--ls-tech);text-transform:uppercase;
+  color:var(--text-muted);}
+.wf-out::before{content:"";width:16px;height:1px;background:var(--linkk-green);flex:none;}
+
+/* --- Capability grid (Support, R&D) ---------------------------------------- *
+   Line-art glyph, name, one line. No container — a hairline above and below is
+   the whole frame. */
+/* Same rule as .soc: no column gap, because it split the row's bottom hairline
+   into segments while the container's top hairline ran the full width. */
+.caps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  border-top:1px solid var(--border);}
+.cap{position:relative;padding:clamp(20px,2.2vw,30px) clamp(24px,3vw,52px) clamp(20px,2.2vw,30px) 0;
+  border-bottom:1px solid var(--border);}
+.cap .ic{display:grid;place-items:center;width:38px;height:38px;margin-bottom:16px;
+  border:1px solid var(--border);border-radius:var(--r-sm);color:var(--linkk-green-dark);
+  transition:border-color .3s var(--ease),transform .4s var(--ease-out);}
+.cap .ic svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.5;}
+.cap:hover .ic{border-color:var(--linkk-green);transform:translateY(-3px);}
+.cap h3{font-family:var(--display);font-size:var(--t-h4);line-height:var(--lh-head-sm);font-weight:600;
+  color:var(--text-primary);margin-bottom:8px;}
+.cap p{color:var(--text-secondary);font-size:var(--t-body-sm);line-height:var(--lh-body-sm);}
+
+/* --- Projects: search ------------------------------------------------------ *
+   Sits beside the existing chip filter and drives the same rows. Hidden until
+   JS runs, exactly like the chips, so the no-JS page is simply the full list. */
+.gp-tools{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;
+  margin-bottom:16px;}
+.gp-search{position:relative;flex:1 1 240px;max-width:330px;}
+.gp-search input{width:100%;padding:12px 14px 12px 40px;font:inherit;font-size:var(--t-body);
+  color:var(--text-primary);background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-btn);
+  transition:border-color .2s var(--ease),box-shadow .2s var(--ease);}
+.gp-search input::placeholder{color:var(--text-muted);}
+.gp-search input:focus{outline:none;border-color:var(--linkk-green-dark);
+  box-shadow:0 0 0 3px rgba(106,174,44,.16);}
+.gp-search svg{position:absolute;left:13px;top:50%;translate:0 -50%;
+  width:15px;height:15px;fill:none;stroke:var(--text-muted);stroke-width:1.8;
+  pointer-events:none;}
+/* Countries named in the reference list. Reuses the .applist rhythm. */
+.reach{display:flex;flex-wrap:wrap;gap:7px 22px;margin-top:18px;}
+.reach li{position:relative;padding-left:15px;font-family:var(--mono);font-size:var(--t-technical);
+  letter-spacing:var(--ls-tech);text-transform:uppercase;color:var(--text-secondary);}
+.reach li::before{content:"";position:absolute;left:0;top:.52em;width:7px;height:1px;
+  background:var(--linkk-green);}
+
+/* --- Video wall (Media) ---------------------------------------------------- *
+   One feature at two-thirds width with its description beside it, then three
+   secondary below. The button is the existing .vframe facade hook in main.js —
+   nothing is requested from YouTube until it is pressed. */
+.vfeat{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,.6fr);
+  gap:clamp(22px,2.8vw,48px);align-items:center;}
+.vrow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:clamp(18px,2.2vw,34px);margin-top:clamp(28px,3.2vw,52px);}
+.vshell{position:relative;aspect-ratio:16/9;overflow:hidden;
+  border-radius:var(--r-md);background:var(--section-muted);box-shadow:var(--shadow-sm);}
+.vframe{position:absolute;inset:0;width:100%;height:100%;display:block;padding:0;
+  border:0;background:none;cursor:pointer;}
+.vframe img{width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .8s var(--ease-out);}
+.vframe:hover img,.vframe:focus-visible img{transform:scale(1.045);}
+.vshell iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+.vplay{position:absolute;left:50%;top:50%;translate:-50% -50%;
+  width:clamp(54px,4.6vw,70px);aspect-ratio:1;border-radius:50%;
+  background:var(--linkk-green);display:grid;place-items:center;
+  box-shadow:0 6px 20px rgba(29,36,31,.26);
+  transition:transform .35s var(--ease),background-color .25s var(--ease);}
+.vframe:hover .vplay,.vframe:focus-visible .vplay{transform:translate(-50%,-50%) scale(1.08);
+  background:var(--linkk-green-bright);}
+.vplay::before{content:"";width:0;height:0;margin-left:5px;
+  border-left:17px solid var(--text-primary);
+  border-top:11px solid transparent;border-bottom:11px solid transparent;}
+.vrow .vplay{width:48px;}
+.vrow .vplay::before{border-left-width:13px;border-top-width:8px;border-bottom-width:8px;
+  margin-left:4px;}
+.vbody{margin-top:14px;}
+.vfeat .vbody{margin-top:0;}
+.vbody .kind{display:block;font-family:var(--mono);font-size:var(--t-technical);letter-spacing:var(--ls-tech);
+  text-transform:uppercase;color:var(--linkk-green-dark);margin-bottom:10px;}
+.vbody h3{font-family:var(--display);font-size:var(--t-h4);line-height:var(--lh-head-sm);font-weight:600;
+  color:var(--text-primary);margin-bottom:8px;}
+.vbody p{color:var(--text-secondary);font-size:var(--t-body-sm);line-height:var(--lh-body-sm);}
+.vbody .vmeta{display:block;margin-top:9px;font-family:var(--mono);font-size:var(--t-technical);
+  letter-spacing:var(--ls-tech);text-transform:uppercase;color:var(--text-muted);}
+
+/* --- Social strip (Media) -------------------------------------------------- *
+   Deliberately secondary: a row of hairline entries near the foot of the page,
+   not four coloured cards at the top of it. */
+/* No column gap: the gap broke the row's bottom rule into four segments while
+   the top rule ran the full width. Separation comes from padding instead, so
+   both rules are continuous. */
+.soc{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  border-top:1px solid var(--border);}
+.soc a{display:flex;align-items:center;gap:13px;
+  padding:19px clamp(18px,2.4vw,40px) 19px 0;
+  border-bottom:1px solid var(--border);color:var(--text-secondary);
+  transition:color .25s var(--ease);}
+.soc a:hover{color:var(--linkk-green-dark);}
+.soc svg{width:19px;height:19px;fill:currentColor;flex:none;
+  transition:transform .35s var(--ease-out);}
+.soc a:hover svg{transform:translateY(-2px);}
+.soc .n{display:block;font-size:var(--t-h5);font-weight:600;
+  line-height:var(--lh-head-xs);color:var(--text-primary);}
+.soc a:hover .n{color:var(--linkk-green-dark);}
+.soc .h{display:block;margin-top:3px;font-family:var(--mono);font-size:var(--t-micro);
+  letter-spacing:var(--ls-tech);color:var(--text-muted);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+/* --- Contact --------------------------------------------------------------- */
+.cgrid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);
+  gap:clamp(28px,4.4vw,84px);align-items:start;}
+.cdl{margin:0;border-top:1px solid var(--border);}
+.cdl-row{display:grid;grid-template-columns:86px minmax(0,1fr);gap:8px 18px;
+  padding:16px 0;border-bottom:1px solid var(--border);align-items:baseline;}
+.cdl-row dt{font-family:var(--mono);font-size:var(--t-technical);letter-spacing:var(--ls-tech);
+  text-transform:uppercase;color:var(--text-muted);}
+.cdl-row dd{margin:0;font-size:var(--t-body-sm);line-height:var(--lh-body);color:var(--text-secondary);}
+.cdl-row dd a{color:var(--text-primary);}
+.cdl-row dd a:hover{color:var(--linkk-green-dark);}
+.cdl-row .big{font-family:var(--display);font-size:var(--t-h3);line-height:var(--lh-head);
+  font-weight:600;color:var(--text-primary);display:inline-block;}
+.cdl-row .big:hover{color:var(--linkk-green-dark);}
+
+/* The form. No panel around it — the fields are the structure. */
+.cform{margin-top:clamp(20px,2.2vw,30px);}
+.frow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:0 clamp(16px,2vw,28px);}
+.field{display:flex;flex-direction:column;margin-bottom:clamp(16px,1.8vw,22px);}
+.field label{font-family:var(--mono);font-size:var(--t-label);letter-spacing:var(--ls-label);
+  text-transform:uppercase;color:var(--text-muted);margin-bottom:9px;}
+.field .req{color:var(--linkk-green-dark);}
+.field input,.field select,.field textarea{
+  width:100%;padding:12px 14px;font:inherit;font-size:var(--t-body);color:var(--text-primary);
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-btn);
+  transition:border-color .2s var(--ease),box-shadow .2s var(--ease);
+}
+.field select{appearance:none;cursor:pointer;padding-right:38px;
+  background-image:linear-gradient(45deg,transparent 50%,var(--text-muted) 50%),
+                   linear-gradient(135deg,var(--text-muted) 50%,transparent 50%);
+  background-position:calc(100% - 19px) calc(50% + 1px),calc(100% - 14px) calc(50% + 1px);
+  background-size:5px 5px,5px 5px;background-repeat:no-repeat;}
+.field textarea{min-height:132px;resize:vertical;line-height:1.6;}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;
+  border-color:var(--linkk-green-dark);box-shadow:0 0 0 3px rgba(106,174,44,.16);}
+.field.has-error input,.field.has-error select,.field.has-error textarea{
+  border-color:var(--legrand);}
+.field .err{display:none;margin-top:7px;font-size:var(--t-body-sm);color:var(--legrand);}
+.field.has-error .err{display:block;}
+.form-alert{display:none;margin-bottom:22px;padding:15px 18px;font-size:var(--t-body-sm);
+  line-height:var(--lh-body-sm);color:var(--text-primary);background:var(--linkk-green-soft);
+  border-left:3px solid var(--linkk-green);border-radius:0 var(--r-sm) var(--r-sm) 0;}
+.form-alert.is-on{display:block;}
+.form-note{margin-top:6px;font-size:var(--t-body-sm);line-height:var(--lh-body-sm);
+  color:var(--text-muted);}
+.form-note a{color:var(--text-primary);text-decoration:underline;
+  text-underline-offset:3px;}
+
+/* The map band. Full-bleed, with the address panel overlapping it rather than
+   a grey rectangle dropped at the end of the page. */
+.mapband{padding-block:0;background:var(--section-muted);
+  border-top:1px solid var(--border-soft);}
+.map-shell{position:relative;height:clamp(340px,42vw,520px);}
+.map-shell iframe{position:absolute;inset:0;width:100%;height:100%;border:0;
+  filter:saturate(.72) contrast(1.03);}
+.map-over{position:absolute;inset:0;display:flex;align-items:flex-end;
+  pointer-events:none;}
+.map-card{pointer-events:auto;width:min(390px,100%);
+  margin-bottom:clamp(22px,3.4vw,52px);padding:clamp(20px,2.2vw,30px);
+  background:var(--surface);border-radius:var(--r-md);box-shadow:var(--shadow);}
+.map-card h3{font-family:var(--display);font-size:var(--t-h4);line-height:var(--lh-head-sm);font-weight:600;
+  color:var(--text-primary);margin-bottom:10px;}
+.map-card p{font-size:var(--t-body-sm);line-height:var(--lh-body-sm);color:var(--text-secondary);
+  margin-bottom:16px;}
+
+/* --- Internal pages, part 2: responsive ------------------------------------ */
+@media (max-width:1180px){
+  .caps{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .soc{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media (max-width:980px){
+  .phero-shot{width:100%;margin-inline:0;aspect-ratio:16/9;}
+  .prin{grid-template-columns:1fr;gap:0;}
+  .prin > * + *::before{content:none;}
+  .prin > *{padding-bottom:clamp(18px,2vw,26px);}
+  .vfeat{grid-template-columns:1fr;gap:20px;}
+  .vfeat .vbody{margin-top:2px;}
+  .vrow{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .cgrid{grid-template-columns:1fr;gap:38px;}
+  .map-over{position:static;display:block;pointer-events:auto;}
+  .map-card{width:100%;margin:0;border-radius:0;box-shadow:none;
+    border-bottom:1px solid var(--border);}
+  .map-shell{height:clamp(300px,52vw,420px);}
+}
+@media (max-width:760px){
+  /* The year column was 58px, which held a 9px sublabel and nothing bigger.
+     Now that the labels are legible the milestone reads as one block with the
+     rail beside it, rather than two columns fighting over 58px. */
+  .tline{--rail:17px;}
+  .tline-item{grid-template-columns:minmax(0,1fr);gap:10px;padding-left:40px;}
+  .tline-item .yr{justify-self:start;font-size:var(--t-h3);
+    display:flex;align-items:baseline;gap:11px;}
+  .tline-item .yr small{margin-top:0;}
+  .tline-item--tbc .yr{padding:5px 8px;align-self:auto;margin-top:0;
+    font-size:var(--t-micro);display:inline-block;}
+  .wf-step:nth-child(even) .wf-body{padding-left:0;}
+  .wf-step{gap:16px;}
+  /* One column: the right padding that keeps the rules continuous side by side
+     is just lost measure here. */
+  .caps{grid-template-columns:1fr;}
+  .cap{padding-right:0;}
+  .vrow{grid-template-columns:1fr;}
+  .soc{grid-template-columns:1fr;}
+  .soc a{padding-right:0;}
+  .frow{grid-template-columns:1fr;}
+  .cdl-row{grid-template-columns:1fr;gap:5px;padding:16px 0;}
+  .gp-tools{gap:12px;}
+  .gp-search{max-width:none;flex:1 1 100%;}
+  .phero-rail li{min-width:50%;padding:15px 14px 0 0;}
+  /* Touch targets on the small link rows. */
+  .soc a{padding:17px 0;min-height:56px;}
+  .res{padding:18px 0;min-height:56px;}
+}
+@media (max-width:420px){
+  .phero-rail li{min-width:100%;}
+}
+
+/* --- Hero mosaic (Projects) ------------------------------------------------ *
+   Three sector photographs instead of a product render. Deliberately small:
+   the source images are 300px wide, so they are shown at a size they can
+   actually carry rather than blown up to hero scale. Asymmetric — one tall
+   plate beside two stacked. */
+.phero-mosaic{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-rows:repeat(2,minmax(0,1fr));gap:clamp(8px,1vw,14px);
+  width:104%;max-width:none;margin-inline:-2%;}
+.phero-mosaic figure{margin:0;position:relative;overflow:hidden;
+  border-radius:var(--r-sm);background:var(--section-muted);}
+.phero-mosaic figure:first-child{grid-row:span 2;}
+.phero-mosaic img{width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .9s var(--ease-out);}
+.phero-mosaic figure:hover img{transform:scale(1.05);}
+/* The caption sits on an arbitrary photograph, so the scrim has to carry the
+   contrast on its own: by the time the text starts the gradient is already at
+   .72, which is 7:1 against white even on the brightest possible frame. */
+.phero-mosaic figcaption{position:absolute;left:0;right:0;bottom:0;padding:26px 12px 9px;
+  font-family:var(--mono);font-size:var(--t-technical);letter-spacing:var(--ls-tech);text-transform:uppercase;
+  color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45);
+  background:linear-gradient(180deg,rgba(23,28,23,0) 0%,rgba(23,28,23,.72) 38%,
+                                    rgba(23,28,23,.92) 100%);}
+.phero-mosaic figure:not(:first-child) img{aspect-ratio:4/3;}
+@media (max-width:980px){
+  .phero-mosaic{width:100%;margin-inline:0;grid-template-rows:auto;}
+  .phero-mosaic figure:first-child{grid-row:span 2;}
+}
+@media (max-width:520px){
+  .phero-mosaic{grid-template-columns:1fr;grid-template-rows:auto;}
+  .phero-mosaic figure:first-child{grid-row:auto;}
+  .phero-mosaic figure:first-child img{aspect-ratio:16/9;}
+}
+/* The sector index rows link into the reference list below and pre-set its
+   filter. Without JS they are ordinary in-page anchors. */
+.ind-row .count{font-family:var(--mono);font-size:var(--t-micro);letter-spacing:var(--ls-tech);
+  color:var(--text-muted);white-space:nowrap;}
+a.ind-row:hover .count,a.ind-row:focus-within .count{color:var(--linkk-green-dark);}
+
+/* Visually hidden, still announced. For labels whose field is self-evident on
+   screen — .skip is a real skip link and must not be borrowed for this. */
+.vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+  clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;}
+
+/* The workflow reads as a rail against a held heading rather than a single
+   narrow column with 700px of empty page beside it. The heading tracks the
+   rail on desktop and drops above it once there is only one column. */
+.wf-layout{display:grid;grid-template-columns:minmax(0,.72fr) minmax(0,1.28fr);
+  gap:clamp(26px,4vw,72px);}
+/* align-items is left at stretch on purpose: a sticky child can only travel
+   inside its own grid area, and `start` would shrink that area to the
+   heading's own height, pinning it at the top instead. */
+.wf-intro-in{position:sticky;top:112px;}
+@media (max-width:980px){
+  .wf-layout{grid-template-columns:1fr;gap:26px;}
+  .wf-intro-in{position:static;}
+}
+
+/* Two-column statement block. Same proportions as the Legrand row, without
+   borrowing a class named for a different thing. */
+.say{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
+  gap:clamp(24px,3vw,56px);align-items:start;}
+@media (max-width:980px){.say{grid-template-columns:1fr;gap:20px;}}

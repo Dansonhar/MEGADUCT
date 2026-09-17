@@ -136,7 +136,7 @@
 
       if (firstBad) {
         ev.preventDefault();
-        firstBad.querySelector('input, textarea').focus();
+        firstBad.querySelector('input, select, textarea').focus();
         firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
       }
@@ -152,7 +152,7 @@
       }
     });
 
-    Array.prototype.forEach.call(form.querySelectorAll('input, textarea'), function (input) {
+    Array.prototype.forEach.call(form.querySelectorAll('input, select, textarea'), function (input) {
       input.addEventListener('input', function () {
         input.closest('.field').classList.remove('has-error');
       });
@@ -429,21 +429,47 @@
       sectors.push({ key: key, label: el ? el.textContent.trim() : key });
     });
     var chips = [{ key: '', label: 'All' }].concat(sectors);
+
+    /* Search is optional: a page with no [data-gp-search] behaves exactly as
+       it did before. The row's own text is the haystack, so a project is
+       searchable by name, sector or country without a parallel index. */
+    var gpSearch = doc.querySelector('[data-gp-search]');
+    var gpEmpty = doc.querySelector('[data-gp-empty]');
+    var activeKey = '';
+    var query = '';
+
+    rows.forEach(function (r) {
+      r.setAttribute('data-hay', r.textContent.replace(/\s+/g, ' ').trim().toLowerCase());
+    });
+
     var apply = function (key) {
+      if (typeof key === 'string') activeKey = key;
       var shown = 0;
       rows.forEach(function (r) {
-        var on = !key || r.getAttribute('data-industry') === key;
+        var on = (!activeKey || r.getAttribute('data-industry') === activeKey) &&
+                 (!query || r.getAttribute('data-hay').indexOf(query) > -1);
         r.hidden = !on;
         if (on) shown++;
       });
       Array.prototype.forEach.call(gpFilter.children, function (c) {
-        c.setAttribute('aria-pressed', String(c.getAttribute('data-key') === key));
+        c.setAttribute('aria-pressed', String(c.getAttribute('data-key') === activeKey));
       });
+      if (gpEmpty) gpEmpty.hidden = shown > 0;
       if (gpCount) {
         gpCount.textContent = shown + (shown === 1 ? ' project' : ' projects') +
-          (key ? ' in ' + (chips.filter(function (c) { return c.key === key; })[0] || {}).label : '');
+          (activeKey ? ' in ' + (chips.filter(function (c) { return c.key === activeKey; })[0] || {}).label : '') +
+          (query ? ' matching \u201c' + query + '\u201d' : '');
       }
     };
+
+    if (gpSearch) {
+      gpSearch.addEventListener('input', function () {
+        query = gpSearch.value.trim().toLowerCase();
+        apply();
+      });
+      var tools = gpSearch.closest('.gp-tools');
+      if (tools) tools.hidden = false;
+    }
 
     chips.forEach(function (c) {
       var b = doc.createElement('button');
@@ -456,12 +482,81 @@
       gpFilter.appendChild(b);
     });
 
+    /* A sector row elsewhere on the page can pre-set the filter. The anchor's
+       own href does the scrolling, so without JS these stay ordinary in-page
+       links to the full list. */
+    Array.prototype.forEach.call(doc.querySelectorAll('[data-gp-jump]'), function (a) {
+      a.addEventListener('click', function () {
+        if (gpSearch) { gpSearch.value = ''; query = ''; }
+        apply(a.getAttribute('data-gp-jump'));
+      });
+    });
+
     /* One sector only: a filter with a single choice is noise. */
     if (sectors.length > 1) {
       gpFilter.hidden = false;
       if (gpCount) gpCount.hidden = false;
     }
     apply('');
+  }
+
+  /* ---- System flow (Products) --------------------------------------------- *
+     Same scroll-linked mechanic as the Home page timeline, on the same markup
+     shape, so the two read as one motion language. Guarded on [data-flow],
+     so every page without one skips it.                                     */
+  var flow = doc.querySelector('[data-flow]');
+  if (flow && !reduced) {
+    var fLine = flow.querySelector('.flow-line');
+    var fSteps = flow.querySelectorAll('.flow-step');
+    var fTrack = flow.querySelector('.flow-track');
+
+    var fTick = function () {
+      var r = flow.getBoundingClientRect();
+      var vh = window.innerHeight;
+      var p = (vh * 0.8 - r.top) / (r.height + vh * 0.4);
+      p = Math.max(0, Math.min(1, p));
+      if (fLine) fLine.style.setProperty('--p', p.toFixed(3));
+      Array.prototype.forEach.call(fSteps, function (s, i) {
+        s.classList.toggle('is-in', p >= (i + 0.5) / fSteps.length);
+      });
+    };
+    /* The mobile rail scrolls sideways instead, so light every stage rather
+       than leaving half the swipe view dimmed. */
+    var fSync = function () {
+      if (fTrack && fTrack.scrollWidth > fTrack.clientWidth + 4) {
+        Array.prototype.forEach.call(fSteps, function (s) { s.classList.add('is-in'); });
+        if (fLine) fLine.style.setProperty('--p', '1');
+      } else {
+        fTick();
+      }
+    };
+    window.addEventListener('scroll', fSync, { passive: true });
+    window.addEventListener('resize', fSync);
+    fSync();
+  } else if (flow) {
+    Array.prototype.forEach.call(flow.querySelectorAll('.flow-step'), function (s) {
+      s.classList.add('is-in');
+    });
+  }
+
+  /* ---- Component gallery (Products) --------------------------------------- *
+     Each component is already a <button> carrying data-component. Until a
+     detail page or panel exists there is nothing to open, so pressing one
+     dispatches `comp:open` and does nothing else — wiring a modal or a route
+     later means listening for that event, not re-authoring the markup.      */
+  var compGrid = doc.querySelector('[data-comp-grid]');
+  if (compGrid) {
+    compGrid.addEventListener('click', function (ev) {
+      var btn = ev.target.closest ? ev.target.closest('.comp') : null;
+      if (!btn) return;
+      compGrid.dispatchEvent(new CustomEvent('comp:open', {
+        bubbles: true,
+        detail: {
+          component: btn.getAttribute('data-component'),
+          name: (btn.querySelector('.nm') || {}).textContent
+        }
+      }));
+    });
   }
 
   /* ---- Instrument trace --------------------------------------------------- *
