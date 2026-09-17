@@ -1,0 +1,725 @@
+/* ==========================================================================
+   LINKK Busway Systems — industrial design system (2026)
+
+   Scope: currently loaded by linkk/index.html ONLY. The other seven LINKK
+   pages still use linkk.css. Migrate them page by page; this sheet is the
+   target system.
+
+   Direction: premium industrial engineering. Dark charcoal-green dominates,
+   warm white carries the product, steel grey carries structure, and LINKK
+   green is an accent — never a background. Sharp geometry over rounded
+   cards; large type over card grids.
+   ========================================================================== */
+
+/* --- Tokens --------------------------------------------------------------- */
+:root{
+  /* Surfaces — dark first */
+  --void:#090c0b;          /* deepest, used for the closing CTA */
+  --carbon:#0e1311;        /* primary dark section */
+  --carbon-2:#151b18;      /* raised dark surface */
+  --steel-900:#202924;     /* hairlines on dark */
+  --steel:#6d7b74;         /* secondary text on dark */
+  --steel-300:#aeb8b2;     /* body text on dark */
+
+  /* Surfaces — light */
+  --paper:#f2f2ee;         /* warm white, primary light section */
+  --paper-2:#e8e9e3;       /* recessed warm white */
+  --ink:#0e1311;           /* text on light */
+  --ink-2:#4a544e;         /* secondary text on light */
+  --rule:#d5d7cf;          /* hairlines on light */
+
+  /* Accent — used sparingly */
+  --green:#8cc63f;
+  --green-bright:#a4dc55;
+  --green-deep:#4f7a1c;
+  --legrand:#e2001a;
+
+  --wrap:1280px;
+  --gutter:28px;
+
+  --display:"Barlow Condensed","Barlow",Arial,sans-serif;
+  --sans:"Barlow","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+
+  --ease:cubic-bezier(.22,.7,.28,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+}
+
+/* --- Reset ---------------------------------------------------------------- */
+*,*::before,*::after{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+body{
+  margin:0;font-family:var(--sans);font-size:16.5px;line-height:1.62;
+  color:var(--ink);background:var(--paper);overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+img{max-width:100%;height:auto;display:block;border:0;}
+a{color:inherit;text-decoration:none;}
+h1,h2,h3,h4{margin:0;font-weight:600;line-height:1.02;letter-spacing:-.01em;}
+p{margin:0 0 18px;}p:last-child{margin-bottom:0;}
+ul,ol{margin:0;padding:0;list-style:none;}
+button{font:inherit;color:inherit;}
+:focus-visible{outline:2px solid var(--green);outline-offset:3px;}
+::selection{background:var(--green);color:var(--carbon);}
+
+/* --- Layout primitives ---------------------------------------------------- */
+.wrap{width:100%;max-width:var(--wrap);margin-inline:auto;padding-inline:var(--gutter);}
+.sec{position:relative;padding-block:clamp(56px,5.6vw,96px);}
+.sec--dark{background:var(--carbon);color:var(--steel-300);}
+.sec--void{background:var(--void);color:var(--steel-300);}
+.sec--paper{background:var(--paper);color:var(--ink-2);}
+.sec--paper2{background:var(--paper-2);color:var(--ink-2);}
+.sec--flush{padding-block:0;}
+.sec--tight{padding-block:clamp(44px,4.2vw,72px);}
+
+/* --- Type ----------------------------------------------------------------- */
+/* Display: Barlow Condensed, tight, uppercase-capable. The industrial voice. */
+/* Sized so a headline states the section without consuming the screen.
+   d1 tops out at 4.75rem, d2 at 3.4rem — see the scale note in the README. */
+.d1{font-family:var(--display);font-size:clamp(3.25rem,5vw,4.75rem);font-weight:600;
+    line-height:.94;letter-spacing:-.018em;}
+.d2{font-family:var(--display);font-size:clamp(2.3rem,3.5vw,3.4rem);font-weight:600;
+    line-height:1;letter-spacing:-.015em;}
+.d3{font-family:var(--display);font-size:clamp(1.65rem,2.3vw,2.3rem);font-weight:600;
+    line-height:1.06;letter-spacing:-.012em;}
+.d4{font-family:var(--display);font-size:clamp(1.3rem,1.55vw,1.55rem);font-weight:600;
+    line-height:1.12;letter-spacing:-.01em;}
+.on-dark .d1,.on-dark .d2,.on-dark .d3,.on-dark .d4,
+.sec--dark h1,.sec--dark h2,.sec--dark h3,.sec--void h2,.sec--void h3{color:#fff;}
+.sec--paper h2,.sec--paper h3,.sec--paper2 h2,.sec--paper2 h3{color:var(--ink);}
+.jrn h2,.gp h2,.rnd h2,.cta h2{color:#fff;}
+
+/* Technical label — the mono eyebrow that signals engineering, used as the
+   section index throughout the page. */
+.eyebrow{
+  display:flex;align-items:center;gap:11px;margin:0 0 18px;
+  font-family:var(--mono);font-size:11.5px;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--green);
+}
+.eyebrow::before{
+  content:"";width:26px;height:1px;background:var(--green);flex:none;
+}
+.eyebrow .idx{color:var(--steel);}
+.sec--paper .eyebrow,.sec--paper2 .eyebrow{color:var(--green-deep);}
+.sec--paper .eyebrow::before,.sec--paper2 .eyebrow::before{background:var(--green-deep);}
+.sec--paper .eyebrow .idx,.sec--paper2 .eyebrow .idx{color:#8a9490;}
+
+.lede{font-size:clamp(1rem,1.15vw,1.125rem);line-height:1.62;max-width:60ch;}
+.sec--dark .lede,.sec--void .lede{color:var(--steel-300);}
+.meta{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;
+      text-transform:uppercase;color:var(--steel);}
+
+/* --- Buttons — square industrial geometry, no pills ----------------------- */
+.b{
+  display:inline-flex;align-items:center;justify-content:center;gap:11px;
+  padding:14px 26px;border:1px solid transparent;border-radius:2px;
+  font-family:var(--sans);font-size:15px;font-weight:600;letter-spacing:.04em;
+  text-transform:uppercase;cursor:pointer;position:relative;overflow:hidden;
+  transition:background .22s var(--ease),color .22s var(--ease),
+             border-color .22s var(--ease);
+}
+.b svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;flex:none;
+       transition:transform .28s var(--ease);}
+.b:hover svg{transform:translateX(4px);}
+.b--green{background:var(--green);color:var(--carbon);border-color:var(--green);}
+.b--green:hover{background:var(--green-bright);border-color:var(--green-bright);}
+.b--ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.28);}
+.b--ghost:hover{background:#fff;color:var(--carbon);border-color:#fff;}
+.b--ink{background:var(--ink);color:#fff;border-color:var(--ink);}
+.b--ink:hover{background:var(--green-deep);border-color:var(--green-deep);}
+.b--line{background:transparent;color:var(--ink);border-color:var(--rule);}
+.b--line:hover{border-color:var(--ink);}
+
+/* Text link with a rule that draws on hover */
+.tlink{
+  display:inline-flex;align-items:center;gap:9px;padding-bottom:4px;
+  font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--green);position:relative;
+}
+.tlink::after{
+  content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;
+  background:currentColor;transform:scaleX(0);transform-origin:left;
+  transition:transform .35s var(--ease-out);
+}
+.tlink:hover::after{transform:scaleX(1);}
+/* The arrow needs explicit sizing here as well as in .b — without it the
+   inline SVG renders at its intrinsic size and blows the link apart. */
+.tlink svg{width:13px;height:13px;flex:none;fill:none;stroke:currentColor;stroke-width:2;
+  transition:transform .28s var(--ease);}
+.tlink:hover svg{transform:translateX(4px);}
+.tlink{white-space:nowrap;}
+.sec--paper .tlink,.sec--paper2 .tlink{color:var(--green-deep);}
+
+/* --- Scroll reveal -------------------------------------------------------- *
+   Elements start slightly low and transparent; the observer in main.js adds
+   .is-in. Everything degrades to visible if JS never runs (see .no-js guard
+   applied inline on <html>), and motion is dropped entirely under
+   prefers-reduced-motion.                                                    */
+[data-reveal]{opacity:0;transform:translateY(22px);
+  transition:opacity .7s var(--ease-out),transform .7s var(--ease-out);}
+[data-reveal].is-in{opacity:1;transform:none;}
+[data-reveal][data-d="1"]{transition-delay:.08s;}
+[data-reveal][data-d="2"]{transition-delay:.16s;}
+[data-reveal][data-d="3"]{transition-delay:.24s;}
+[data-reveal][data-d="4"]{transition-delay:.32s;}
+[data-reveal][data-d="5"]{transition-delay:.40s;}
+
+/* ==========================================================================
+   SHARED CHROME — header, nav, drawer, footer
+   Same markup hooks as linkk.css so main.js keeps working unchanged.
+   ========================================================================== */
+
+/* --- Top bar -------------------------------------------------------------- */
+.topbar{background:var(--void);color:var(--steel);
+        border-bottom:1px solid rgba(255,255,255,.06);font-size:12.5px;}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;
+              gap:20px;min-height:42px;}
+.topbar a{color:var(--steel);transition:color .18s var(--ease);}
+.topbar a:hover{color:#fff;}
+.topbar-right{display:flex;align-items:center;gap:20px;font-family:var(--mono);
+              letter-spacing:.08em;}
+.topbar-right .sep{opacity:.25;}
+.topbar-cert{height:26px;width:auto;background:#fff;border-radius:2px;padding:2px 4px;}
+
+/* Brand switcher — existing behaviour, industrial skin */
+.brandswitch{display:inline-flex;align-items:center;gap:1px;padding:2px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:2px;}
+.brandswitch a{
+  display:inline-flex;align-items:center;gap:7px;padding:5px 13px;border-radius:1px;
+  font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--steel);white-space:nowrap;
+  transition:background .2s var(--ease),color .2s var(--ease);
+}
+.brandswitch a:hover{color:#fff;background:rgba(255,255,255,.07);}
+.brandswitch a.is-on{background:var(--green);color:var(--carbon);}
+.brandswitch a.is-on:hover{background:var(--green-bright);}
+.brandswitch .tag{font-size:8.5px;font-weight:600;letter-spacing:.1em;
+  padding:2px 5px;border-radius:1px;background:rgba(0,0,0,.22);color:inherit;}
+
+/* --- Header --------------------------------------------------------------- *
+   Transparent over the hero, then solidifies once scrolled (.is-stuck comes
+   from the existing handler in main.js).                                     */
+.site-header{
+  position:sticky;top:0;z-index:900;background:transparent;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  transition:background .3s var(--ease),border-color .3s var(--ease),
+             backdrop-filter .3s var(--ease);
+}
+.site-header.is-stuck{
+  background:rgba(14,19,17,.88);backdrop-filter:saturate(160%) blur(14px);
+  border-bottom-color:rgba(255,255,255,.1);
+}
+.site-header .wrap{display:flex;align-items:center;gap:26px;min-height:82px;}
+
+/* Logo lockup — inline SVG; no LINKK artwork file exists in assets/ */
+.brand-linkk{display:flex;align-items:center;gap:12px;flex:none;}
+.brand-linkk .glyph{width:38px;height:38px;flex:none;}
+.brand-linkk .wm{display:grid;line-height:1;}
+.brand-linkk .wm .n{font-family:var(--display);font-size:27px;font-weight:600;
+  letter-spacing:.2em;color:#fff;}
+.brand-linkk .wm .sub{display:flex;align-items:center;gap:5px;margin-top:5px;
+  font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;color:var(--steel);
+  text-transform:uppercase;white-space:nowrap;}
+.brand-linkk .wm .sub .mark{width:7px;height:7px;background:var(--legrand);flex:none;}
+.brand-linkk .wm .sub b{color:#e7ebe8;font-weight:600;font-size:9.5px;letter-spacing:.02em;}
+
+.nav-main{display:flex;align-items:center;gap:2px;margin-inline:auto;}
+.nav-main a{
+  position:relative;display:block;padding:10px 13px;
+  font-size:14px;font-weight:500;letter-spacing:.035em;text-transform:uppercase;
+  color:var(--steel-300);white-space:nowrap;transition:color .2s var(--ease);
+}
+.nav-main a:hover{color:#fff;}
+.nav-main a.is-active{color:#fff;}
+.nav-main a.is-active::after{
+  content:"";position:absolute;left:13px;right:13px;bottom:2px;height:2px;background:var(--green);
+}
+.head-actions{flex:none;display:flex;align-items:center;gap:14px;}
+.head-cta{padding:12px 20px;font-size:13px;}
+
+.burger{display:none;width:44px;height:44px;flex:none;background:transparent;
+  border:1px solid rgba(255,255,255,.22);border-radius:2px;cursor:pointer;padding:0;place-items:center;}
+.burger span{display:block;width:17px;height:1.5px;background:#fff;position:relative;}
+.burger span::before,.burger span::after{content:"";position:absolute;left:0;width:17px;height:1.5px;background:#fff;}
+.burger span::before{top:-5px;}.burger span::after{top:5px;}
+
+/* --- Drawer --------------------------------------------------------------- */
+.scrim{position:fixed;inset:0;background:rgba(9,12,11,.65);backdrop-filter:blur(3px);
+       display:none;z-index:999;}
+.scrim.is-open{display:block;}
+.drawer{
+  position:fixed;inset:0 0 0 auto;width:min(380px,92vw);z-index:1000;
+  background:var(--carbon);color:var(--steel-300);
+  transform:translateX(100%);transition:transform .38s var(--ease-out);
+  display:flex;flex-direction:column;padding:26px;overflow-y:auto;
+}
+.drawer.is-open{transform:translateX(0);}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px;gap:12px;}
+.drawer-close{flex:none;width:42px;height:42px;border:1px solid rgba(255,255,255,.2);
+  background:transparent;color:#fff;font-size:20px;cursor:pointer;border-radius:2px;line-height:1;}
+.drawer nav{display:flex;flex-direction:column;}
+.drawer nav a{
+  padding:16px 2px;border-bottom:1px solid rgba(255,255,255,.07);
+  font-family:var(--display);font-size:24px;font-weight:600;letter-spacing:.01em;
+  color:#fff;text-transform:uppercase;
+}
+.drawer nav a.is-active{color:var(--green);}
+.drawer-switch{margin-top:26px;}
+.drawer-switch .lbl{display:block;font-family:var(--mono);font-size:10px;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--steel);margin-bottom:11px;}
+.drawer-switch .brandswitch{width:100%;}
+.drawer-switch .brandswitch a{flex:1;justify-content:center;}
+.drawer-foot{margin-top:28px;padding-top:22px;border-top:1px solid rgba(255,255,255,.07);
+  font-size:14.5px;line-height:1.65;color:var(--steel);}
+.drawer-foot b{display:block;color:#fff;margin-bottom:7px;font-weight:600;}
+.drawer-foot .tel{display:block;font-family:var(--display);font-size:26px;
+  font-weight:600;color:#fff;margin-top:14px;}
+
+/* --- Footer --------------------------------------------------------------- */
+.foot{background:var(--void);color:var(--steel);border-top:1px solid rgba(255,255,255,.07);}
+.foot .wrap{padding-block:64px 30px;}
+.foot-nav{display:flex;flex-wrap:wrap;gap:0;padding-bottom:32px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;}
+.foot-nav a{color:var(--steel-300);transition:color .18s var(--ease);}
+.foot-nav a:hover{color:var(--green);}
+.foot-nav .sep{margin-inline:14px;opacity:.2;}
+.foot-top{display:flex;align-items:flex-start;justify-content:space-between;
+  gap:44px;flex-wrap:wrap;padding-block:38px;}
+.foot-addr{font-size:15px;line-height:1.75;max-width:460px;}
+.foot-addr b{display:block;color:#fff;font-family:var(--display);font-size:22px;
+  font-weight:600;margin-bottom:10px;letter-spacing:.01em;}
+.foot-reach{display:grid;gap:6px;text-align:right;justify-items:end;}
+.foot-reach a{color:var(--steel-300);font-size:15px;}
+.foot-reach a:hover{color:var(--green);}
+.foot-reach a.foot-tel{font-family:var(--display);font-size:32px;font-weight:600;color:#fff;}
+.foot-bottom{padding-top:24px;border-top:1px solid rgba(255,255,255,.07);
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:#5d675f;
+  display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;}
+.foot-bottom a{color:var(--green);}
+
+/* --- Back to top ---------------------------------------------------------- */
+.to-top{position:fixed;right:26px;bottom:26px;z-index:800;width:46px;height:46px;padding:0;
+  background:var(--green);color:var(--carbon);border:0;cursor:pointer;border-radius:2px;font-size:0;
+  opacity:0;visibility:hidden;transform:translateY(8px);
+  transition:opacity .25s var(--ease),transform .25s var(--ease),background .2s var(--ease),visibility .25s;}
+.to-top::after{content:"";position:absolute;inset:0;margin:auto;width:9px;height:9px;
+  border-top:2px solid currentColor;border-right:2px solid currentColor;
+  transform:rotate(-45deg) translate(-2px,2px);}
+.to-top.is-on{opacity:1;visibility:visible;transform:none;}
+.to-top:hover{background:var(--green-bright);}
+
+/* ==========================================================================
+   01 — HERO
+   Asymmetric: dark copy column left, warm-white inspection panel right.
+   The panel exists for a practical reason as well as a visual one — every
+   product photograph in assets/ is shot on white, so a light plane is the
+   honest way to place one against a dark page.
+   ========================================================================== */
+.hero{
+  position:relative;background:var(--carbon);color:var(--steel-300);
+  min-height:clamp(560px,84svh,780px);display:flex;align-items:center;overflow:hidden;
+}
+/* Fine engineering grid — structure without decoration. */
+.hero::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
+  background-size:78px 78px;
+  mask-image:radial-gradient(120% 90% at 22% 40%,#000 25%,transparent 78%);
+  -webkit-mask-image:radial-gradient(120% 90% at 22% 40%,#000 25%,transparent 78%);
+}
+.hero .wrap{position:relative;z-index:2;width:100%;}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.06fr) minmax(0,.94fr);
+  gap:clamp(28px,3.4vw,56px);align-items:center;padding-block:clamp(38px,3.6vw,58px);}
+
+.hero-parent{display:inline-flex;align-items:center;gap:10px;margin-bottom:22px;
+  padding:8px 14px 8px 12px;border:1px solid rgba(255,255,255,.14);border-radius:2px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--steel-300);}
+.hero-parent .mark{width:9px;height:9px;background:var(--legrand);flex:none;}
+.hero-parent b{color:#fff;font-weight:600;letter-spacing:.02em;font-size:11.5px;}
+
+.hero h1{color:#fff;margin-bottom:20px;}
+.hero h1 .accent{color:var(--green);}
+.hero-lede{font-size:clamp(1rem,1.15vw,1.125rem);line-height:1.6;color:var(--steel-300);
+  max-width:52ch;margin-bottom:28px;}
+.hero-cta{display:flex;flex-wrap:wrap;gap:14px;}
+
+/* Verified facts only — no current ratings until engineering signs them off. */
+.hero-rail{display:flex;flex-wrap:wrap;gap:0;margin-top:clamp(26px,2.6vw,38px);
+  border-top:1px solid var(--steel-900);}
+.hero-rail li{flex:1 1 auto;min-width:140px;padding:15px 24px 0 0;}
+.hero-rail .k{display:block;font-family:var(--display);font-size:clamp(1.35rem,1.65vw,1.65rem);
+  font-weight:600;color:#fff;line-height:1;}
+.hero-rail .v{display:block;margin-top:7px;font-family:var(--mono);font-size:10px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--steel);}
+
+/* Inspection panel */
+.hero-panel{position:relative;background:var(--paper);
+  padding:clamp(18px,1.9vw,28px);border-radius:2px;}
+.hero-panel::after{  /* accent corner, sharp not rounded */
+  content:"";position:absolute;left:0;bottom:0;width:66px;height:4px;background:var(--green);
+}
+.hero-panel figure{margin:0;}
+.hero-panel img{width:100%;aspect-ratio:3/2;object-fit:contain;mix-blend-mode:multiply;
+  transform:scale(1.02);transition:transform 1.1s var(--ease-out);}
+.hero-panel:hover img{transform:scale(1.045);}
+.hero-panel figcaption{display:flex;align-items:baseline;justify-content:space-between;
+  gap:16px;margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);}
+.hero-panel .t{font-family:var(--display);font-size:19px;font-weight:600;color:var(--ink);
+  text-transform:uppercase;letter-spacing:.01em;}
+.hero-panel .s{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--green-deep);}
+/* Measurement tick marks down the panel edge — technical, not decorative. */
+.hero-panel .ticks{position:absolute;right:-1px;top:14%;bottom:14%;width:1px;background:var(--rule);}
+.hero-panel .ticks::before,.hero-panel .ticks::after{
+  content:"";position:absolute;right:0;width:9px;height:1px;background:var(--rule);}
+.hero-panel .ticks::before{top:0;}.hero-panel .ticks::after{bottom:0;}
+
+.hero-scroll{position:absolute;left:var(--gutter);bottom:26px;z-index:3;
+  display:flex;align-items:center;gap:11px;font-family:var(--mono);font-size:10px;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--steel);}
+.hero-scroll .line{display:block;width:44px;height:1px;background:var(--steel-900);position:relative;overflow:hidden;}
+.hero-scroll .line::after{content:"";position:absolute;inset:0;background:var(--green);
+  transform:translateX(-100%);animation:railSweep 2.6s var(--ease) infinite;}
+@keyframes railSweep{0%{transform:translateX(-100%)}55%,100%{transform:translateX(100%)}}
+
+/* ==========================================================================
+   02 — CREDIBILITY NUMBERS
+   Large type on a rule-divided band. No cards.
+   ========================================================================== */
+/* .stat carries its own vertical rhythm, so the section padding is dropped
+   or the band ends up with ~200px of dead space. */
+.sec.stats{padding-block:0;}
+.stats{border-top:1px solid var(--steel-900);border-bottom:1px solid var(--steel-900);}
+.stats-grid{display:grid;grid-template-columns:repeat(5,1fr);}
+.stat{padding:clamp(24px,2.4vw,36px) 24px clamp(24px,2.4vw,36px) 0;
+      border-left:1px solid var(--steel-900);padding-left:clamp(18px,1.7vw,28px);}
+.stat:first-child{border-left:0;padding-left:0;}
+.stat .n{display:block;font-family:var(--display);font-weight:600;
+  font-size:clamp(2.1rem,3vw,3.1rem);line-height:.96;color:#fff;letter-spacing:-.02em;}
+.stat .n .suf{color:var(--green);}
+.stat .l{display:block;margin-top:9px;font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--steel);line-height:1.5;}
+
+/* ==========================================================================
+   03 — INDUSTRIES
+   An editorial list, not a card grid. Each row is a full-width band that
+   fills on hover and reveals verified reference projects.
+   ========================================================================== */
+.ind{border-top:1px solid var(--rule);}
+.ind-row{
+  position:relative;display:grid;grid-template-columns:76px minmax(0,1fr) minmax(0,1.05fr) 40px;
+  gap:clamp(16px,2.4vw,40px);align-items:center;
+  padding:clamp(15px,1.5vw,21px) 0;border-bottom:1px solid var(--rule);
+  cursor:pointer;transition:color .34s var(--ease);
+}
+.ind-row::before{ /* the fill, drawn from the left */
+  content:"";position:absolute;left:calc(var(--gutter) * -1);right:calc(var(--gutter) * -1);
+  top:0;bottom:0;background:var(--carbon);transform:scaleX(0);transform-origin:left;
+  transition:transform .5s var(--ease-out);z-index:0;
+}
+.ind-row > *{position:relative;z-index:1;}
+.ind-row:hover::before,.ind-row:focus-within::before{transform:scaleX(1);}
+.ind-row:hover,.ind-row:focus-within{color:var(--steel-300);}
+.ind-row .ix{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:#98a29c;}
+.ind-row .nm{font-family:var(--display);font-size:clamp(1.5rem,2.15vw,2.1rem);font-weight:600;
+  color:var(--ink);text-transform:uppercase;letter-spacing:-.008em;transition:color .34s var(--ease);}
+.ind-row:hover .nm,.ind-row:focus-within .nm{color:#fff;}
+.ind-row .refs{font-size:14px;line-height:1.55;color:var(--ink-2);
+  opacity:.55;transition:opacity .34s var(--ease),color .34s var(--ease);}
+.ind-row:hover .refs,.ind-row:focus-within .refs{opacity:1;color:var(--steel-300);}
+.ind-row .go{justify-self:end;width:22px;height:22px;color:#b3bbb6;
+  transition:color .34s var(--ease),transform .34s var(--ease);}
+.ind-row:hover .go,.ind-row:focus-within .go{color:var(--green);transform:translateX(5px);}
+.ind-row .go svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.6;}
+
+/* ==========================================================================
+   04 — MEGADUCT SYSTEM BREAKDOWN
+   A large product plate with a numbered component list beside it. Selecting
+   a component swaps the plate to that component's real photograph where one
+   exists in assets/img/products/. Components that live inside the enclosure
+   (conductors, insulation) have no photograph and keep the full-run plate —
+   they are described, never faked. Structured so a future exploded-view
+   animation or video can replace .mg-plate without touching the list.
+   ========================================================================== */
+.mg{background:var(--paper);}
+.mg-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+  gap:clamp(26px,3vw,48px);align-items:start;}
+
+.mg-plate{position:relative;background:#fff;border:1px solid var(--rule);
+  padding:clamp(18px,2vw,32px);border-radius:2px;overflow:hidden;}
+.mg-plate::before{ /* corner registration marks */
+  content:"";position:absolute;left:16px;top:16px;width:14px;height:14px;
+  border-left:1px solid var(--rule);border-top:1px solid var(--rule);}
+.mg-plate::after{content:"";position:absolute;right:16px;bottom:16px;width:14px;height:14px;
+  border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);}
+/* The plates are absolutely positioned rather than grid items: as grid items
+   their square intrinsic ratio fed back into row sizing and overrode the
+   stage's own aspect-ratio, making the plate 560x560 instead of 560x373. */
+.mg-stage{position:relative;aspect-ratio:8/5;min-height:0;}
+.mg-stage img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
+  opacity:0;transform:scale(.97);
+  transition:opacity .45s var(--ease-out),transform .6s var(--ease-out);
+}
+.mg-stage img.is-on{opacity:1;transform:none;}
+.mg-cap{display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+  margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);}
+.mg-cap .t{font-family:var(--display);font-size:19px;font-weight:600;
+  text-transform:uppercase;color:var(--ink);}
+.mg-cap .n{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--green-deep);}
+
+.mg-list{display:grid;}
+.mg-item{
+  display:grid;grid-template-columns:44px 1fr;gap:18px;align-items:start;
+  width:100%;text-align:left;background:transparent;border:0;cursor:pointer;
+  padding:15px 0;border-bottom:1px solid var(--rule);
+}
+.mg-item:first-child{border-top:1px solid var(--rule);}
+.mg-item .ix{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:#9aa49e;
+  padding-top:4px;transition:color .25s var(--ease);}
+.mg-item h3{font-family:var(--display);font-size:20px;font-weight:600;text-transform:uppercase;
+  color:var(--ink);margin-bottom:0;transition:color .25s var(--ease);}
+.mg-item p{font-size:14px;line-height:1.55;color:var(--ink-2);margin:0;
+  max-height:0;opacity:0;overflow:hidden;
+  transition:max-height .5s var(--ease-out),opacity .4s var(--ease),margin .4s var(--ease);}
+.mg-item.is-on{border-bottom-color:var(--ink);}
+.mg-item.is-on .ix{color:var(--green-deep);}
+.mg-item.is-on p{max-height:110px;opacity:1;margin-top:7px;}
+.mg-item:hover h3{color:var(--green-deep);}
+
+/* ==========================================================================
+   05 — PRODUCT FAMILIES
+   Full-width alternating bands. Driven by markup order; adding a family is a
+   copy of one <article>. Deliberately NOT cards.
+   ========================================================================== */
+.fam{border-top:1px solid var(--rule);}
+.fam-row{display:grid;grid-template-columns:minmax(0,.94fr) minmax(0,1.06fr);
+  gap:clamp(26px,3vw,52px);align-items:center;padding-block:clamp(30px,2.9vw,50px);
+  border-bottom:1px solid var(--rule);}
+.fam-row:nth-child(even) .fam-media{order:-1;}
+.fam-media{position:relative;background:#fff;border:1px solid var(--rule);
+  padding:clamp(16px,1.8vw,28px);border-radius:2px;overflow:hidden;}
+.fam-media img{width:100%;aspect-ratio:3/2;object-fit:contain;
+  transition:transform .9s var(--ease-out);}
+.fam-row:hover .fam-media img{transform:scale(1.04);}
+.fam-media .badge{position:absolute;left:0;top:clamp(16px,1.8vw,28px);
+  padding:7px 14px;background:var(--carbon);color:#fff;
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;}
+.fam-body h3{margin-bottom:14px;color:var(--ink);}
+.fam-body p{color:var(--ink-2);max-width:52ch;}
+.fam-spec{display:flex;flex-wrap:wrap;gap:7px;margin:18px 0 22px;}
+.fam-spec li{padding:7px 13px;border:1px solid var(--rule);
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-2);}
+
+/* ==========================================================================
+   06 — ENGINEERING JOURNEY
+   Horizontal scroll-linked track on desktop, swipe rail on mobile. The
+   progress line draws as the section scrolls (--p set by main.js).
+   ========================================================================== */
+.jrn{background:var(--carbon-2);color:var(--steel-300);overflow:hidden;}
+.jrn-track{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(210px,1fr);
+  gap:0;margin-top:clamp(24px,2.6vw,38px);position:relative;}
+.jrn-line{position:absolute;left:0;right:0;top:23px;height:1px;background:var(--steel-900);}
+.jrn-line::after{content:"";position:absolute;inset:0;background:var(--green);
+  transform:scaleX(var(--p,0));transform-origin:left;transition:transform .45s var(--ease-out);}
+.jrn-step{position:relative;padding:0 24px 0 0;}
+.jrn-step .dot{position:relative;z-index:2;width:46px;height:46px;display:grid;place-items:center;
+  background:var(--carbon-2);border:1px solid var(--steel-900);border-radius:50%;
+  font-family:var(--mono);font-size:12px;color:var(--steel);
+  transition:border-color .4s var(--ease),color .4s var(--ease),background .4s var(--ease);}
+.jrn-step.is-in .dot{border-color:var(--green);color:var(--green);}
+.jrn-step h3{margin-top:16px;font-family:var(--display);font-size:19px;font-weight:600;
+  text-transform:uppercase;color:#fff;}
+.jrn-step p{margin-top:8px;font-size:13.5px;line-height:1.55;color:var(--steel);max-width:26ch;}
+
+/* ==========================================================================
+   07 — R&D / TESTING
+   No testing photography exists in assets/, so credibility is carried by an
+   SVG instrument trace and the certificate tally rather than a stock image.
+   ========================================================================== */
+.rnd{background:var(--void);}
+.rnd-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:clamp(26px,3vw,48px);align-items:end;margin-bottom:clamp(26px,2.8vw,44px);}
+.rnd-trace{position:relative;border:1px solid var(--steel-900);background:var(--carbon);
+  padding:20px;border-radius:2px;}
+.rnd-trace svg{width:100%;height:auto;display:block;}
+.rnd-trace .tl{display:flex;justify-content:space-between;margin-top:14px;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:#5d675f;}
+.trace-path{fill:none;stroke:var(--green);stroke-width:1.6;
+  stroke-dasharray:var(--len,600);stroke-dashoffset:var(--len,600);}
+.is-in .trace-path{animation:traceDraw 2.1s var(--ease-out) forwards;}
+@keyframes traceDraw{to{stroke-dashoffset:0}}
+.trace-grid{stroke:rgba(255,255,255,.07);stroke-width:1;}
+
+.tests{display:grid;grid-template-columns:repeat(2,1fr);gap:0 clamp(24px,3vw,48px);}
+.tests li{display:flex;align-items:baseline;gap:13px;padding:11px 0;
+  border-bottom:1px solid var(--steel-900);font-size:14.5px;color:var(--steel-300);}
+.tests li .no{font-family:var(--mono);font-size:10.5px;color:var(--green);flex:none;}
+
+.certs{display:grid;grid-template-columns:repeat(9,1fr);
+  border-top:1px solid var(--steel-900);border-bottom:1px solid var(--steel-900);}
+.certs li{padding:18px 8px;text-align:center;border-left:1px solid var(--steel-900);}
+.certs li:first-child{border-left:0;}
+.certs .n{display:block;font-family:var(--display);font-size:clamp(1.45rem,1.8vw,1.95rem);
+  font-weight:600;color:#fff;line-height:1;}
+.certs .s{display:block;margin-top:7px;font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.14em;color:var(--steel);}
+
+/* ==========================================================================
+   08 — GLOBAL PROJECTS
+   Selected references as a technical index rather than a long list. The
+   data-industry / data-region attributes are already in the markup so
+   filtering can be wired up without re-authoring the section.
+   ========================================================================== */
+.gp{background:var(--carbon);}
+.gp-head{display:flex;align-items:flex-end;justify-content:space-between;
+  gap:28px;flex-wrap:wrap;margin-bottom:clamp(24px,2.6vw,38px);}
+.gp-list{border-top:1px solid var(--steel-900);}
+.gp-item{display:grid;grid-template-columns:52px minmax(0,1.5fr) minmax(0,1fr) minmax(0,.8fr);
+  gap:clamp(14px,1.8vw,28px);align-items:center;padding:clamp(13px,1.3vw,19px) 0;
+  border-bottom:1px solid var(--steel-900);transition:background .3s var(--ease);}
+.gp-item:hover{background:rgba(255,255,255,.022);}
+.gp-item .cc{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--green);}
+.gp-item .nm{font-family:var(--display);font-size:clamp(1.15rem,1.4vw,1.45rem);font-weight:600;
+  color:#fff;text-transform:uppercase;}
+.gp-item .sector,.gp-item .loc{font-family:var(--mono);font-size:11px;
+  letter-spacing:.11em;text-transform:uppercase;color:var(--steel);}
+.gp-item .loc{text-align:right;}
+
+/* ==========================================================================
+   09 — LEGRAND
+   ========================================================================== */
+.lg-sec{background:var(--paper-2);}
+.lg-inner{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
+  gap:clamp(26px,3vw,52px);align-items:center;}
+.lg-mark{display:inline-flex;align-items:center;gap:12px;
+  font-family:var(--display);font-size:clamp(1.9rem,2.5vw,2.6rem);font-weight:600;
+  color:var(--ink);letter-spacing:-.01em;}
+.lg-mark .sq{width:19px;height:19px;background:var(--legrand);flex:none;}
+.lg-inner p{color:var(--ink-2);max-width:56ch;}
+
+/* ==========================================================================
+   10 — FINAL CTA
+   ========================================================================== */
+.cta{background:var(--void);position:relative;overflow:hidden;text-align:left;}
+.cta::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(70% 120% at 85% 110%,rgba(140,198,63,.13),transparent 62%);}
+.cta .wrap{position:relative;z-index:2;}
+.cta h2{color:#fff;max-width:18ch;margin-bottom:20px;
+  font-size:clamp(2.5rem,3.6vw,3.6rem);}
+.cta .lede{margin-bottom:28px;}
+.cta-actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center;}
+.cta-tel{font-family:var(--display);font-size:clamp(1.6rem,1.9vw,2.1rem);font-weight:600;color:#fff;}
+.cta-tel:hover{color:var(--green);}
+
+/* ==========================================================================
+   RESPONSIVE
+   Mobile is not the desktop stacked. Rails scroll horizontally, the industry
+   list drops its hover mechanic for an always-open layout, and the component
+   breakdown becomes plate-over-list.
+   ========================================================================== */
+@media (max-width:1180px){
+  :root{--gutter:26px;}
+  .nav-main{display:none;}
+  .burger{display:grid;}
+  .site-header .wrap{justify-content:space-between;min-height:74px;}
+  .stats-grid{grid-template-columns:repeat(3,1fr);}
+  .stat:nth-child(4){border-left:0;padding-left:0;}
+  .stat:nth-child(n+4){border-top:1px solid var(--steel-900);}
+  .certs{grid-template-columns:repeat(5,1fr);}
+  .certs li:nth-child(6){border-left:0;}
+  .certs li:nth-child(n+6){border-top:1px solid var(--steel-900);}
+}
+@media (max-width:980px){
+  .hero{min-height:0;}
+  .hero-grid{grid-template-columns:1fr;gap:42px;padding-block:52px 64px;}
+  .hero-scroll{display:none;}
+  .mg-grid,.rnd-top,.lg-inner{grid-template-columns:1fr;}
+  .fam-row{grid-template-columns:1fr;gap:28px;}
+  .fam-row:nth-child(even) .fam-media{order:0;}
+  .ind-row{grid-template-columns:44px minmax(0,1fr) 28px;}
+  .ind-row .refs{grid-column:2/4;margin-top:8px;}
+}
+@media (max-width:760px){
+  :root{--gutter:18px;}
+  body{font-size:16px;}
+  .topbar-right{display:none;}
+  .topbar .wrap{justify-content:center;min-height:38px;}
+
+  /* Stats become a 2-up grid with the last spanning full width. */
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .stat{padding:26px 16px 26px 0;border-left:0;}
+  .stat:nth-child(even){padding-left:18px;border-left:1px solid var(--steel-900);}
+  .stat:nth-child(n+3){border-top:1px solid var(--steel-900);}
+  .stat:last-child{grid-column:1/-1;border-left:0;padding-left:0;}
+
+  /* Industries: no hover on touch, so rows are permanently open and quiet. */
+  .ind-row{grid-template-columns:1fr;gap:6px;padding:22px 0;}
+  .ind-row::before{display:none;}
+  .ind-row .ix{font-size:10px;}
+  .ind-row .refs{opacity:1;grid-column:1;margin-top:4px;font-size:13.5px;}
+  .ind-row .go{display:none;}
+
+  /* Component breakdown: plate first, then the list. */
+  .mg-grid{gap:26px;}
+  .mg-item{padding:18px 0;grid-template-columns:34px 1fr;gap:14px;}
+  .mg-item h3{font-size:20px;}
+
+  /* Tests to one column; certificate tally scrolls sideways rather than
+     becoming a nine-row stack. */
+  .tests{grid-template-columns:1fr;}
+  .certs{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;
+         -webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .certs::-webkit-scrollbar{display:none;}
+  .certs li{flex:0 0 33.333%;scroll-snap-align:start;border-top:0;padding:22px 8px;}
+
+  /* Journey becomes a swipe rail. */
+  .jrn-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;scrollbar-width:none;
+    margin-inline:calc(var(--gutter) * -1);padding-inline:var(--gutter);}
+  .jrn-track::-webkit-scrollbar{display:none;}
+  .jrn-step{flex:0 0 74%;scroll-snap-align:start;padding-right:20px;}
+  .jrn-line{display:none;}
+  .jrn-step .dot{width:46px;height:46px;}
+
+  /* Projects: name over meta, no four-column squeeze. */
+  .gp-item{grid-template-columns:44px 1fr;gap:4px 14px;padding:20px 0;}
+  .gp-item .nm{grid-column:2;font-size:20px;}
+  .gp-item .sector{grid-column:2;}
+  .gp-item .loc{grid-column:2;text-align:left;}
+
+  .hero-rail li{min-width:50%;padding:16px 16px 0 0;}
+  /* Full-width buttons only where they stack; the header keeps intrinsic
+     widths or the CTA pushes the burger off-screen. */
+  .hero-cta .b,.cta-actions .b{width:100%;}
+  .hero-cta,.cta-actions{flex-direction:column;align-items:stretch;width:100%;}
+  /* The drawer carries the full nav and the CTA repeats in the hero, the
+     closing section and the footer, so the header CTA is redundant here. */
+  .head-cta{display:none;}
+  .cta-tel{text-align:center;padding-top:8px;}
+  .foot-reach{text-align:left;justify-items:start;}
+  .foot-top{gap:26px;}
+}
+@media (max-width:420px){
+  .hero-rail li{min-width:100%;}
+  .certs li{flex:0 0 46%;}
+  .jrn-step{flex:0 0 84%;}
+}
+
+/* --- Motion preferences --------------------------------------------------- */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  *,*::before,*::after{
+    transition-duration:.001ms !important;animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+  }
+  [data-reveal]{opacity:1 !important;transform:none !important;}
+  .trace-path{stroke-dashoffset:0 !important;}
+  .hero-scroll .line::after{display:none;}
+}
+/* If JS never runs, nothing stays invisible. */
+.no-js [data-reveal]{opacity:1;transform:none;}

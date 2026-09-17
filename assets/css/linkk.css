@@ -1,55 +1,56 @@
 /* ==========================================================================
-   MEGADUCT — LINKK Busway Systems (M) Sdn Bhd
-   Corporate stylesheet, 2026 revamp.
+   LINKK Busway Systems (M) Sdn Bhd — a brand of Legrand
+   Corporate stylesheet.
 
-   Brand colours are the original site's — MEGADUCT red and blue — but the
-   shell around them is modern: a light sticky header instead of the solid red
-   nav bar, real type (Archivo display / Inter text) instead of Arial Black
-   italic, soft-edged cards, and considerably more whitespace.
-
-   The class names are unchanged from the previous stylesheet, so page markup
-   did not have to be rewritten to adopt this.
-
-   Companion sheet: linkk.css, the same structure in the LINKK brand.
+   The second of the two sites in this project. It shares the class vocabulary
+   of style.css (the MEGADUCT sheet) so page structure is interchangeable, but
+   it is its own design language: LINKK green on white, Poppins instead of
+   Archivo/Inter, pill buttons, larger radii, a light header instead of a dark
+   one. Switching brand should feel like a different company, not a recolour.
    ========================================================================== */
 
 :root{
-  /* Brand */
-  --red:#e4131a;
-  --red-600:#c81016;
-  --red-050:#fef2f2;
-  --blue:#1c3f9c;
-  --blue-600:#16306f;
-  --blue-050:#eef2fb;
-  --navy:#0a1733;
+  /* Brand — LINKK green, plus Legrand red for the parent-brand lockup only */
+  --green:#8cc63f;
+  --green-600:#6d9f2c;
+  --green-700:#517a1c;
+  --green-050:#f3f9ea;
+  --legrand:#e2001a;
 
-  /* Neutrals */
-  --ink:#10151f;
-  --text:#414a5a;
-  --muted:#6b7482;
-  --line:#e3e7ee;
-  --line-soft:#eef1f6;
-  --tint:#f6f8fb;
+  /* Mapped onto the shared names so every shared component picks the brand up */
+  --red:var(--green-700);
+  --red-600:#3f6114;
+  --red-050:var(--green-050);
+  --blue:#2f6b3f;
+  --blue-600:#24522f;
+  --blue-050:#eef6f0;
+  --navy:#18211b;
+
+  --ink:#1c2420;
+  --text:#4a554e;
+  --muted:#77837c;
+  --line:#e4e9e5;
+  --line-soft:#eff3f0;
+  --tint:#f5f8f5;
   --white:#fff;
 
-  /* Semantic aliases kept for the older class names */
   --red-dark:var(--red-600);
   --maroon:var(--red-600);
-  --blue-title:var(--blue);
+  --blue-title:var(--green-700);
   --grey-title:var(--ink);
 
   --wrap:1280px;
   --gutter:24px;
-  --radius:14px;
-  --radius-sm:10px;
+  --radius:18px;
+  --radius-sm:12px;
   --radius-pill:999px;
 
-  --shadow-sm:0 1px 2px rgba(16,21,31,.05), 0 1px 3px rgba(16,21,31,.06);
-  --shadow:0 4px 12px rgba(16,21,31,.06), 0 12px 28px rgba(16,21,31,.07);
-  --shadow-lg:0 12px 28px rgba(16,21,31,.10), 0 28px 60px rgba(16,21,31,.10);
+  --shadow-sm:0 1px 2px rgba(24,33,27,.04), 0 2px 6px rgba(24,33,27,.05);
+  --shadow:0 6px 16px rgba(24,33,27,.06), 0 16px 34px rgba(24,33,27,.07);
+  --shadow-lg:0 14px 32px rgba(24,33,27,.09), 0 32px 70px rgba(24,33,27,.10);
 
-  --sans:"Inter","Helvetica Neue",Arial,sans-serif;
-  --display:"Archivo","Inter","Helvetica Neue",Arial,sans-serif;
+  --sans:"Poppins","Helvetica Neue",Arial,sans-serif;
+  --display:"Poppins","Helvetica Neue",Arial,sans-serif;
   --black:var(--display);
 
   --ease:cubic-bezier(.2,.7,.3,1);
@@ -161,7 +162,7 @@ b,strong{font-weight:650;color:var(--ink);}
 .topbar-right .sep{opacity:.3;}
 /* The certification mark is a multi-colour logo; inverting it turns it to mush,
    so it sits on its own white chip instead. */
-.topbar-cert{height:34px;width:auto;background:#fff;border-radius:4px;padding:2px 5px;}
+.topbar-cert{height:28px;width:auto;background:#fff;border-radius:4px;padding:2px 5px;}
 
 /* --- Brand switcher ------------------------------------------------------- *
    MEGADUCT and LINKK are two separate sites in this one project. This control
@@ -724,4 +725,190 @@ b,strong{font-weight:650;color:var(--ink);}
   .topbar,.site-header,.burger,.drawer,.scrim,.to-top,.brandswitch{display:none;}
   body{font-size:12pt;color:#000;}
   .hero::after,.pagehead::after{background:none;}
+}
+
+/* ==========================================================================
+   LINKK overrides — what makes this a different site, not a recoloured one
+   ========================================================================== */
+
+/* Poppins is geometric and already fairly wide; the tight tracking that suits
+   Archivo makes it look cramped, so headings sit closer to neutral. */
+h1,h2,h3,h4{font-weight:600;letter-spacing:-.008em;}
+
+/* --- Logo lockup ---------------------------------------------------------- *
+   Drawn in inline SVG rather than shipped as an image: there is no LINKK logo
+   file in assets/. Replace .brand-linkk with the real artwork when you have
+   it — nothing else depends on this markup.                                  */
+.brand-linkk{display:flex;align-items:center;gap:11px;}
+.brand-linkk:hover{text-decoration:none;}
+.brand-linkk .glyph{width:40px;height:40px;flex:none;}
+.brand-linkk .wm{display:grid;line-height:1;}
+.brand-linkk .wm .n{
+  font-family:var(--display);font-size:24px;font-weight:600;
+  letter-spacing:.15em;color:var(--ink);
+}
+.brand-linkk .wm .sub{
+  display:flex;align-items:center;gap:5px;margin-top:6px;
+  font-size:9px;font-weight:500;letter-spacing:.04em;color:var(--muted);
+  text-transform:none;white-space:nowrap;
+}
+.brand-linkk .wm .sub .mark{width:8px;height:8px;border-radius:2px;background:var(--legrand);flex:none;}
+.brand-linkk .wm .sub b{color:var(--ink);font-weight:700;font-size:10.5px;letter-spacing:-.01em;}
+.drawer-head .brand-linkk .glyph{width:34px;height:34px;}
+.drawer-head .brand-linkk .wm .n{font-size:20px;}
+
+/* --- Light top bar -------------------------------------------------------- *
+   MEGADUCT runs a dark strip here; LINKK's identity is airy, so this one is
+   near-white and the weight sits in the header below it.                     */
+.topbar{background:var(--tint);color:var(--muted);border-bottom:1px solid var(--line-soft);}
+.topbar a{color:var(--muted);}
+.topbar a:hover{color:var(--ink);}
+.topbar .sep{opacity:.35;}
+.topbar-cert{height:34px;background:#fff;border:1px solid var(--line);}
+
+.brandswitch{background:#fff;border-color:var(--line);}
+.brandswitch a{color:var(--muted);}
+.brandswitch a:hover{background:var(--green-050);color:var(--ink);}
+.brandswitch a.is-on{background:var(--green-700);color:#fff;}
+.brandswitch a.is-on:hover{background:var(--green-700);}
+.brandswitch .tag{background:var(--green);color:#1c2420;}
+.brandswitch a.is-on .tag{background:rgba(255,255,255,.22);color:#fff;}
+
+/* --- Header --------------------------------------------------------------- */
+.site-header{background:rgba(255,255,255,.9);}
+.site-header .wrap{min-height:84px;}
+.nav-main a{font-weight:500;}
+.nav-main a:hover{background:var(--green-050);color:var(--ink);}
+.nav-main a.is-active{color:var(--green-700);font-weight:600;}
+.nav-main a.is-active::after{background:var(--green);height:3px;bottom:0;}
+
+/* --- Pill buttons --------------------------------------------------------- */
+.btn{border-radius:var(--radius-pill);padding:14px 30px;font-weight:600;}
+.btn-sm{padding:10px 20px;}
+.pill{font-weight:500;}
+.pill.is-active{background:var(--green-700);border-color:var(--green-700);}
+
+/* --- Hero ----------------------------------------------------------------- *
+   Lighter than the MEGADUCT hero: the photograph carries the page and the
+   scrim only does enough to keep the type legible.                           */
+.hero{min-height:680px;}
+.hero::after{
+  background:linear-gradient(180deg,rgba(16,24,19,.62) 0%,rgba(16,24,19,.34) 38%,rgba(16,24,19,.78) 100%);
+}
+.hero .wrap{padding-block:120px;}
+.hero h1{font-weight:700;letter-spacing:-.022em;}
+.hero-kicker{
+  background:rgba(140,198,63,.2);border-color:rgba(140,198,63,.5);
+  color:#fff;font-weight:500;
+}
+.hero-kicker::before{background:var(--green);box-shadow:0 0 0 4px rgba(140,198,63,.26);}
+.hero p{color:rgba(255,255,255,.86);}
+
+/* --- Section titles ------------------------------------------------------- */
+.mtitle{font-weight:700;letter-spacing:-.015em;}
+.mtitle b{color:var(--green-700);}
+.mtitle-bar::before{width:62px;height:5px;background:var(--green);}
+.side h3::before{background:var(--green);}
+.capcard::before{background:var(--green);}
+
+/* The shared sheet inlines a red tick; LINKK's is green. */
+.ticks li::before{
+  background:var(--green-050) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23517a1c' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") center/11px no-repeat;
+}
+
+/* --- Page head ------------------------------------------------------------ */
+.pagehead::after{
+  background:linear-gradient(100deg,rgba(16,24,19,.9) 0%,rgba(16,24,19,.7) 58%,rgba(16,24,19,.4) 100%);
+}
+.pagehead h1{font-weight:700;letter-spacing:-.022em;}
+
+/* --- Cards: softer, borderless, more lift --------------------------------- */
+.pcard,.sector,.cert,.capcard,.schan-card,.vcard,.tally li,.panel,.side{
+  border-color:var(--line-soft);
+}
+.factbar .wrap{border-color:var(--line-soft);}
+.fact .n{color:var(--green-700);}
+
+.vplay{background:rgba(81,122,28,.94);box-shadow:0 8px 28px rgba(0,0,0,.3);}
+.vframe:hover .vplay{background:var(--green-700);}
+
+/* --- Footer --------------------------------------------------------------- */
+.foot{background:var(--navy);}
+.foot-reach a.foot-tel{color:#fff;}
+.foot-nav a:hover{color:var(--green);}
+.foot-bottom a{color:var(--green);}
+
+/* --- Legrand endorsement strip -------------------------------------------- *
+   LINKK is a Legrand brand; the parent mark gets one quiet statement rather
+   than being repeated through the page.                                      */
+.legrand-strip{
+  display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;
+  padding:26px 24px;background:var(--tint);border-radius:var(--radius);
+  font-size:15px;color:var(--muted);text-align:center;
+}
+.legrand-strip .lg{display:inline-flex;align-items:center;gap:7px;color:var(--ink);font-weight:600;}
+.legrand-strip .lg .mark{width:13px;height:13px;border-radius:2px;background:var(--legrand);}
+
+@media (max-width:760px){
+  .hero .wrap{padding-block:76px;}
+  .brand-linkk .wm .n{font-size:20px;}
+  .brand-linkk .glyph{width:34px;height:34px;}
+}
+
+/* --- Light hero ----------------------------------------------------------- *
+   MEGADUCT opens on a dark photograph. LINKK opens on light, which is the
+   clearest single signal that you have changed site. Copy on the left, a
+   product card on the right.                                                 */
+.hero--light{
+  min-height:0;
+  background:linear-gradient(158deg,#fff 0%,var(--green-050) 52%,#e8f2d8 100%);
+}
+.hero--light::after{display:none;}
+.hero--light .wrap{
+  display:grid;grid-template-columns:1.02fr .98fr;gap:56px;align-items:center;
+  padding-block:100px;
+}
+.hero--light .hero-copy{max-width:none;color:var(--ink);}
+.hero--light .hero-kicker{
+  background:#fff;border-color:var(--line);color:var(--green-700);
+  box-shadow:var(--shadow-sm);
+}
+.hero--light h1{color:var(--ink);font-size:clamp(38px,4.8vw,64px);}
+.hero--light p{color:var(--text);max-width:540px;}
+
+.hero-figure{position:relative;}
+.hero-figure::before{
+  /* soft brand-green halo behind the card */
+  content:"";position:absolute;inset:-8% -6% -12% 6%;border-radius:50%;
+  background:radial-gradient(circle at 50% 50%,rgba(140,198,63,.34),rgba(140,198,63,0) 68%);
+}
+.hero-card{
+  position:relative;background:#fff;border-radius:var(--radius);
+  box-shadow:var(--shadow-lg);padding:26px;
+}
+.hero-card img{width:100%;border-radius:var(--radius-sm);background:var(--tint);}
+.hero-card figcaption{
+  display:flex;align-items:baseline;justify-content:space-between;gap:14px;
+  margin-top:18px;padding-top:16px;border-top:1px solid var(--line-soft);
+}
+.hero-card .t{font-family:var(--display);font-size:16px;font-weight:600;color:var(--ink);}
+.hero-card .m{font-size:12px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--green-700);}
+
+/* Top-right corner: bottom-right would sit on the card's caption. */
+.hero-badge{
+  position:absolute;right:-18px;top:-20px;z-index:2;
+  display:grid;gap:2px;padding:16px 22px;border-radius:var(--radius-sm);
+  background:var(--green-700);color:#fff;box-shadow:var(--shadow-lg);
+}
+.hero-badge .n{font-family:var(--display);font-size:26px;font-weight:700;line-height:1;}
+.hero-badge .l{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.85;}
+
+@media (max-width:980px){
+  .hero--light .wrap{grid-template-columns:1fr;gap:44px;padding-block:64px;}
+  .hero-figure{max-width:520px;}
+}
+@media (max-width:760px){
+  .hero--light .wrap{padding-block:48px;}
+  .hero-badge{right:6px;top:-16px;padding:12px 18px;}
+  .hero-badge .n{font-size:21px;}
 }

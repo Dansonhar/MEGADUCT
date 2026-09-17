@@ -7,40 +7,49 @@
 <meta name="description" content="MEGADUCT designs and manufactures busduct trunking systems in Malaysia. Established 1992 and supplied to projects across Asia and the Middle East. Certified by ASTA, CPRI, KEMA KEUR and PSB.">
 <link rel="canonical" href="https://www.megaduct.com.my/index.html">
 <link rel="icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
-<div class="utility">
+<div class="topbar">
   <div class="wrap">
-    <a class="u-brand" href="index.html" aria-label="MEGADUCT home">
-      <img src="assets/img/site/logo.png" alt="MEGADUCT" width="300" height="54">
-    </a>
-    <div class="u-right">
-      <div class="u-contact">
-        <span class="label">Speak to us</span>
-        <span class="tel"><a href="tel:+60387276080">+603 8727 6080</a></span>
-        <span class="mail"><a href="mailto:marketing@linkk.com.my">marketing@linkk.com.my</a></span>
+    <div class="brandswitch" role="group" aria-label="Choose site">
+        <a href="index.html" class="is-on" aria-current="true">Megaduct</a>
+        <a href="linkk/index.html">Linkk <span class="tag">New</span></a>
       </div>
-      <div class="u-cert">
-        <img src="assets/img/site/cert-logo.png" alt="TUV SUD / UKAS certified" width="116" height="65">
-      </div>
+    <div class="topbar-right">
+      <a href="tel:+60387276080">+603 8727 6080</a>
+      <span class="sep">|</span>
+      <a class="mail" href="mailto:marketing@linkk.com.my">marketing@linkk.com.my</a>
+      <img class="topbar-cert" src="assets/img/site/cert-logo.png" alt="TUV SUD / UKAS certified" width="116" height="65">
     </div>
   </div>
 </div>
 
-<div class="mainnav">
+<header class="site-header">
   <div class="wrap">
-    <ul>
-      <li><a href="index.html" class="is-active">Home</a></li>
-      <li><a href="about.html">About Us</a></li>
-      <li><a href="products.html">Our Products</a></li>
-      <li><a href="projects.html">Our Projects</a></li>
-      <li><a href="contact.html">Contact Us</a></li>
-    </ul>
-    <button class="burger" aria-label="Open menu" aria-expanded="false"><span></span></button>
+    <a class="brand" href="index.html" aria-label="MEGADUCT home">
+      <img src="assets/img/site/logo.png" alt="MEGADUCT" width="300" height="54">
+    </a>
+    <nav class="nav-main" aria-label="Main">
+        <a href="index.html" class="is-active" aria-current="page">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="products.html">Our Products</a>
+        <a href="research.html">R&amp;D</a>
+        <a href="support.html">Our Support</a>
+        <a href="projects.html">Our Projects</a>
+        <a href="media.html">Media</a>
+        <a href="contact.html">Contact Us</a>
+    </nav>
+    <div class="head-actions">
+      <a class="btn btn-red btn-sm head-cta" href="contact.html">Enquire</a>
+      <button class="burger" aria-label="Open menu" aria-expanded="false"><span></span></button>
+    </div>
   </div>
-</div>
+</header>
 
 <div class="scrim"></div>
 <aside class="drawer" aria-label="Menu">
@@ -49,15 +58,25 @@
     <button class="drawer-close" aria-label="Close menu">&times;</button>
   </div>
   <nav>
-    <a href="index.html" class="is-active">Home</a>
+    <a href="index.html" class="is-active" aria-current="page">Home</a>
     <a href="about.html">About Us</a>
     <a href="products.html">Our Products</a>
+    <a href="research.html">R&amp;D</a>
+    <a href="support.html">Our Support</a>
     <a href="projects.html">Our Projects</a>
+    <a href="media.html">Media</a>
     <a href="contact.html">Contact Us</a>
   </nav>
+  <div class="drawer-switch">
+    <span class="lbl">Switch site</span>
+    <div class="brandswitch" role="group" aria-label="Choose site">
+        <a href="index.html" class="is-on" aria-current="true">Megaduct</a>
+        <a href="linkk/index.html">Linkk <span class="tag">New</span></a>
+      </div>
+  </div>
   <div class="drawer-foot">
     <b>LINKK Busway Systems (M) Sdn Bhd</b>
-    Lot 3226, Jalan Perindustrian Mahkota Utama,<br>Taman Perindustrian Mahkota, 43700 Beranang,<br>Selangor Darul Ehsan, Malaysia
+    Lot 3226, Jalan Perindustrian Mahkota Utama, Taman Perindustrian Mahkota,<br>43700 Beranang, Selangor Darul Ehsan, Malaysia
     <span class="tel"><a href="tel:+60387276080">+603 8727 6080</a></span>
   </div>
 </aside>
@@ -264,12 +283,11 @@
 
 <footer class="foot">
   <div class="wrap">
-    <div class="foot-nav"><a href="index.html">HOME</a><span class="sep">|</span><a href="about.html">ABOUT US</a><span class="sep">|</span><a href="products.html">OUR PRODUCTS</a><span class="sep">|</span><a href="projects.html">OUR PROJECTS</a><span class="sep">|</span><a href="contact.html">CONTACT US</a></div>
+    <div class="foot-nav"><a href="index.html">Home</a><span class="sep">|</span><a href="about.html">About Us</a><span class="sep">|</span><a href="products.html">Our Products</a><span class="sep">|</span><a href="research.html">R&amp;D</a><span class="sep">|</span><a href="support.html">Our Support</a><span class="sep">|</span><a href="projects.html">Our Projects</a><span class="sep">|</span><a href="media.html">Media</a><span class="sep">|</span><a href="contact.html">Contact Us</a></div>
     <div class="foot-top">
       <div class="foot-addr">
-        <b>LINKK Busway Systems (M) Sdn Bhd</b><br>
-        Lot 3226, Jalan Perindustrian Mahkota Utama, Taman Perindustrian Mahkota,<br>
-        43700 Beranang, Selangor Darul Ehsan, Malaysia
+        <b>LINKK Busway Systems (M) Sdn Bhd</b>
+        Lot 3226, Jalan Perindustrian Mahkota Utama, Taman Perindustrian Mahkota,<br>43700 Beranang, Selangor Darul Ehsan, Malaysia
       </div>
       <div class="foot-reach">
         <a class="foot-tel" href="tel:+60387276080">+603 8727 6080</a>
@@ -277,12 +295,13 @@
       </div>
     </div>
     <div class="foot-bottom">
-      Copyright &copy; <span data-year>2026</span> LINKK Busway Systems (M) Sdn Bhd (1018052-D). All rights reserved.
+      <span>Copyright &copy; <span data-year>2026</span> LINKK Busway Systems (M) Sdn Bhd (1018052-D). All rights reserved.</span>
+      <span><a href="linkk/index.html">Switch to the LINKK site &rarr;</a></span>
     </div>
   </div>
 </footer>
 
-<button class="to-top" aria-label="Back to top">&uarr; Top</button>
+<button class="to-top" aria-label="Back to top">Top</button>
 
 <script type="module" src="assets/js/main.js"></script>
 </body>

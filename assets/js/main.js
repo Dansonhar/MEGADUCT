@@ -29,12 +29,12 @@
   if (mclose) mclose.addEventListener('click', function () { setNav(false); });
 
   /* ---- Sticky header shadow --------------------------------------------- */
-  var header = doc.querySelector('.mainnav');
+  var header = doc.querySelector('.site-header');
   var toTop = doc.querySelector('.to-top');
 
   function onScroll() {
     var y = window.pageYOffset;
-    if (header) header.classList.toggle('is-stuck', y > 8);
+    if (header) header.classList.toggle('is-stuck', y > 4);
     if (toTop) toTop.classList.toggle('is-on', y > 520);
   }
   window.addEventListener('scroll', onScroll, { passive: true });
@@ -158,6 +158,192 @@
       });
     });
   }
+
+  /* ---- Video facade ------------------------------------------------------- *
+     Each video on the media page ships as a still image plus a play button.
+     Nothing is requested from YouTube until the visitor clicks, so the page
+     loads fast and sets no third-party cookies on arrival. On click the
+     button is swapped for the player, already playing.
+     youtube-nocookie.com is YouTube's own privacy-preserving embed host.     */
+  Array.prototype.forEach.call(doc.querySelectorAll('.vframe[data-video]'), function (btn) {
+    btn.addEventListener('click', function () {
+      var id = btn.getAttribute('data-video');
+      if (!id) return;
+
+      var frame = doc.createElement('iframe');
+      frame.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) +
+                  '?autoplay=1&rel=0&modestbranding=1';
+      frame.title = btn.getAttribute('data-title') || 'Video';
+      frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; ' +
+                    'gyroscope; picture-in-picture; web-share';
+      frame.allowFullscreen = true;
+      frame.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+
+      btn.replaceWith(frame);
+      frame.focus();
+    });
+  });
+
+  /* ======================================================================
+     LINKK 2026 home-page behaviour.
+     Every block below exits early when its markup is absent, so the other
+     fifteen pages load this file and do nothing extra.
+     ====================================================================== */
+
+  var reduced = window.matchMedia &&
+                window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- Scroll reveal ------------------------------------------------------ *
+     Marks elements as in-view once. Without IntersectionObserver (or with
+     reduced motion) everything is revealed immediately — the CSS keeps
+     content hidden only on the assumption that this runs.                    */
+  var reveals = doc.querySelectorAll('[data-reveal]');
+  if (reveals.length) {
+    if (reduced || !('IntersectionObserver' in window)) {
+      Array.prototype.forEach.call(reveals, function (el) { el.classList.add('is-in'); });
+    } else {
+      var revealObs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          e.target.classList.add('is-in');
+          revealObs.unobserve(e.target);
+        });
+      }, { rootMargin: '0px 0px -12% 0px', threshold: 0.12 });
+      Array.prototype.forEach.call(reveals, function (el) { revealObs.observe(el); });
+    }
+  }
+
+  /* ---- Number count-up ---------------------------------------------------- *
+     Counts to data-count, preserving any prefix/suffix already in the markup
+     so "5,000+" and "1992" both read correctly mid-animation.                */
+  var counters = doc.querySelectorAll('[data-count]');
+  if (counters.length) {
+    /* Group thousands only where the authored value already did. Without
+       this the year 1992 counts up to "1,992". */
+    var fmt = function (n, group) {
+      return group ? n.toLocaleString('en-US') : String(n);
+    };
+
+    var run = function (el) {
+      var target = parseFloat(el.getAttribute('data-count'));
+      if (isNaN(target)) return;
+      var dur = 1500;
+      var t0 = null;
+
+      var frame = function (t) {
+        if (t0 === null) t0 = t;
+        var p = Math.min((t - t0) / dur, 1);
+        /* ease-out cubic: fast start, settled finish — reads as instrumented
+           rather than bouncy. */
+        var eased = 1 - Math.pow(1 - p, 3);
+        el.firstChild.nodeValue = fmt(Math.round(target * eased),
+                                      el.getAttribute('data-group') === '1');
+        if (p < 1) requestAnimationFrame(frame);
+      };
+      requestAnimationFrame(frame);
+    };
+
+    if (reduced || !('IntersectionObserver' in window)) {
+      /* leave the authored value in place */
+    } else {
+      var countObs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          run(e.target);
+          countObs.unobserve(e.target);
+        });
+      }, { threshold: 0.5 });
+      Array.prototype.forEach.call(counters, function (el) {
+        el.setAttribute('data-group',
+          (el.textContent || '').indexOf(',') !== -1 ? '1' : '0');
+        el.firstChild.nodeValue = '0';
+        countObs.observe(el);
+      });
+    }
+  }
+
+  /* ---- MEGADUCT component breakdown --------------------------------------- *
+     Each list button names the plate image it wants via data-plate. Items
+     for parts that sit inside the enclosure have no photograph of their own
+     and point back at the full-run plate — nothing is fabricated.            */
+  var mgList = doc.querySelector('[data-mg-list]');
+  if (mgList) {
+    var plates = doc.querySelectorAll('[data-mg-stage] img');
+    var capT = doc.querySelector('[data-mg-cap-title]');
+    var capN = doc.querySelector('[data-mg-cap-note]');
+    var items = mgList.querySelectorAll('.mg-item');
+
+    var select = function (btn) {
+      var want = btn.getAttribute('data-plate');
+
+      Array.prototype.forEach.call(items, function (i) {
+        var on = i === btn;
+        i.classList.toggle('is-on', on);
+        i.setAttribute('aria-expanded', String(on));
+      });
+      Array.prototype.forEach.call(plates, function (img) {
+        img.classList.toggle('is-on', img.getAttribute('data-plate') === want);
+      });
+      if (capT) capT.textContent = btn.getAttribute('data-cap') || '';
+      if (capN) capN.textContent = btn.getAttribute('data-note') || '';
+    };
+
+    Array.prototype.forEach.call(items, function (btn) {
+      btn.addEventListener('click', function () { select(btn); });
+    });
+    select(items[0]);
+  }
+
+  /* ---- Engineering journey progress --------------------------------------- *
+     Drives the connecting rule's --p (0 to 1) from the section's position in
+     the viewport, and lights each step as it is reached.                     */
+  var jrn = doc.querySelector('[data-journey]');
+  if (jrn && !reduced) {
+    var line = jrn.querySelector('.jrn-line');
+    var steps = jrn.querySelectorAll('.jrn-step');
+    var track = jrn.querySelector('.jrn-track');
+
+    var tick = function () {
+      var r = jrn.getBoundingClientRect();
+      var vh = window.innerHeight;
+      /* 0 when the section's top reaches 80% of the viewport, 1 once its
+         bottom passes 40% — the rule fills across the readable window. */
+      var p = (vh * 0.8 - r.top) / (r.height + vh * 0.4);
+      p = Math.max(0, Math.min(1, p));
+      if (line) line.style.setProperty('--p', p.toFixed(3));
+      Array.prototype.forEach.call(steps, function (s, i) {
+        s.classList.toggle('is-in', p >= (i + 0.5) / steps.length);
+      });
+    };
+
+    /* The mobile rail scrolls horizontally instead; light every step so the
+       swipe view is never half-dimmed. */
+    var syncMode = function () {
+      if (track && track.scrollWidth > track.clientWidth + 4) {
+        Array.prototype.forEach.call(steps, function (s) { s.classList.add('is-in'); });
+        if (line) line.style.setProperty('--p', '1');
+      } else {
+        tick();
+      }
+    };
+
+    window.addEventListener('scroll', syncMode, { passive: true });
+    window.addEventListener('resize', syncMode);
+    syncMode();
+  } else if (jrn) {
+    Array.prototype.forEach.call(jrn.querySelectorAll('.jrn-step'), function (s) {
+      s.classList.add('is-in');
+    });
+  }
+
+  /* ---- Instrument trace --------------------------------------------------- *
+     Sets each path's own length as --len so the dash animation in CSS draws
+     it exactly, whatever the path.                                           */
+  Array.prototype.forEach.call(doc.querySelectorAll('.trace-path'), function (p) {
+    if (typeof p.getTotalLength === 'function') {
+      p.style.setProperty('--len', Math.ceil(p.getTotalLength()));
+    }
+  });
 
   /* ---- Footer year -------------------------------------------------------- */
   var yr = doc.querySelector('[data-year]');

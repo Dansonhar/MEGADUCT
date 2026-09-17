@@ -73,12 +73,25 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       // Every page needs listing, or only index.html gets built.
+      // Two sites live here: MEGADUCT at the root, LINKK under linkk/.
       input: {
         index: resolve(import.meta.dirname, 'index.html'),
         about: resolve(import.meta.dirname, 'about.html'),
         products: resolve(import.meta.dirname, 'products.html'),
+        research: resolve(import.meta.dirname, 'research.html'),
+        support: resolve(import.meta.dirname, 'support.html'),
         projects: resolve(import.meta.dirname, 'projects.html'),
+        media: resolve(import.meta.dirname, 'media.html'),
         contact: resolve(import.meta.dirname, 'contact.html'),
+
+        linkkIndex: resolve(import.meta.dirname, 'linkk/index.html'),
+        linkkAbout: resolve(import.meta.dirname, 'linkk/about.html'),
+        linkkProducts: resolve(import.meta.dirname, 'linkk/products.html'),
+        linkkResearch: resolve(import.meta.dirname, 'linkk/research.html'),
+        linkkSupport: resolve(import.meta.dirname, 'linkk/support.html'),
+        linkkProjects: resolve(import.meta.dirname, 'linkk/projects.html'),
+        linkkMedia: resolve(import.meta.dirname, 'linkk/media.html'),
+        linkkContact: resolve(import.meta.dirname, 'linkk/contact.html'),
       },
     },
   },
