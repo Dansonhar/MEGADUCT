@@ -737,25 +737,13 @@ h1,h2,h3,h4{font-weight:600;letter-spacing:-.008em;}
 
 /* --- Logo lockup ---------------------------------------------------------- *
    Drawn in inline SVG rather than shipped as an image: there is no LINKK logo
-   file in assets/. Replace .brand-linkk with the real artwork when you have
-   it — nothing else depends on this markup.                                  */
-.brand-linkk{display:flex;align-items:center;gap:11px;}
+   file in assets/. Now the supplied artwork: this header is near-white, so it
+   takes assets/img/site/logo-LINKK.png unmodified. The dark LINKK home page
+   uses the -dark variant instead.                                            */
+.brand-linkk{display:flex;align-items:center;}
 .brand-linkk:hover{text-decoration:none;}
-.brand-linkk .glyph{width:40px;height:40px;flex:none;}
-.brand-linkk .wm{display:grid;line-height:1;}
-.brand-linkk .wm .n{
-  font-family:var(--display);font-size:24px;font-weight:600;
-  letter-spacing:.15em;color:var(--ink);
-}
-.brand-linkk .wm .sub{
-  display:flex;align-items:center;gap:5px;margin-top:6px;
-  font-size:9px;font-weight:500;letter-spacing:.04em;color:var(--muted);
-  text-transform:none;white-space:nowrap;
-}
-.brand-linkk .wm .sub .mark{width:8px;height:8px;border-radius:2px;background:var(--legrand);flex:none;}
-.brand-linkk .wm .sub b{color:var(--ink);font-weight:700;font-size:10.5px;letter-spacing:-.01em;}
-.drawer-head .brand-linkk .glyph{width:34px;height:34px;}
-.drawer-head .brand-linkk .wm .n{font-size:20px;}
+.brand-linkk img{height:46px;width:auto;display:block;}
+.drawer-head .brand-linkk img{height:38px;}
 
 /* --- Light top bar -------------------------------------------------------- *
    MEGADUCT runs a dark strip here; LINKK's identity is airy, so this one is

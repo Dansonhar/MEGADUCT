@@ -193,6 +193,23 @@
   var reduced = window.matchMedia &&
                 window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* ---- Hero entrance ------------------------------------------------------ *
+     The hero is above the fold, so an IntersectionObserver would either fire
+     before the browser has painted or not fire at all. Instead the section
+     opts in on the frame after load and the CSS delays stagger it. Without
+     JS, or under reduced motion, .is-ready is set immediately and the
+     transitions are already suppressed, so nothing is ever left invisible. */
+  var hero = doc.querySelector('.hero');
+  if (hero) {
+    if (reduced) {
+      hero.classList.add('is-ready');
+    } else {
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { hero.classList.add('is-ready'); });
+      });
+    }
+  }
+
   /* ---- Scroll reveal ------------------------------------------------------ *
      Marks elements as in-view once. Without IntersectionObserver (or with
      reduced motion) everything is revealed immediately — the CSS keeps
@@ -263,34 +280,88 @@
   }
 
   /* ---- MEGADUCT component breakdown --------------------------------------- *
-     Each list button names the plate image it wants via data-plate. Items
-     for parts that sit inside the enclosure have no photograph of their own
-     and point back at the full-run plate — nothing is fabricated.            */
+     A tablist over a media stage. Each tab names the plate it wants via
+     data-plate; the stage shows whichever direct child carries the matching
+     key, whatever that element is (see the MEDIA STAGE note in
+     linkk-2026.css). Items for parts that sit inside the enclosure have no
+     photograph of their own and point back at the full-run plate — nothing
+     is fabricated.
+
+     A tab may also declare data-media="video", which surfaces the play
+     button over the stage and dispatches a `mg:play` event when pressed, so
+     a future hardware-breakdown video or exploded-view viewer can hook in
+     without this block changing.                                            */
   var mgList = doc.querySelector('[data-mg-list]');
   if (mgList) {
-    var plates = doc.querySelectorAll('[data-mg-stage] img');
+    var stage = doc.querySelector('[data-mg-stage]');
+    var plates = stage ? stage.querySelectorAll('[data-plate]') : [];
     var capT = doc.querySelector('[data-mg-cap-title]');
     var capN = doc.querySelector('[data-mg-cap-note]');
+    var play = doc.querySelector('[data-mg-play]');
+    var plate = doc.querySelector('.mg-plate');
     var items = mgList.querySelectorAll('.mg-item');
 
-    var select = function (btn) {
+    var select = function (btn, focus) {
       var want = btn.getAttribute('data-plate');
 
       Array.prototype.forEach.call(items, function (i) {
         var on = i === btn;
         i.classList.toggle('is-on', on);
-        i.setAttribute('aria-expanded', String(on));
+        i.setAttribute('aria-selected', String(on));
+        /* Roving tabindex: only the selected tab is in the tab order, and
+           the arrow keys move between them. */
+        i.setAttribute('tabindex', on ? '0' : '-1');
       });
-      Array.prototype.forEach.call(plates, function (img) {
-        img.classList.toggle('is-on', img.getAttribute('data-plate') === want);
+      Array.prototype.forEach.call(plates, function (el) {
+        el.classList.toggle('is-on', el.getAttribute('data-plate') === want);
       });
       if (capT) capT.textContent = btn.getAttribute('data-cap') || '';
       if (capN) capN.textContent = btn.getAttribute('data-note') || '';
+
+      var hasMedia = btn.getAttribute('data-media') === 'video';
+      if (plate) plate.classList.toggle('has-media', hasMedia);
+      if (play) play.hidden = !hasMedia;
+
+      if (focus) btn.focus();
     };
 
     Array.prototype.forEach.call(items, function (btn) {
       btn.addEventListener('click', function () { select(btn); });
     });
+
+    mgList.addEventListener('keydown', function (ev) {
+      var keys = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 };
+      var step = keys[ev.key];
+      var list = Array.prototype.slice.call(items);
+      var at = list.indexOf(doc.activeElement);
+      if (at === -1) return;
+
+      if (step) {
+        ev.preventDefault();
+        select(list[(at + step + list.length) % list.length], true);
+      } else if (ev.key === 'Home') {
+        ev.preventDefault();
+        select(list[0], true);
+      } else if (ev.key === 'End') {
+        ev.preventDefault();
+        select(list[list.length - 1], true);
+      }
+    });
+
+    if (play) {
+      play.addEventListener('click', function () {
+        var on = mgList.querySelector('.mg-item.is-on');
+        var el = stage && stage.querySelector('[data-plate].is-on');
+        /* If the active plate is a real <video>, just play it. Anything else
+           (an embed, a 3D viewer) listens for the event instead. */
+        if (el && typeof el.play === 'function') { el.play(); return; }
+        stage.dispatchEvent(new CustomEvent('mg:play', {
+          bubbles: true,
+          detail: { plate: on && on.getAttribute('data-plate') }
+        }));
+      });
+    }
+
     select(items[0]);
   }
 
@@ -334,6 +405,63 @@
     Array.prototype.forEach.call(jrn.querySelectorAll('.jrn-step'), function (s) {
       s.classList.add('is-in');
     });
+  }
+
+  /* ---- Global projects filter --------------------------------------------- *
+     The chip row is built from the data-industry values already on the rows,
+     so a project is added by adding a row — there is no list to keep in
+     sync, and rows rendered from a real project database would work the same
+     way. Both the chip row and the count are hidden until this runs, so
+     without JS the section is simply the full list.                         */
+  var gpList = doc.querySelector('[data-gp-list]');
+  var gpFilter = doc.querySelector('[data-gp-filter]');
+  if (gpList && gpFilter && gpList.querySelectorAll('[data-industry]').length > 1) {
+    var rows = Array.prototype.slice.call(gpList.querySelectorAll('[data-industry]'));
+    var gpCount = doc.querySelector('[data-gp-count]');
+
+    /* Label from the row's own visible sector text, so the chip always reads
+       the way the row does. */
+    var sectors = [];
+    rows.forEach(function (r) {
+      var key = r.getAttribute('data-industry');
+      if (!key || sectors.some(function (s) { return s.key === key; })) return;
+      var el = r.querySelector('.sector');
+      sectors.push({ key: key, label: el ? el.textContent.trim() : key });
+    });
+    var chips = [{ key: '', label: 'All' }].concat(sectors);
+    var apply = function (key) {
+      var shown = 0;
+      rows.forEach(function (r) {
+        var on = !key || r.getAttribute('data-industry') === key;
+        r.hidden = !on;
+        if (on) shown++;
+      });
+      Array.prototype.forEach.call(gpFilter.children, function (c) {
+        c.setAttribute('aria-pressed', String(c.getAttribute('data-key') === key));
+      });
+      if (gpCount) {
+        gpCount.textContent = shown + (shown === 1 ? ' project' : ' projects') +
+          (key ? ' in ' + (chips.filter(function (c) { return c.key === key; })[0] || {}).label : '');
+      }
+    };
+
+    chips.forEach(function (c) {
+      var b = doc.createElement('button');
+      b.type = 'button';
+      b.className = 'gp-chip';
+      b.textContent = c.label;
+      b.setAttribute('data-key', c.key);
+      b.setAttribute('aria-pressed', String(c.key === ''));
+      b.addEventListener('click', function () { apply(c.key); });
+      gpFilter.appendChild(b);
+    });
+
+    /* One sector only: a filter with a single choice is noise. */
+    if (sectors.length > 1) {
+      gpFilter.hidden = false;
+      if (gpCount) gpCount.hidden = false;
+    }
+    apply('');
   }
 
   /* ---- Instrument trace --------------------------------------------------- *

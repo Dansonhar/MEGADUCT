@@ -147,15 +147,131 @@ Two rules to keep:
   items their square intrinsic ratio fed back into row sizing and silently
   overrode the stage's `aspect-ratio`, rendering a 560x373 box as 560x560.
 
+### Colour system
+
+`linkk-2026.css` carries the LINKK house atmosphere from `linkk.css` — bright,
+white-led, with a pale green-grey tint for alternate bands — on the modern
+industrial layout. Dark is used **twice** on the page and nowhere else.
+
+| Token | Value | Used for |
+| --- | --- | --- |
+| `--section-light` | `#ffffff` | Statistics, Systems we build, Legrand |
+| `--page-bg` | `#f7f8f5` | Hero base, Industries, Global projects, `<body>` |
+| `--section-soft` | `#f1f4ee` | Top bar, the MEGADUCT breakdown |
+| `--section-muted` | `#e8eee5` | Testing — the deepest light tone |
+| `--surface` | `#ffffff` | Plates, panels, the header |
+| `--text-primary` | `#1d241f` | Headings and key figures (13.4:1 worst case) |
+| `--text-secondary` | `#4d564f` | Body copy (6.5:1 worst case) |
+| `--text-muted` | `#5f6a61` | Mono labels and numerals (4.78:1 worst case) |
+| `--border` | `#dde4da` | Hairlines |
+| `--border-soft` | `#e9eee7` | Section seams and inner dividers |
+| `--dark-section` | `#202720` | 06 Engineering journey |
+| `--dark-section-2` | `#1b211c` | 10 Closing CTA |
+| `--dark-deep` | `#171c17` | Footer |
+| `--dark-rule` | `#333c33` | Hairlines on dark |
+| `--on-dark` / `--on-dark-body` / `--on-dark-muted` | `#ffffff` / `#d6ddd6` / `#a3ada4` | Text on the two dark bands |
+| `--linkk-green` | `#6aae2c` | Button fills, dark-section accents |
+| `--linkk-green-bright` | `#7cc636` | Hover |
+| `--linkk-green-dark` | `#44741a` | Green that is **text or an icon on light** |
+| `--linkk-green-soft` | `#eaf4df` | Row hover wash, spec chips |
+| `--legrand` | `#e30613` | Sampled from the supplied logo artwork |
+
+The band sequence, top to bottom. Every light-to-light step is under 1.2:1:
+
+| Band | Colour |
+| --- | --- |
+| top bar | `--section-soft` |
+| header | `rgba(255,255,255,.88)` |
+| 01 hero | gradient `#fff` → `--page-bg` → `--section-soft` |
+| 02 statistics | `--section-light` |
+| 03 industries | `--page-bg` |
+| 04 one system | `--section-soft` |
+| 05 systems we build | `--section-light`, ramping to `--section-muted` |
+| 06 journey | **dark** `--dark-section` |
+| 07 testing | ramp from `#e3eade` into `--section-muted` |
+| 08 projects | `--page-bg` |
+| 09 legrand | `--section-light`, ramping to `--section-muted` |
+| 10 closing CTA | **dark** `--dark-section-2` |
+| footer | `--dark-deep` |
+
+Four rules to keep:
+
+- **Dark is the exception, not the default.** Two bands only, and never two in
+  a row. A third dark section would put the page back where it was.
+- **`--linkk-green` is fill-only on light surfaces** — it reaches 2.9:1 on
+  white. Green text and icons on light use `--linkk-green-dark`, the only step
+  that clears 4.5:1 on `--section-muted`. On a dark band `--linkk-green` is
+  fine at 5.6:1.
+- **No hard edge into or out of a dark band.** `.sec--to-dark` fades the light
+  section above into `--section-muted`; `.sec--from-dark` fades back out; and
+  `.sec--dark` supplies a 3px `--linkk-green` top rule plus its own vertical
+  gradient. They are declared as `.sec.sec--to-dark` so they outrank a
+  section's own background, which is declared later in the sheet.
+- **No text carries `opacity` below 1.** Anything that needs to look secondary
+  uses `--text-muted`.
+
+Every rendered text node on the home page passes WCAG AA at its own size.
+`scripts/` has no checker for this; it was verified in-browser against
+computed styles.
+
+### Geometry and the blend rule
+
+The layout is industrial but not boxed: product renders have no container at
+all. Three radii exist — `--r-btn: 5px` (buttons, chips), `--r-sm: 7px` (small
+surfaces), `--r-md: 10px` (large media panels) — and most visuals never touch
+them. Depth comes from a soft wash plus a contact shadow behind each render,
+and the industrial character is carried by linework (datum lines, baselines,
+registration marks, index numerals) rather than by enclosure.
+
+**The blend rule. Every product photograph in `assets/` is a JPEG shot on
+white with no alpha channel.** They sit directly on tinted sections only
+because `mix-blend-mode: multiply` makes their white margin take the section
+colour. That is the whole reason the cards could be deleted, and it is fragile
+in one specific way:
+
+> Anything between the image and the section background that forms an isolated
+> group kills the blend, and the white rectangle comes straight back.
+
+In practice that means **none of the following may appear on the image or any
+ancestor up to the section**: `opacity` below 1, `isolation: isolate`,
+`filter`, `backdrop-filter`, `will-change: opacity|filter`, `contain: paint`,
+or `position` + a non-`auto` `z-index`. Four separate regressions during this
+pass came from exactly that list:
+
+| Cause | Symptom |
+| --- | --- |
+| `z-index: 2` on `.hero .wrap` | Hero render showed a white rectangle. Fixed by moving the green wash into the `background` shorthand so `.wrap` needs no `z-index` |
+| `z-index: 1` on `.mg-stage` | Same, in the MEGADUCT section |
+| `will-change: opacity` on the plates | Same — it makes the element its own isolated group |
+| `[data-reveal]` fading opacity 0→1 | White rectangle *during the transition only*. `[data-reveal="shift"]` and the hero panel's `data-enter` move without fading for this reason |
+
+A white or near-white wash behind a render causes the same visible result by a
+different route: multiply against near-white returns near-white. The washes are
+therefore faint **dark** lifts, not light ones.
+
+### Logo
+
+`assets/img/site/logo-LINKK.png` (496x136) is the artwork as supplied: glyph
+green `#b3cd3d`, wordmark grey `#605c5f`, Legrand red `#e30613`. All eight
+LINKK pages use it unmodified, now that the home-page header is light too.
+
+`logo-LINKK-dark.png` is the same file with only the neutral inks flipped for
+a dark surface — the wordmark grey becomes `#f1f3f2`, the "A brand of" black
+becomes white, and the green and red are untouched. Geometry is
+pixel-identical. Nothing uses it at present; it is kept for any future dark
+header. Replace both with the vector original if LINKK supply an SVG or EPS.
+
 Home-page-only behaviours live at the end of `assets/js/main.js` and are each
 guarded on their own markup, so the other fifteen pages load the file and do
 nothing extra:
 
 | Hook | Does |
 | --- | --- |
-| `[data-reveal]` (+ `data-d` 1-5) | Staggered scroll reveal via IntersectionObserver |
+| `.hero [data-enter]` | Hero entrance. Plays on the frame after load, not on scroll — the hero is above the fold, so an observer would fire before first paint or not at all. `.is-ready` on `.hero` drives it; CSS delays stagger it |
+| `[data-reveal]` (+ `data-d` 1-5) | Staggered scroll reveal via IntersectionObserver, for everything below the fold |
 | `[data-count]` | Number count-up. Groups thousands only if the authored value did — otherwise the year 1992 renders as "1,992" |
-| `[data-mg-list]` / `[data-mg-stage]` | MEGADUCT component breakdown; each button's `data-plate` selects a real product photograph |
+| `[data-mg-list]` / `[data-mg-stage]` | MEGADUCT breakdown as an ARIA tablist over a media stage. Roving tabindex, arrow/Home/End keys. `data-media="video"` on a tab surfaces the play button and fires a `mg:play` event |
+| `[data-gp-filter]` / `[data-gp-list]` | Project sector filter, built from the rows' own `data-industry` values. Hidden until the script runs, so the no-JS state is the full list |
 | `[data-journey]` | Scroll-linked progress on the process timeline; auto-completes when the track becomes a mobile swipe rail |
 | `.trace-path` | Measures its own length so the CSS dash animation draws it exactly |
 
@@ -274,24 +390,30 @@ inventing specifications:
 The design works around an asset library that cannot carry it. Needed, in
 priority order:
 
-1. **Hero plate** — a MEGADUCT run shot for a dark background, 2400px wide.
-   The current hero uses a 600x600 studio shot on white inside a light panel.
-2. **Factory floor** — manufacturing at Beranang, 2400px wide.
-3. **Testing** — the temperature rise / short circuit rigs. Section 07 currently
-   carries an SVG instrument trace because no testing photograph exists.
-4. **Installed runs on site** — for the projects section, which is currently
-   typographic only.
-5. **Product renders at 1600px+** — the existing set is 600x600.
+1. **Product renders at 1600px+.** Every product shot is 600x600 and renders at
+   roughly 490px CSS in the hero panel — only 1.2x on a 2x display. This is the
+   most visible shortfall on the page.
+2. **Project photography.** Section 08 has a thumbnail slot ready
+   (`.gp-thumb`, see the note in the CSS) and uses none, because the existing
+   `assets/img/site/project-*.jpg` are 300px wide and do not correspond to the
+   six named projects.
+3. **Testing.** The temperature-rise and short-circuit rigs. Section 07 carries
+   an SVG instrument trace because no testing photograph exists.
+4. **MEGADUCT hardware-breakdown video** or an exploded-view viewer. Section 04
+   is wired for it — add a sibling to the media stage with the same
+   `data-plate` key and `data-media="video"` on the tab.
+5. **Factory floor** at Beranang, 2400px wide.
+
+No image on the site has a `srcset`, and none is served as WebP or AVIF.
 
 ### LINKK brand assets
 
-There is no LINKK logo file in `assets/`. The lockup in the header is drawn in
-inline SVG — two rounded squares plus the wordmark and a "a brand of Legrand" line
-— defined by `.brand-linkk` in `linkk.css` and repeated in each `linkk/*.html`
-header and drawer. **Replace it with the real artwork when you have it**; nothing
-else depends on that markup.
+The supplied logo artwork is in use on all eight LINKK pages — see the **Logo**
+section above. Still missing: the vector original (SVG/EPS), and official
+Legrand group artwork for section 09, which currently draws the lockup as a red
+square plus the wordmark in Barlow Condensed.
 
-LINKK photography is also placeholder: the pages reuse the MEGADUCT product and
+LINKK photography is placeholder: the pages reuse the MEGADUCT product and
 banner images already in `assets/`.
 
 ### Unused assets

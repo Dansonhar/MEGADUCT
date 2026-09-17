@@ -9,11 +9,13 @@
 <link rel="icon" href="../favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
 <link rel="stylesheet" href="../assets/css/linkk-2026.css">
 <script>document.documentElement.classList.remove('no-js');</script>
 </head>
 <body>
+
+<a class="skip" href="#main">Skip to content</a>
 
 <div class="topbar">
   <div class="wrap">
@@ -23,16 +25,16 @@
       </div>
     <div class="topbar-right">
       <a href="tel:+60387276080">+603 8727 6080</a>
-      <span class="sep">|</span>
+      <span class="sep" aria-hidden="true">|</span>
       <a class="mail" href="mailto:marketing@linkk.com.my">marketing@linkk.com.my</a>
-      <img class="topbar-cert" src="../assets/img/site/cert-logo.png" alt="TUV SUD / UKAS certified" width="116" height="65">
+      <img class="topbar-cert" src="../assets/img/site/cert-logo.png" alt="TUV SUD / UKAS certified" width="116" height="65" decoding="async">
     </div>
   </div>
 </div>
 
 <header class="site-header">
   <div class="wrap">
-    <a class="brand-linkk" href="index.html" aria-label="LINKK home"><svg class="glyph" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><rect x="2.6" y="2.6" width="22.8" height="22.8" rx="6" fill="none" stroke="#8cc63f" stroke-width="3"/><rect x="14.6" y="14.6" width="22.8" height="22.8" rx="6" fill="none" stroke="#6d7b74" stroke-width="3"/></svg><span class="wm"><span class="n">LINKK</span><span class="sub">A brand of <span class="mark"></span><b>legrand</b></span></span></a>
+    <a class="brand-linkk" href="index.html" aria-label="LINKK home"><img src="../assets/img/site/logo-LINKK.png" alt="LINKK — a brand of Legrand" width="496" height="136" decoding="async"></a>
     <nav class="nav-main" aria-label="Main">
         <a href="index.html" class="is-active" aria-current="page">Home</a>
         <a href="about.html">About Us</a>
@@ -53,7 +55,7 @@
 <div class="scrim"></div>
 <aside class="drawer" aria-label="Menu">
   <div class="drawer-head">
-    <span class="brand-linkk"><svg class="glyph" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><rect x="2.6" y="2.6" width="22.8" height="22.8" rx="6" fill="none" stroke="#8cc63f" stroke-width="3"/><rect x="14.6" y="14.6" width="22.8" height="22.8" rx="6" fill="none" stroke="#6d7b74" stroke-width="3"/></svg><span class="wm"><span class="n">LINKK</span><span class="sub">A brand of <span class="mark"></span><b>legrand</b></span></span></span>
+    <span class="brand-linkk"><img src="../assets/img/site/logo-LINKK.png" alt="LINKK — a brand of Legrand" width="496" height="136" decoding="async"></span>
     <button class="drawer-close" aria-label="Close menu">&times;</button>
   </div>
   <nav>
@@ -80,37 +82,39 @@
   </div>
 </aside>
 
+<main id="main" tabindex="-1">
+
 <!-- 01 — Hero ============================================================ -->
 <section class="hero">
   <div class="wrap">
     <div class="hero-grid">
 
-      <div class="hero-copy" data-reveal>
-        <p class="hero-parent"><span class="mark"></span>A brand of <b>legrand</b></p>
-        <h1 class="d1">Power Distribution,<br>Engineered to <span class="accent">Scale.</span></h1>
-        <p class="hero-lede">
+      <div class="hero-copy">
+        <p class="hero-parent" data-enter="1"><span class="mark"></span>A brand of <b>legrand</b></p>
+        <h1 class="d1" data-enter="2">Power Distribution,<br>Engineered to <span class="accent">Scale.</span></h1>
+        <p class="hero-lede" data-enter="3">
           LINKK Busway Systems designs and manufactures busduct trunking systems at
           our own factory in Beranang, Selangor &mdash; supplying commercial,
           industrial and infrastructure projects in more than 50 countries.
         </p>
-        <div class="hero-cta">
+        <div class="hero-cta" data-enter="4">
           <a class="b b--green" href="products.html">Explore Systems <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a>
-          <a class="b b--ghost" href="contact.html">Talk to Engineering</a>
+          <a class="b b--line" href="contact.html">Talk to Engineering</a>
         </div>
 
-        <ul class="hero-rail">
+        <ul class="hero-rail" data-enter="5">
           <li><span class="k">1992</span><span class="v">Manufacturing since</span></li>
           <li><span class="k">IEC 61439</span><span class="v">Designed to</span></li>
           <li><span class="k">ISO 9001</span><span class="v">:2015 certified</span></li>
         </ul>
       </div>
 
-      <div class="hero-panel" data-reveal data-d="2">
+      <div class="hero-panel" data-enter="panel">
         <span class="ticks" aria-hidden="true"></span>
         <figure>
           <img src="../assets/img/products/proL-Feeder-Plug-in.jpg"
                alt="MEGADUCT sandwich busduct feeder run with plug-in outlet"
-               width="600" height="600" fetchpriority="high">
+               width="600" height="600" fetchpriority="high" decoding="async">
           <figcaption>
             <span class="t">MEGADUCT Feeder Run</span>
             <span class="s">Sandwich Busduct</span>
@@ -124,7 +128,7 @@
 </section>
 
 <!-- 02 — Credibility ===================================================== -->
-<section class="sec sec--dark stats" aria-label="Company figures">
+<section class="sec stats" aria-label="Company figures">
   <div class="wrap">
     <div class="stats-grid">
       <div class="stat" data-reveal>
@@ -152,11 +156,11 @@
 </section>
 
 <!-- 03 — Industries ====================================================== -->
-<section class="sec sec--paper" aria-labelledby="ind-h">
+<section class="sec sec--light" aria-labelledby="ind-h">
   <div class="wrap">
     <p class="eyebrow" data-reveal><span class="idx">03</span> Industries served</p>
     <h2 class="d2" id="ind-h" data-reveal>Where our busduct runs.</h2>
-    <div class="ind" style="margin-top:clamp(24px,2.6vw,38px)">
+    <div class="ind sec-body">
       <a class="ind-row" href="projects.html" data-reveal data-d="0">
         <span class="ix">01</span>
         <span class="nm">Data Centres</span>
@@ -198,68 +202,80 @@
 </section>
 
 <!-- 04 — MEGADUCT system ================================================= -->
-<section class="sec mg" aria-labelledby="mg-h">
+<section class="sec sec--soft sec--step mg" style="--step-bg:var(--page-bg)" aria-labelledby="mg-h">
   <div class="wrap">
     <p class="eyebrow" data-reveal><span class="idx">04</span> The MEGADUCT system</p>
     <h2 class="d2" id="mg-h" data-reveal style="max-width:20ch">One system, supplied complete.</h2>
-    <p class="lede" data-reveal data-d="1" style="margin-top:14px;color:var(--ink-2)">
+    <p class="lede" data-reveal data-d="1" style="margin-top:14px">
       MEGADUCT is the busduct brand we manufacture. Straight runs, every elbow and
       fitting, the joints and hangers that hold it up, and the tap-off units that
       take power out of it &mdash; all from one factory.
     </p>
 
-    <div class="mg-grid" style="margin-top:clamp(24px,2.6vw,38px)">
-      <div class="mg-plate" data-reveal>
-        <div class="mg-stage" data-mg-stage>
-        <img data-plate="run" src="../assets/img/products/proL-Feeder-Plug-in.jpg" alt="MEGADUCT feeder run with plug-in outlet" width="600" height="600" loading="lazy">
-        <img data-plate="joint" src="../assets/img/products/proL-Joint-Sets.jpg" alt="MEGADUCT joint set" width="600" height="600" loading="lazy">
-        <img data-plate="tap" src="../assets/img/products/proL-Tap-Off-Unit.jpg" alt="MEGADUCT tap-off unit" width="600" height="600" loading="lazy">
-        <img data-plate="elbow" src="../assets/img/products/proL-Edgewise-Elbow.jpg" alt="MEGADUCT edgewise elbow" width="600" height="600" loading="lazy">
-        <img data-plate="hanger" src="../assets/img/products/proL-Vertical-Hanger.jpg" alt="MEGADUCT vertical hanger" width="600" height="600" loading="lazy">
+    <div class="mg-grid sec-body">
+      <div class="mg-plate" data-reveal="shift">
+        <span class="mg-guide" aria-hidden="true"><span></span></span>
+        <div class="mg-stage" data-mg-stage id="mg-stage" role="tabpanel" aria-live="polite">
+        <img data-plate="run" src="../assets/img/products/proL-Feeder-Plug-in.jpg" alt="MEGADUCT feeder run with plug-in outlet" width="600" height="600" loading="lazy" decoding="async">
+        <img data-plate="joint" src="../assets/img/products/proL-Joint-Sets.jpg" alt="MEGADUCT joint set" width="600" height="600" loading="lazy" decoding="async">
+        <img data-plate="tap" src="../assets/img/products/proL-Tap-Off-Unit.jpg" alt="MEGADUCT tap-off unit" width="600" height="600" loading="lazy" decoding="async">
+        <img data-plate="elbow" src="../assets/img/products/proL-Edgewise-Elbow.jpg" alt="MEGADUCT edgewise elbow" width="600" height="600" loading="lazy" decoding="async">
+        <img data-plate="hanger" src="../assets/img/products/proL-Vertical-Hanger.jpg" alt="MEGADUCT vertical hanger" width="600" height="600" loading="lazy" decoding="async">
         </div>
+        <button class="mg-play" type="button" data-mg-play hidden
+                aria-label="Play the MEGADUCT system breakdown">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+        </button>
         <div class="mg-cap">
           <span class="t" data-mg-cap-title>Feeder Run</span>
           <span class="n" data-mg-cap-note>Enclosure</span>
         </div>
       </div>
 
-      <div class="mg-list" data-mg-list data-reveal data-d="1">
-      <button class="mg-item" type="button" data-plate="run" data-cap="Feeder Run" data-note="Enclosure" aria-expanded="false">
+      <div class="mg-list" data-mg-list role="tablist"
+           aria-label="MEGADUCT system components" data-reveal data-d="1">
+      <button class="mg-item" type="button" data-plate="run" data-cap="Feeder Run" data-note="Enclosure" role="tab" aria-selected="false"
+              aria-controls="mg-stage" tabindex="-1">
         <span class="ix">01</span>
         <span>
           <h3>Enclosure</h3>
           <p>The metal housing that carries and protects the run, and forms the earth path along its length.</p>
         </span>
       </button>
-      <button class="mg-item" type="button" data-plate="run" data-cap="Feeder Run" data-note="Conductors" aria-expanded="false">
+      <button class="mg-item" type="button" data-plate="run" data-cap="Feeder Run" data-note="Conductors" role="tab" aria-selected="false"
+              aria-controls="mg-stage" tabindex="-1">
         <span class="ix">02</span>
         <span>
           <h3>Conductors</h3>
           <p>High-purity copper of 99.95% minimum, laminated together so a compact section carries far more current than equivalent cabling.</p>
         </span>
       </button>
-      <button class="mg-item" type="button" data-plate="run" data-cap="Feeder Run" data-note="Insulation system" aria-expanded="false">
+      <button class="mg-item" type="button" data-plate="run" data-cap="Feeder Run" data-note="Insulation system" role="tab" aria-selected="false"
+              aria-controls="mg-stage" tabindex="-1">
         <span class="ix">03</span>
         <span>
           <h3>Insulation</h3>
           <p>Insulation laid between conductors through the sandwich construction, verified by dielectric and insulation testing before dispatch.</p>
         </span>
       </button>
-      <button class="mg-item" type="button" data-plate="joint" data-cap="Joint Set" data-note="Joint set" aria-expanded="false">
+      <button class="mg-item" type="button" data-plate="joint" data-cap="Joint Set" data-note="Joint set" role="tab" aria-selected="false"
+              aria-controls="mg-stage" tabindex="-1">
         <span class="ix">04</span>
         <span>
           <h3>Joints</h3>
           <p>Where two lengths meet. Joint connection stability under varying loads is one of the tests every system goes through.</p>
         </span>
       </button>
-      <button class="mg-item" type="button" data-plate="tap" data-cap="Tap-Off Unit" data-note="Tap-off" aria-expanded="false">
+      <button class="mg-item" type="button" data-plate="tap" data-cap="Tap-Off Unit" data-note="Tap-off" role="tab" aria-selected="false"
+              aria-controls="mg-stage" tabindex="-1">
         <span class="ix">05</span>
         <span>
           <h3>Tap-off units</h3>
           <p>Takes power out of the run where it is needed. Interlocks prevent the unit being detached while it is switched on.</p>
         </span>
       </button>
-      <button class="mg-item" type="button" data-plate="elbow" data-cap="Edgewise Elbow" data-note="Fittings" aria-expanded="false">
+      <button class="mg-item" type="button" data-plate="elbow" data-cap="Edgewise Elbow" data-note="Fittings" role="tab" aria-selected="false"
+              aria-controls="mg-stage" tabindex="-1">
         <span class="ix">06</span>
         <span>
           <h3>Elbows &amp; fittings</h3>
@@ -272,15 +288,15 @@
 </section>
 
 <!-- 05 — Product families ================================================ -->
-<section class="sec sec--paper2" aria-labelledby="fam-h">
+<section class="sec sec--surface sec--to-dark" aria-labelledby="fam-h">
   <div class="wrap">
     <p class="eyebrow" data-reveal><span class="idx">05</span> Product families</p>
     <h2 class="d2" id="fam-h" data-reveal>Systems we build.</h2>
-    <div class="fam" style="margin-top:clamp(22px,2.4vw,34px)">
+    <div class="fam sec-body">
       <article class="fam-row" data-reveal>
         <div class="fam-media">
           <span class="badge">LV &middot; MV &middot; HV</span>
-          <img src="../assets/img/products/proL-Joint-Sets.jpg" alt="Sandwich Busduct" width="600" height="600" loading="lazy">
+          <img src="../assets/img/products/proL-Joint-Sets.jpg" alt="Sandwich Busduct" width="600" height="600" loading="lazy" decoding="async">
         </div>
         <div class="fam-body">
           <h3 class="d3">Sandwich Busduct</h3>
@@ -292,7 +308,7 @@
       <article class="fam-row" data-reveal>
         <div class="fam-media">
           <span class="badge">NSPB &middot; LV &amp; MV</span>
-          <img src="../assets/img/products/proL-End-Feed-Cable-Box.jpg" alt="Non-Segregated Phase Busduct" width="600" height="600" loading="lazy">
+          <img src="../assets/img/products/proL-End-Feed-Cable-Box.jpg" alt="Non-Segregated Phase Busduct" width="600" height="600" loading="lazy" decoding="async">
         </div>
         <div class="fam-body">
           <h3 class="d3">Non-Segregated Phase Busduct</h3>
@@ -306,7 +322,7 @@
 </section>
 
 <!-- 06 — Engineering journey ============================================= -->
-<section class="sec jrn" data-journey aria-labelledby="jrn-h">
+<section class="sec sec--dark jrn" data-journey aria-labelledby="jrn-h">
   <div class="wrap">
     <p class="eyebrow" data-reveal><span class="idx">06</span> How a project runs</p>
     <h2 class="d2" id="jrn-h" data-reveal>From diagram to installed run.</h2>
@@ -347,7 +363,7 @@
 </section>
 
 <!-- 07 — R&amp;D and testing =============================================== -->
-<section class="sec rnd" aria-labelledby="rnd-h">
+<section class="sec sec--from-dark rnd" aria-labelledby="rnd-h">
   <div class="wrap">
     <div class="rnd-top">
       <div data-reveal>
@@ -387,7 +403,7 @@
         <li><span class="no">08</span>Thermal imaging to locate heat points</li>
     </ul>
 
-    <p class="meta" style="margin:clamp(28px,2.8vw,42px) 0 14px">Certificates held</p>
+    <p class="meta certs-label">Certificates held</p>
     <ul class="certs" data-reveal>
         <li><span class="n">24</span><span class="s">PSB</span></li>
         <li><span class="n">18</span><span class="s">ASTA</span></li>
@@ -403,16 +419,18 @@
 </section>
 
 <!-- 08 — Global projects ================================================= -->
-<section class="sec gp" aria-labelledby="gp-h">
+<section class="sec sec--light sec--step sec--step--right gp" style="--step-bg:var(--section-muted)" aria-labelledby="gp-h">
   <div class="wrap">
     <div class="gp-head">
       <div data-reveal>
         <p class="eyebrow"><span class="idx">08</span> Selected projects</p>
         <h2 class="d2" id="gp-h" style="max-width:16ch">Powering infrastructure across 50+ countries.</h2>
       </div>
-      <a class="b b--ghost" href="projects.html" data-reveal data-d="1">All projects <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a>
+      <a class="b b--line" href="projects.html" data-reveal data-d="1">All projects <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a>
     </div>
-    <ul class="gp-list" data-reveal>
+    <div class="gp-filter" data-gp-filter role="group" aria-label="Filter projects by sector" hidden></div>
+    <p class="gp-count" data-gp-count aria-live="polite" hidden></p>
+    <ul class="gp-list" data-gp-list data-reveal>
       <li class="gp-item" data-industry="transportation" data-region="apac" data-country="MV">
         <span class="cc">MV</span>
         <span class="nm">Male International Airport</span>
@@ -454,7 +472,7 @@
 </section>
 
 <!-- 09 — Legrand ========================================================= -->
-<section class="sec lg-sec" aria-labelledby="lg-h">
+<section class="sec sec--surface sec--to-dark lg-sec" aria-labelledby="lg-h">
   <div class="wrap">
     <div class="lg-inner">
       <div data-reveal>
@@ -477,7 +495,7 @@
 </section>
 
 <!-- 10 — Closing CTA ===================================================== -->
-<section class="sec cta" aria-labelledby="cta-h">
+<section class="sec sec--dark cta" aria-labelledby="cta-h">
   <div class="wrap">
     <p class="eyebrow" data-reveal><span class="idx">10</span> Next step</p>
     <h2 class="d1" id="cta-h" data-reveal>Planning a power distribution project?</h2>
@@ -492,9 +510,11 @@
   </div>
 </section>
 
+</main>
+
 <footer class="foot">
   <div class="wrap">
-    <div class="foot-nav"><a href="index.html">Home</a><span class="sep">|</span><a href="about.html">About Us</a><span class="sep">|</span><a href="products.html">Our Products</a><span class="sep">|</span><a href="research.html">R&amp;D</a><span class="sep">|</span><a href="support.html">Our Support</a><span class="sep">|</span><a href="projects.html">Our Projects</a><span class="sep">|</span><a href="media.html">Media</a><span class="sep">|</span><a href="contact.html">Contact Us</a></div>
+    <div class="foot-nav"><a href="index.html">Home</a><span class="sep" aria-hidden="true">|</span><a href="about.html">About Us</a><span class="sep" aria-hidden="true">|</span><a href="products.html">Our Products</a><span class="sep" aria-hidden="true">|</span><a href="research.html">R&amp;D</a><span class="sep" aria-hidden="true">|</span><a href="support.html">Our Support</a><span class="sep" aria-hidden="true">|</span><a href="projects.html">Our Projects</a><span class="sep" aria-hidden="true">|</span><a href="media.html">Media</a><span class="sep" aria-hidden="true">|</span><a href="contact.html">Contact Us</a></div>
     <div class="foot-top">
       <div class="foot-addr">
         <b>LINKK Busway Systems (M) Sdn Bhd</b>
