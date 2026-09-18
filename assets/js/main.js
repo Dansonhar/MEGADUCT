@@ -365,47 +365,63 @@
     select(items[0]);
   }
 
-  /* ---- Engineering journey progress --------------------------------------- *
-     Drives the connecting rule's --p (0 to 1) from the section's position in
-     the viewport, and lights each step as it is reached.                     */
-  var jrn = doc.querySelector('[data-journey]');
-  if (jrn && !reduced) {
-    var line = jrn.querySelector('.jrn-line');
-    var steps = jrn.querySelectorAll('.jrn-step');
-    var track = jrn.querySelector('.jrn-track');
+  /* ---- Scroll-linked rails -------------------------------------------------- *
+     Home's engineering journey and the Products system flow are the same
+     device on the same markup, so they run off one function and cannot drift
+     apart.
 
-    var tick = function () {
-      var r = jrn.getBoundingClientRect();
-      var vh = window.innerHeight;
-      /* 0 when the section's top reaches 80% of the viewport, 1 once its
-         bottom passes 40% — the rule fills across the readable window. */
-      var p = (vh * 0.8 - r.top) / (r.height + vh * 0.4);
-      p = Math.max(0, Math.min(1, p));
+     Progress is measured from the RAIL, not from the section. Measured off the
+     section, a tall one stretched the fill: it began as soon as the section
+     peeked in at the bottom of the window and only finished once the section
+     was most of the way past, so the rail was still filling after the reader
+     had scrolled on. Off the rail it always takes the same 40% of a viewport
+     height of scrolling, and it completes while the rail is still in the upper
+     half of the screen.                                                      */
+  var scrollRail = function (root, cls) {
+    var line = root.querySelector('.' + cls + '-line');
+    var steps = root.querySelectorAll('.' + cls + '-step');
+    var track = root.querySelector('.' + cls + '-track');
+    if (!steps.length) return;
+
+    var light = function (p) {
       if (line) line.style.setProperty('--p', p.toFixed(3));
       Array.prototype.forEach.call(steps, function (s, i) {
         s.classList.toggle('is-in', p >= (i + 0.5) / steps.length);
       });
     };
 
-    /* The mobile rail scrolls horizontally instead; light every step so the
-       swipe view is never half-dimmed. */
-    var syncMode = function () {
-      if (track && track.scrollWidth > track.clientWidth + 4) {
-        Array.prototype.forEach.call(steps, function (s) { s.classList.add('is-in'); });
-        if (line) line.style.setProperty('--p', '1');
-      } else {
-        tick();
-      }
+    var tick = function () {
+      /* The rail scrolls sideways on mobile, so light every stage rather than
+         leaving half the swipe view dimmed. */
+      if (track && track.scrollWidth > track.clientWidth + 8) { light(1); return; }
+      var vh = window.innerHeight;
+      var top = (track || root).getBoundingClientRect().top;
+      var from = vh * 0.76;   /* p = 0 — the rail has just cleared the fold   */
+      var to = vh * 0.36;     /* p = 1 — still well inside the readable window */
+      light(Math.max(0, Math.min(1, (from - top) / (from - to))));
     };
 
-    window.addEventListener('scroll', syncMode, { passive: true });
-    window.addEventListener('resize', syncMode);
-    syncMode();
-  } else if (jrn) {
-    Array.prototype.forEach.call(jrn.querySelectorAll('.jrn-step'), function (s) {
+    window.addEventListener('scroll', tick, { passive: true });
+    window.addEventListener('resize', tick);
+    tick();
+  };
+
+  var lightAll = function (root, cls) {
+    Array.prototype.forEach.call(root.querySelectorAll('.' + cls + '-step'), function (s) {
       s.classList.add('is-in');
     });
-  }
+    var l = root.querySelector('.' + cls + '-line');
+    if (l) l.style.setProperty('--p', '1');
+  };
+
+  Array.prototype.forEach.call(
+    [[doc.querySelector('[data-journey]'), 'jrn'], [doc.querySelector('[data-flow]'), 'flow']],
+    function (pair) {
+      if (!pair[0]) return;
+      if (reduced) lightAll(pair[0], pair[1]);
+      else scrollRail(pair[0], pair[1]);
+    }
+  );
 
   /* ---- Global projects filter --------------------------------------------- *
      The chip row is built from the data-industry values already on the rows,
@@ -500,45 +516,6 @@
     apply('');
   }
 
-  /* ---- System flow (Products) --------------------------------------------- *
-     Same scroll-linked mechanic as the Home page timeline, on the same markup
-     shape, so the two read as one motion language. Guarded on [data-flow],
-     so every page without one skips it.                                     */
-  var flow = doc.querySelector('[data-flow]');
-  if (flow && !reduced) {
-    var fLine = flow.querySelector('.flow-line');
-    var fSteps = flow.querySelectorAll('.flow-step');
-    var fTrack = flow.querySelector('.flow-track');
-
-    var fTick = function () {
-      var r = flow.getBoundingClientRect();
-      var vh = window.innerHeight;
-      var p = (vh * 0.8 - r.top) / (r.height + vh * 0.4);
-      p = Math.max(0, Math.min(1, p));
-      if (fLine) fLine.style.setProperty('--p', p.toFixed(3));
-      Array.prototype.forEach.call(fSteps, function (s, i) {
-        s.classList.toggle('is-in', p >= (i + 0.5) / fSteps.length);
-      });
-    };
-    /* The mobile rail scrolls sideways instead, so light every stage rather
-       than leaving half the swipe view dimmed. */
-    var fSync = function () {
-      if (fTrack && fTrack.scrollWidth > fTrack.clientWidth + 4) {
-        Array.prototype.forEach.call(fSteps, function (s) { s.classList.add('is-in'); });
-        if (fLine) fLine.style.setProperty('--p', '1');
-      } else {
-        fTick();
-      }
-    };
-    window.addEventListener('scroll', fSync, { passive: true });
-    window.addEventListener('resize', fSync);
-    fSync();
-  } else if (flow) {
-    Array.prototype.forEach.call(flow.querySelectorAll('.flow-step'), function (s) {
-      s.classList.add('is-in');
-    });
-  }
-
   /* ---- Component gallery (Products) --------------------------------------- *
      Each component is already a <button> carrying data-component. Until a
      detail page or panel exists there is nothing to open, so pressing one
@@ -571,4 +548,81 @@
   /* ---- Footer year -------------------------------------------------------- */
   var yr = doc.querySelector('[data-year]');
   if (yr) yr.textContent = new Date().getFullYear();
+
+  /* ---- Image warming ------------------------------------------------------ *
+     The product renders are photographed on white and drop that background
+     with mix-blend-mode, which can only do its job once the file has decoded.
+     Left as loading="lazy" they arrive at the exact moment they scroll into
+     view, which is the one moment the seam can show.
+
+     So once the page has loaded and the browser is idle, every remaining lazy
+     image is upgraded to eager and decoded off the main thread, a few at a
+     time so the warming never competes with what is already on screen. By the
+     time the reader reaches an image it is already in the cache, decoded.
+
+     Skipped entirely on Save-Data or a 2G-class connection: pre-fetching 15
+     product shots is the wrong trade there, and lazy loading stays as it was. */
+  var warmImages = function () {
+    var c = navigator.connection;
+    if (c && (c.saveData || /(^|-)2g$/.test(c.effectiveType || ''))) return;
+
+    var lazy = [];
+    Array.prototype.forEach.call(doc.querySelectorAll('img[loading="lazy"]'), function (im) {
+      lazy.push(im);
+    });
+
+    var i = 0;
+    var batch = function () {
+      for (var n = 0; n < 4 && i < lazy.length; n++, i++) {
+        var im = lazy[i];
+        im.loading = 'eager';
+        /* decode() moves the decode off the scroll path. It rejects if the
+           image is detached or fails to load — neither is worth reporting. */
+        if (typeof im.decode === 'function') im.decode().catch(function () {});
+      }
+      if (i < lazy.length) setTimeout(batch, 140);
+    };
+    batch();
+  };
+
+  var whenIdle = function (fn) {
+    if (typeof window.requestIdleCallback === 'function') {
+      window.requestIdleCallback(fn, { timeout: 2500 });
+    } else {
+      setTimeout(fn, 600);
+    }
+  };
+
+  if (doc.readyState === 'complete') whenIdle(warmImages);
+  else window.addEventListener('load', function () { whenIdle(warmImages); });
+
+  /* ---- Image protection --------------------------------------------------- *
+     Photography on this site is the client's own, so the images are not left
+     draggable onto the desktop or into another tab.
+
+     Two listeners rather than a `draggable="false"` attribute on 83 <img>
+     tags: one place to change, and it also covers anything added later.
+     The CSS carries -webkit-user-drag, which handles Chrome and Safari on its
+     own; this is what covers Firefox, and what stops the drag of a figure or
+     a link that happens to wrap an image.
+
+     This is a deterrent, not protection. The files are still served over HTTP
+     and remain reachable through view-source, devtools and the network tab.
+     Anything that genuinely must not be copied should not be published.       */
+  var isImage = function (el) {
+    for (var n = el; n && n !== doc.documentElement; n = n.parentNode) {
+      if (n.nodeType === 1 && (n.tagName === 'IMG' || n.tagName === 'PICTURE')) return true;
+    }
+    return false;
+  };
+
+  doc.addEventListener('dragstart', function (e) {
+    if (isImage(e.target)) e.preventDefault();
+  });
+
+  /* Right-click is blocked over images only. Blocking it document-wide would
+     take away Copy, Paste and the spell-checker on the enquiry form. */
+  doc.addEventListener('contextmenu', function (e) {
+    if (isImage(e.target)) e.preventDefault();
+  });
 })();

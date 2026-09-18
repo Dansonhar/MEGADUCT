@@ -9,7 +9,7 @@
 <link rel="icon" href="../favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Roboto:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
 <link rel="stylesheet" href="../assets/css/linkk-2026.css">
 <script>document.documentElement.classList.remove('no-js');</script>
 </head>
@@ -36,14 +36,20 @@
   <div class="wrap">
     <a class="brand-linkk" href="index.html" aria-label="LINKK home"><img src="../assets/img/site/logo-LINKK.png" alt="LINKK — a brand of Legrand" width="496" height="136" decoding="async"></a>
     <nav class="nav-main" aria-label="Main">
-    <a href="index.html">Home</a>
-    <a href="about.html" class="is-active" aria-current="page">About Us</a>
-    <a href="products.html">Our Products</a>
-    <a href="research.html">R&amp;D</a>
-    <a href="support.html">Our Support</a>
-    <a href="projects.html">Our Projects</a>
-    <a href="media.html">Media</a>
-    <a href="contact.html">Contact Us</a>
+        <a href="index.html">Home</a>
+        <a href="about.html" class="is-active" aria-current="page">About Us</a>
+        <span class="nav-has-sub">
+          <a href="products.html">Our Products</a>
+          <span class="nav-sub">
+          <a href="sandwich-busduct.html">Sandwich Bus duct</a>
+          <a href="non-segregated-phase-product.html">Non-segregated Phase Product</a>
+          </span>
+        </span>
+        <a href="research.html">R&amp;D</a>
+        <a href="support.html">Our Support</a>
+        <a href="projects.html">Our Projects</a>
+        <a href="media.html">Media</a>
+        <a href="contact.html">Contact Us</a>
     </nav>
     <div class="head-actions">
       <a class="b b--green head-cta" href="contact.html">Talk to Engineering</a>
@@ -62,6 +68,8 @@
     <a href="index.html">Home</a>
     <a href="about.html" class="is-active" aria-current="page">About Us</a>
     <a href="products.html">Our Products</a>
+    <span class="sub"><a href="sandwich-busduct.html">Sandwich Bus duct</a></span>
+    <span class="sub"><a href="non-segregated-phase-product.html">Non-segregated Phase Product</a></span>
     <a href="research.html">Research &amp; Development</a>
     <a href="support.html">Our Support</a>
     <a href="projects.html">Our Projects</a>
@@ -121,9 +129,9 @@
            .phero-shot class if it is a photograph rather than a render. -->
       <div class="phero-stage" data-enter="panel">
         <figure style="margin:0">
-          <img src="../assets/img/products/proL-Flange-End-with-Elbow.jpg"
+          <img src="../assets/img/products/cut/proL-Flange-End-with-Elbow.png"
                alt="MEGADUCT busduct flange end with elbow"
-               width="600" height="600" fetchpriority="high" decoding="async">
+               width="491" height="460" fetchpriority="high" decoding="async">
         </figure>
       </div>
 
@@ -274,12 +282,16 @@
         </p>
         <a class="tlink" href="contact.html" style="margin-top:18px">Get in touch with the team <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a>
       </div>
-      <!-- Team and factory photography slot. Nothing is placed here because the
-           only people image in the project (assets/img/site/about.jpg) is a
-           300x351 stock photograph of models in hard hats, not LINKK staff.
-           Presenting it as "our people" would be a false claim. Drop a real
-           photograph in here at 1600px or wider when one is supplied. -->
     </div>
+    <!-- Photograph of LINKK staff, taken from the company's own site. The
+         300x351 assets/img/site/about.jpg it replaces was a stock image of
+         models in hard hats, which could not be captioned "our people". -->
+    <figure class="ppl-shot" data-reveal data-d="2">
+      <img src="../assets/img/site/photo-people.jpg"
+           alt="LINKK colleagues at the Beranang office"
+           width="1600" height="1067" loading="lazy" decoding="async">
+      <figcaption>Beranang, Selangor</figcaption>
+    </figure>
   </div>
 </section>
 
@@ -287,46 +299,67 @@
 <section class="sec sec--light" aria-labelledby="prin-h">
   <div class="wrap">
     <p class="eyebrow" data-reveal><span class="idx">04</span> How we hold ourselves</p>
-    <h2 class="d2" id="prin-h" data-reveal>Vision, mission, quality.</h2>
-    <div class="prin sec-body">
+    <h2 class="d2" id="prin-h" data-reveal>Vision and mission.</h2>
+    <div class="say sec-body">
       <div data-reveal>
-        <span class="ix">01 &mdash; Vision</span>
-        <h3>A global leader in bus duct</h3>
-        <p>
-          To become a global leader in bus duct manufacturing, consistently
-          exceeding customer expectations through superior systems and service.
-        </p>
+        <span class="ix-lbl">01 &mdash; Our Vision</span>
+        <p class="pquote">We aim to be a global leader in bus duct manufacturing.</p>
+        <div class="prose" style="margin-top:18px">
+          <p>Our goal is to consistently exceed expectations, providing our customers with
+            the best bus duct systems, and excellent customer service.</p>
+        </div>
       </div>
       <div data-reveal data-d="1">
-        <span class="ix">02 &mdash; Mission</span>
-        <h3>Five commitments</h3>
+        <span class="ix-lbl">02 &mdash; Our Mission</span>
         <ul class="speclist" style="margin-bottom:0">
-          <li>Continuously improve product quality and reliability</li>
-          <li>Expand our product and service offering</li>
-          <li>Broaden our global market reach</li>
-          <li>Invest in advanced research and development</li>
-          <li>Support the growth and development of our team</li>
+          <li>Continuous improvement of our product quality and reliability.</li>
+          <li>Expand our range of products and services.</li>
+          <li>Expand our global reach.</li>
+          <li>Invest in cutting-edge research and development.</li>
+          <li>Foster the growth and development of our team.</li>
         </ul>
-      </div>
-      <div data-reveal data-d="2">
-        <span class="ix">03 &mdash; Quality policy</span>
-        <h3>Verified, then improved</h3>
-        <p>
-          We are committed to consistent product quality, a superior customer
-          experience, and continuous improvement of the products we make.
-        </p>
-        <a class="tlink" href="research.html" style="margin-top:16px">How we test <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a>
+        <a class="tlink" href="research.html" style="margin-top:20px">How we test <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 07 — Legrand ========================================================= -->
+<!-- 05 — Core values ===================================================== -->
+<section class="sec sec--soft" aria-labelledby="val-h">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="idx">05</span> Our core value</p>
+    <h2 class="d2" id="val-h" data-reveal>What we ask of each other.</h2>
+    <div class="vals sec-body">
+      <div data-reveal>
+        <h3>Teamwork</h3>
+        <ul><li>Team Spirit</li><li>Team Targets</li><li>Team Decision and Policy</li><li>Team Diversity</li><li>Team Harmony</li></ul>
+      </div>
+      <div data-reveal data-d="1">
+        <h3>Leadership</h3>
+        <ul><li>Empower Others</li><li>Self-motivated</li><li>Walk-the-talk</li><li>Inspiring</li><li>Sense of Achievement</li></ul>
+      </div>
+      <div data-reveal data-d="2">
+        <h3>Passion</h3>
+        <ul><li>Love LINKK</li><li>Responsibility and Accountability</li><li>Extra Miles</li></ul>
+      </div>
+      <div data-reveal data-d="3">
+        <h3>Health and Safety</h3>
+        <ul><li>Importance of Health and Safety</li><li>Respect and Follow Policy</li></ul>
+      </div>
+      <div data-reveal data-d="4">
+        <h3>Creativity</h3>
+        <ul><li>Fun and Openness</li><li>Sharing Knowledge and Information</li><li>Encourage Ideas</li><li>Challenge</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 — Legrand ========================================================= -->
 <section class="sec sec--surface sec--to-dark lg-sec" aria-labelledby="lg-h">
   <div class="wrap">
     <div class="lg-inner">
       <div data-reveal>
-        <p class="eyebrow"><span class="idx">05</span> Group</p>
+        <p class="eyebrow"><span class="idx">06</span> Group</p>
         <span class="lg-mark" id="lg-h"><span class="sq"></span>legrand</span>
       </div>
       <div data-reveal data-d="1">
@@ -363,20 +396,51 @@
 </main>
 <footer class="foot">
   <div class="wrap">
-    <div class="foot-nav"><a href="index.html">Home</a><span class="sep" aria-hidden="true">|</span><a href="about.html">About Us</a><span class="sep" aria-hidden="true">|</span><a href="products.html">Our Products</a><span class="sep" aria-hidden="true">|</span><a href="research.html">R&amp;D</a><span class="sep" aria-hidden="true">|</span><a href="support.html">Our Support</a><span class="sep" aria-hidden="true">|</span><a href="projects.html">Our Projects</a><span class="sep" aria-hidden="true">|</span><a href="media.html">Media</a><span class="sep" aria-hidden="true">|</span><a href="contact.html">Contact Us</a></div>
-    <div class="foot-top">
-      <div class="foot-addr">
-        <b>LINKK Busway Systems (M) Sdn Bhd</b>
-        Lot 3226, Jalan Perindustrian Mahkota Utama, Taman Perindustrian Mahkota,<br>43700 Beranang, Selangor Darul Ehsan, Malaysia
+    <div class="foot-cols">
+      <div class="foot-brand">
+        <img src="../assets/img/site/logo-LINKK.png" alt="LINKK — a brand of Legrand" width="496" height="136" loading="lazy" decoding="async">
+        <p>LINKK Busway Systems (M) Sdn Bhd is a leading company in busway systems, established in 2013. We own the marketing and manufacturing rights of MEGADUCT that further strengthening our position in the market.</p>
+        <p>We offer a range of busway systems, including low voltage, medium voltage and high voltage solution that catering to a wide range of industrial and commercial applications. Our products are designed to meet the highest international standards.</p>
       </div>
-      <div class="foot-reach">
-        <a class="foot-tel" href="tel:+60387276080">+603 8727 6080</a>
-        <a href="mailto:marketing@linkk.com.my">marketing@linkk.com.my</a>
+      <div class="foot-col">
+        <h2>Links</h2>
+        <div class="foot-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About Us</a>
+          <a href="products.html">Our Products</a>
+          <a class="child" href="sandwich-busduct.html">Sandwich Bus duct</a>
+          <a class="child" href="non-segregated-phase-product.html">Non-segregated Phase Product</a>
+          <a href="research.html">Research &amp; Development</a>
+          <a href="support.html">Our Support</a>
+          <a href="projects.html">Our Projects</a>
+          <a href="media.html">Media</a>
+          <a href="contact.html">Contact Us</a>
+          <a href="privacy-policy.html">Privacy Policy</a>
+        </div>
+      </div>
+      <div class="foot-col">
+        <h2>Get In Touch</h2>
+        <div class="foot-contact">
+          <div>
+            <b>LINKK Busway Systems (M) Sdn Bhd (1018052-D)</b>
+            Lot 3226, Jalan Perindustrian Mahkota Utama,<br>Taman Perindustrian Mahkota,<br>43700 Beranang, Selangor Darul Ehsan.
+          </div>
+          <div>
+            <a href="tel:+60387276080">Tel: +603 8727 6080</a><br>
+            <span>Fax: +603 8727 8081</span>
+          </div>
+          <div><a href="mailto:my-ber-sm-cs-linkk@legrand.com">my-ber-sm-cs-linkk@legrand.com</a></div>
+          <p class="hours">Mon &ndash; Fri: 9 am &ndash; 5 pm<br>Saturday &amp; Sunday: Closed</p>
+          <div class="foot-soc">
+            <a href="https://www.facebook.com/LinkkBuswaySystemsMSdnBhd" aria-label="LINKK on Facebook" rel="noopener" target="_blank"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 22v-8h2.7l.4-3.1h-3.1V8.9c0-.9.25-1.5 1.55-1.5H16.7V4.6c-.29-.04-1.27-.12-2.41-.12-2.39 0-4.02 1.46-4.02 4.13v2.3H7.55V14h2.72v8z"/></svg></a>
+            <a href="https://www.linkedin.com/company/linkk-busway-systems/" aria-label="LINKK on LinkedIn" rel="noopener" target="_blank"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.94 5.5a1.94 1.94 0 1 1-3.88 0 1.94 1.94 0 0 1 3.88 0M3.3 8.98h3.4V20H3.3zM9.2 8.98h3.26v1.5h.05c.45-.86 1.56-1.77 3.22-1.77 3.44 0 4.08 2.27 4.08 5.22V20h-3.4v-4.96c0-1.18-.02-2.7-1.65-2.7-1.65 0-1.9 1.29-1.9 2.62V20H9.2z"/></svg></a>
+          </div>
+        </div>
       </div>
     </div>
     <div class="foot-bottom">
       <span>Copyright &copy; <span data-year>2026</span> LINKK Busway Systems (M) Sdn Bhd (1018052-D). All rights reserved.</span>
-      <span><a href="../about.html">Switch to the MEGADUCT site &rarr;</a></span>
+      <span><a href="../index.html">Switch to the MEGADUCT site &rarr;</a></span>
     </div>
   </div>
 </footer>

@@ -47,6 +47,43 @@ The same eight on each site. MEGADUCT files sit at the root, LINKK files in `lin
 | `media.html` | Social channels + video wall | Same |
 | `contact.html` | Enquiry form, contact details, map | Same |
 
+LINKK carries three routes MEGADUCT does not, added to match `linkk.com.my`:
+
+| File | Content |
+| --- | --- |
+| `sandwich-busduct.html` | Advantages, the nine certifying bodies, the 19-part range |
+| `non-segregated-phase-product.html` | NSPB LV/MV description and published ratings |
+| `privacy-policy.html` | The live site's policy and terms of use, verbatim |
+
+The first two hang off **Our Products** in the header (`.nav-has-sub`, CSS-only,
+opens on hover and on `:focus-within`) and are indented under it in the drawer.
+Privacy Policy is reachable from the footer, as on the live site.
+
+## Brand realignment
+
+The 2026 redesign had drifted a long way from `linkk.com.my`. It was pulled
+back in one pass, keeping the layout and replacing the identity. **The live site
+is the source of truth for copy**: where it and this site disagreed, the live
+wording won.
+
+| | Was | Now | Source |
+| --- | --- | --- | --- |
+| Accent green | `#6aae2c` (cool grass) | `#97b63b` / `#b3cd3d` | Sampled from `logo-LINKK.png`; the live theme uses `#839e34` |
+| Headings | Barlow Condensed | **Poppins** | The live site's heading face |
+| Body | Barlow | **Roboto** | The live site's body face |
+| Hero | "Power Distribution, Engineered to Scale." | "Leading Bus duct System Designer" | Live hero |
+| Hero visual | Product render | The Beranang factory | Live slider |
+| Footer | One address row | Three columns: company, links, get in touch | Live footer |
+
+Sections restored from the live homepage, which the redesign had dropped:
+**Introduction** (03), and **Why choose us** (11) — the four pillars and the
+four published counters (150+ team members, 20+ awards, 5,000+ completed works,
+100+ client's feedback) over a photograph of the workforce.
+
+Because the display face changed from a condensed to a geometric sans, the
+heading steps were cut by roughly a fifth and every leading token was loosened;
+see **The type scale**.
+
 ## Structure
 
 ```
@@ -160,13 +197,17 @@ below 11px. There was no scale: each component invented a size, so the nav was
 Fourteen tokens now carry all of it. **No rule sets a raw px font size** — the
 one exception is the `×` glyph on the drawer's close button, which is an icon.
 
+Poppins sets far wider than Barlow Condensed, so when the display face changed
+the five heading steps were cut by roughly a fifth: the old 66px hero wrapped
+where the new 50px does not. The steps stay 1.20-1.44x apart at 1440.
+
 | Token | Clamp | 390 | 768 | 1440 | 1920 |
 | --- | --- | --- | --- | --- | --- |
-| `--t-display` | `clamp(2.6rem,4.6vw,4.5rem)` | 41.6 | 41.6 | 66.2 | 72 |
-| `--t-h1` | `clamp(2.15rem,3.45vw,3.5rem)` | 34.4 | 34.4 | 49.7 | 56 |
-| `--t-h2` | `clamp(1.9rem,2.75vw,2.95rem)` | 30.4 | 30.4 | 39.6 | 47.2 |
-| `--t-h3` | `clamp(1.4rem,1.95vw,2.05rem)` | 22.4 | 22.4 | 28.1 | 32.8 |
-| `--t-h4` | `clamp(1.2rem,1.45vw,1.55rem)` | 19.2 | 19.2 | 20.9 | 24.8 |
+| `--t-display` | `clamp(2.05rem,3.5vw,3.4rem)` | 32.8 | 32.8 | 50.4 | 54.4 |
+| `--t-h1` | `clamp(1.75rem,2.7vw,2.7rem)` | 28 | 28 | 38.9 | 43.2 |
+| `--t-h2` | `clamp(1.55rem,2.15vw,2.25rem)` | 24.8 | 24.8 | 31 | 36 |
+| `--t-h3` | `clamp(1.2rem,1.5vw,1.6rem)` | 19.2 | 19.2 | 21.6 | 25.6 |
+| `--t-h4` | `clamp(1.1rem,1.25vw,1.35rem)` | 17.6 | 17.6 | 18 | 21.6 |
 | `--t-h5` | `clamp(1.02rem,.85vw,1.15rem)` | 16.3 | 16.3 | 17.2 | 18.4 |
 | `--t-body-lg` | `clamp(1.0625rem,1.25vw,1.1875rem)` | 17 | 17 | 18 | 19 |
 | `--t-body` | `clamp(1rem,.35vw + .72rem,1.125rem)` | 16 | 16 | 16.6 | 18 |
@@ -220,6 +261,19 @@ industrial layout. Dark is used **twice** on the page and nowhere else.
 | `--section-soft` | `#f1f4ee` | Top bar, the MEGADUCT breakdown |
 | `--section-muted` | `#e8eee5` | Testing — the deepest light tone |
 | `--surface` | `#ffffff` | Plates, panels, the header |
+| `--linkk-green` | `#97b63b` | Fills, rules, accents on dark (6.6:1 on `--dark-section`) |
+| `--linkk-green-bright` | `#b3cd3d` | The logo mark exactly — hovers, accents on dark |
+| `--linkk-green-dark` | `#556b1f` | Green **text** on a light surface (5.07:1 on `--section-muted`) |
+
+The greens are sampled, not chosen: `#b3cd3d` is the logo mark in
+`logo-LINKK.png` and `#839e34` is the live site's UI green. Both are
+yellow-greens; the `#6aae2c` this file used to carry was noticeably cooler and
+did not match the lockup it sat beside.
+
+`.why` carries a photograph rather than a flat tone, so it is **not**
+`.sec--dark` and the dark-section overrides do not reach it. Anything placed
+there needs its own on-dark colour — the section's eyebrow numeral was missed
+the first time and audited at 2.71:1.
 | `--text-primary` | `#1d241f` | Headings and key figures (13.4:1 worst case) |
 | `--text-secondary` | `#4d564f` | Body copy (6.5:1 worst case) |
 | `--text-muted` | `#5f6a61` | Mono labels and numerals (4.78:1 worst case) |
@@ -437,6 +491,158 @@ three places it appears:
 Thumbnails load from YouTube rather than being copied into `assets/`, so they stay
 in step if the channel's artwork changes.
 
+## Product renders
+
+The fifteen component shots were supplied as 600x600 JPEGs photographed on
+white. LINKK now uses **trimmed PNG cut-outs with a real alpha channel**, in
+`assets/img/products/cut/`. The original JPEGs stay where they are — the
+MEGADUCT site at the repo root still uses them, and nothing there changed.
+
+**Why cut-outs.** The white background used to be removed at render time with
+`mix-blend-mode: multiply`, which only works once the file has decoded and
+which several browsers drop while an ancestor is composited. That is what the
+split-second white rectangle was. Baking the transparency into the file removes
+the mechanism rather than the symptom: there is no longer any blend mode on any
+product image, on any page.
+
+**How they are made.** `scratchpad/cutout.mjs` decodes the PNG, flood-fills
+inward **from the border** over near-white pixels, and keys only what that fill
+reaches — so white and pale-grey parts *inside* a product (the silver plates on
+a joint set, for one) are never touched. Edge pixels get proportional alpha
+from their own whiteness and are un-multiplied, so the cut-out carries no pale
+halo onto a dark band. The result is then trimmed to the content bounding box
+plus a 2.5% margin and posterised to 5 bits per channel with ordered dithering,
+which is invisible at these sizes and worth about 38% of the file.
+
+Two sizes are written: the full trimmed size (~570px long side) for hero and
+feature stages, and a `-sm` variant capped at 400px for the 287px component
+grid. Fully warmed with a cold cache, `linkk/products.html` transfers 1205 KB
+against 1055 KB for the untouched MEGADUCT products page.
+
+**How large a render reads is now set in CSS, not by the file.** The supplied
+JPEGs carried their own white margin, which was doing double duty as padding —
+once it was trimmed away the products filled their boxes edge to edge and read
+as much too big. The widths below put each one back at the size it was before
+the trim, to within 1%, while the box still hugs the render so every rule meets
+its edge. Change these if a product should read larger or smaller; do not put
+the margin back into the image.
+
+| Rule | Width | Render before trim | Now |
+| --- | --- | --- | --- |
+| `.comp-media img` | 88% | ~255px | 252px |
+| `.fam-media` | 67% | 428px | 430px |
+| `.pfeat-media` (and `.pfeat-cap`, which must match) | 68% | 351px | 353px |
+| `.phero-stage img` | 82% | 467px | 465px |
+| `.mg-stage` | 83% | 512px | 511px |
+
+**Trimming is also what fixed the alignment.** A 600x600 image dropped into a
+wide container with `object-fit: contain` paints as a square in the middle, so
+every rule, guide and caption anchored to the container pointed at empty space.
+Measured gap between the container edge and where the render actually painted:
+
+| Stage | Before | After |
+| --- | --- | --- |
+| `.pfeat-media` (R&D) | 105px a side | **0** |
+| `.mg-stage` (Home) | 153px | 37px |
+| `.phero-stage` (inner pages) | 62-78px | **0** |
+| `.fam-media` (Home) | 62-107px | **0** |
+
+Three changes got there: the images carry no dead margin now; `.phero-stage img`
+and `.fam-media img` dropped their imposed `aspect-ratio` so the box hugs the
+render; and `.pfeat-media` takes `--plate-ar` from the markup, set per instance
+to the ratio of the plate it holds — it needs a ratio because its plates are
+`position:absolute` and cannot size the box themselves. `.mg-stage` keeps a
+fixed 3/2 for the same reason and cannot go to zero: one box holds six plates
+of different shapes.
+
+**The caption baseline.** `.comp` is a `<button>`, and Chrome's UA rendering
+centres a button's content in its box. As a stretched grid item, any cell whose
+purpose line did not wrap sat half the leftover height lower than its
+neighbours — two of the twelve product names were 12.8px off the row baseline.
+Declaring the button an explicit column flex container overrides it. A smaller
+bug sat underneath: `.comp-media` is a `<span>` and computed to `display:inline`,
+so its `margin-bottom:12px` was dropped and the image sat on the text baseline,
+where the descender varied with the column's sub-pixel width. It is
+`display:block` now. All twelve captions land on one offset.
+
+**Contact shadows are gone.** Six rules drew an elliptical shadow under a
+render: `.hero-panel::after`, `.phero-stage::after`, `.fam-media::after`, and a
+second gradient layer inside `.mg-plate::before`, `.pfeat-stage::before` and
+`.comp-media::before`. `.phero-stage::after` was the one that survived the
+first pass and kept a shadow under the product on every inner page. The faint
+dark *wash* behind each render stays.
+
+**Image warming.** `main.js` upgrades every remaining lazy image to eager once
+the page has loaded and the browser is idle, four at a time, calling `decode()`
+on each. Measured on `linkk/products.html` with a cold cache: 1 of 12 component
+images complete at load, **12 of 12 complete 1.2s later without scrolling**.
+Skipped when `navigator.connection` reports Save-Data or a 2G-class connection.
+
+## Motion and alignment
+
+**`transform` replaces `translate`, it does not compose with it.** Both play
+buttons were centred with the individual `translate: -50% -50%` property and
+then scaled on hover with `transform: translate(-50%,-50%) scale(...)`. The two
+are separate properties and both apply, so the hover shifted the button a
+second time and it appeared to grow towards the top left. They now scale with
+the individual `scale` property, which composes with `translate` and scales
+about the centre. Measured centre drift on hover: **0.0px**.
+
+**The scroll rails.** Home's engineering journey and the Products system flow
+are one function, `scrollRail()`, so they cannot drift apart. Two things were
+wrong:
+
+- `.jrn-track` used `grid-auto-columns: minmax(210px,1fr)`. Six stages need
+  1260px and the content column is 1224px at 1440, so the track overflowed by
+  36px — the script read that as the mobile swipe rail and lit every stage at
+  once. **The journey never animated on a desktop.** The minimum is 184px now,
+  which fits down to the 1180 breakpoint, below which it is meant to scroll.
+- Progress was measured from the *section*, so a tall one stretched the fill:
+  it began as the section peeked in at the bottom of the window and finished
+  only once the section was most of the way past. It is measured from the rail
+  now, over a fixed 40% of a viewport height.
+
+Measured at 1440x900, both rails identical:
+
+| | Rail position |
+| --- | --- |
+| Section enters view | rail at 1051px (below the fold) |
+| Fill starts | rail at 640px — 70% down the screen |
+| Fill completes | rail at 280px — 30% down, section still fully in view |
+| Section leaves view | rail at −380px |
+
+**Alignment.** `.pfeat` and `.fam-row` are `align-items: start`, not `center` —
+centring floated the render against a taller copy column so the heading and the
+top of the product never met. Two deliberate offsets were also removed because
+they read as mistakes rather than as composition: the alternating indent on
+every second workflow stage (`.wf-step:nth-child(even) .wf-body`), which put
+eight headings on two different left edges, and the downward nudge on the
+second family row's copy.
+
+## Image protection
+
+Images on **both** sites cannot be dragged out of the page, and right-click is
+suppressed over them. Two pieces:
+
+- `assets/js/main.js` — one delegated `dragstart` listener and one
+  `contextmenu` listener, both walking up from the event target to find an
+  `<img>` or `<picture>`. Walking up is what catches a drag started on a
+  `<figure>` or on a link wrapping an image.
+- Both stylesheets — `-webkit-user-drag:none`, `user-select:none` and
+  `-webkit-touch-callout:none` on `img, picture`. The CSS alone covers Chrome
+  and Safari; the listener is what covers Firefox.
+
+No `draggable="false"` attributes were added: there are 83 `<img>` tags across
+19 pages, and the listener covers anything added later for free.
+
+Right-click is blocked **over images only**. Suppressing it document-wide would
+take Copy, Paste and the spell-checker away from the enquiry form.
+
+This is a deterrent, not protection. The files are still served over HTTP and
+stay reachable through view-source, devtools and the network tab, and the CSS
+`background-image` on `.why` was never draggable in the first place. Anything
+that genuinely must not be copied should not be published.
+
 ## Deployment
 
 The repository root is the deployable site — `index.html`, `linkk/` and `assets/`
@@ -540,6 +746,28 @@ one is **preserved as written** — nothing was resolved by guessing.
 | Contact | **File upload** | Not added. The form posts as `application/x-www-form-urlencoded`, so a file field would be silently dropped. Needs `enctype="multipart/form-data"`, a handler that accepts the part, and a size/type limit — all three together. Until then the form note points people at email |
 | Contact | **Project type** and **project country** were added as optional fields. The project-type options are LINKK's own twelve project sectors | Extra POST fields; no backend change needed |
 
+### Conflicts in the live site's own copy
+
+Found when `linkk.com.my` was adopted as the source of truth. These are the
+client's, not this project's, and all are **published as written**.
+
+| Where | What |
+| --- | --- |
+| Home | "established in 2013" sits three paragraphs above "Since our beginning in 1992" and "With 30 years of track record" |
+| Our Support | "have been established since **2010**" — a third founding year, against 2013 on Home and Contact and 1992 on About |
+| Home | The Introduction says "completed 5,000 projects"; the Achievements pillar says "over 5000 projects"; the counter is set to 5,000 |
+| Site-wide | **"Bus duct", "Busduct" and "busway"** are all used, sometimes in the same paragraph. Product and navigation names here follow the live site's two-word "Bus duct"; running prose keeps "busduct" |
+| Our Support | Carries Consultio theme demo content: a "Natalia Duke (Chairman and founder)" testimonial and the phone number "540-325-1523". **Not copied** |
+| Research & Development | Carries theme lorem: "Praesent feugiat sem mattis.", "A wonderful serenity.", "Premium services for you.", "Set a link back to photo." **Not copied** |
+| Privacy Policy | Square-bracket placeholders survive in the published text — "Latest update: [September 2025]", "Publishing Director: [Linkk Busway Systems (M) Sdn Bhd]" — and a security-report link points at `linkk.com`, not `linkk.com.my`. Reproduced verbatim; all three need the client's attention |
+| Contact | Three email addresses are published: `my-ber-sm-cs-linkk@legrand.com` (footer), `customerservice@linkk.com.my` and `marketing@linkk.com.my`. The Legrand address is used as primary here |
+
+Two questions that earlier passes had flagged as unresolvable are now answered
+by the live site and have been published: **temperature rise testing up to
+5000A** ("Our current transformer generates up to 5000A", R&D page) and the
+**NSPB ratings** (up to 6300A, 400V-38kV, 20-100kA symmetrical, 2300mm maximum
+straight section).
+
 ### LINKK Home: content awaiting approval
 
 Five things the redesign brief asked for are **not published**, because they do
@@ -556,8 +784,21 @@ inventing specifications:
 
 ### LINKK photography
 
-The design works around an asset library that cannot carry it. Needed, in
-priority order:
+Four photographs were taken from the company's own live site during the brand
+realignment and are now in `assets/img/site/`, resized and recompressed:
+
+| File | From | Used on |
+| --- | --- | --- |
+| `photo-factory.jpg` (1920x1279) | `MG_0001-1` | Home hero |
+| `photo-team.jpg` (1920x1280) | `MG_0190-1` | Home, behind **Why choose us** |
+| `photo-people.jpg` (1600x1067) | `MG_0300` | About, **Our people** |
+| `photo-products.jpg` (1600x1067) | `Products-2` | NSPB sub-page hero |
+
+`photo-people.jpg` replaced an empty slot that had been left deliberately blank,
+because the only people image in the project (`about.jpg`, 300x351) was stock
+photography of models in hard hats and could not be captioned "our people".
+
+Still needed, in priority order:
 
 1. **Product renders at 1600px+.** Every product shot is 600x600 and renders at
    roughly 490px CSS in the hero panel — only 1.2x on a 2x display. This is the
@@ -571,9 +812,12 @@ priority order:
 4. **MEGADUCT hardware-breakdown video** or an exploded-view viewer. Section 04
    is wired for it — add a sibling to the media stage with the same
    `data-plate` key and `data-media="video"` on the tab.
-5. **Factory floor** at Beranang, 2400px wide.
+5. **Factory floor** at Beranang, 2400px wide. The exterior is now covered by
+   `photo-factory.jpg`; the shop floor is not.
 
-No image on the site has a `srcset`, and none is served as WebP or AVIF.
+No image on the site has a `srcset`, and none is served as WebP or AVIF. The
+four photographs above are the heaviest assets in the build — `photo-team.jpg`
+alone is 496 kB.
 
 ### LINKK brand assets
 
@@ -582,8 +826,8 @@ section above. Still missing: the vector original (SVG/EPS), and official
 Legrand group artwork for section 09, which currently draws the lockup as a red
 square plus the wordmark in Barlow Condensed.
 
-LINKK photography is placeholder: the pages reuse the MEGADUCT product and
-banner images already in `assets/`.
+Product and sector imagery is still reused from MEGADUCT; the four photographs
+listed under **LINKK photography** are the company's own.
 
 ### Unused assets
 

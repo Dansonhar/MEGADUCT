@@ -725,3 +725,16 @@ b,strong{font-weight:650;color:var(--ink);}
   body{font-size:12pt;color:#000;}
   .hero::after,.pagehead::after{background:none;}
 }
+
+/* --- Image protection ------------------------------------------------------ *
+   Stops the browser lifting a photograph out of the page as a drag payload,
+   and stops the drag ghost appearing at all. -webkit-user-drag covers Chrome
+   and Safari; Firefox is handled by the dragstart listener in main.js.
+   user-select on the image keeps it out of a text selection that is then
+   copied. Captions and alt text are unaffected — they are separate elements. */
+img,picture{
+  -webkit-user-drag:none;
+  -webkit-touch-callout:none;   /* no long-press "Save Image" sheet on iOS */
+  user-select:none;
+  -webkit-user-select:none;
+}
