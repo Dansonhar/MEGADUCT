@@ -279,150 +279,6 @@
     }
   }
 
-  /* ---- MEGADUCT component breakdown --------------------------------------- *
-     A tablist over a media stage. Each tab names the plate it wants via
-     data-plate; the stage shows whichever direct child carries the matching
-     key, whatever that element is (see the MEDIA STAGE note in
-     linkk-2026.css). Items for parts that sit inside the enclosure have no
-     photograph of their own and point back at the full-run plate — nothing
-     is fabricated.
-
-     A tab may also declare data-media="video", which surfaces the play
-     button over the stage and dispatches a `mg:play` event when pressed, so
-     a future hardware-breakdown video or exploded-view viewer can hook in
-     without this block changing.                                            */
-  var mgList = doc.querySelector('[data-mg-list]');
-  if (mgList) {
-    var stage = doc.querySelector('[data-mg-stage]');
-    var plates = stage ? stage.querySelectorAll('[data-plate]') : [];
-    var capT = doc.querySelector('[data-mg-cap-title]');
-    var capN = doc.querySelector('[data-mg-cap-note]');
-    var play = doc.querySelector('[data-mg-play]');
-    var plate = doc.querySelector('.mg-plate');
-    var items = mgList.querySelectorAll('.mg-item');
-
-    var select = function (btn, focus) {
-      var want = btn.getAttribute('data-plate');
-
-      Array.prototype.forEach.call(items, function (i) {
-        var on = i === btn;
-        i.classList.toggle('is-on', on);
-        i.setAttribute('aria-selected', String(on));
-        /* Roving tabindex: only the selected tab is in the tab order, and
-           the arrow keys move between them. */
-        i.setAttribute('tabindex', on ? '0' : '-1');
-      });
-      Array.prototype.forEach.call(plates, function (el) {
-        el.classList.toggle('is-on', el.getAttribute('data-plate') === want);
-      });
-      if (capT) capT.textContent = btn.getAttribute('data-cap') || '';
-      if (capN) capN.textContent = btn.getAttribute('data-note') || '';
-
-      var hasMedia = btn.getAttribute('data-media') === 'video';
-      if (plate) plate.classList.toggle('has-media', hasMedia);
-      if (play) play.hidden = !hasMedia;
-
-      if (focus) btn.focus();
-    };
-
-    Array.prototype.forEach.call(items, function (btn) {
-      btn.addEventListener('click', function () { select(btn); });
-    });
-
-    mgList.addEventListener('keydown', function (ev) {
-      var keys = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 };
-      var step = keys[ev.key];
-      var list = Array.prototype.slice.call(items);
-      var at = list.indexOf(doc.activeElement);
-      if (at === -1) return;
-
-      if (step) {
-        ev.preventDefault();
-        select(list[(at + step + list.length) % list.length], true);
-      } else if (ev.key === 'Home') {
-        ev.preventDefault();
-        select(list[0], true);
-      } else if (ev.key === 'End') {
-        ev.preventDefault();
-        select(list[list.length - 1], true);
-      }
-    });
-
-    if (play) {
-      play.addEventListener('click', function () {
-        var on = mgList.querySelector('.mg-item.is-on');
-        var el = stage && stage.querySelector('[data-plate].is-on');
-        /* If the active plate is a real <video>, just play it. Anything else
-           (an embed, a 3D viewer) listens for the event instead. */
-        if (el && typeof el.play === 'function') { el.play(); return; }
-        stage.dispatchEvent(new CustomEvent('mg:play', {
-          bubbles: true,
-          detail: { plate: on && on.getAttribute('data-plate') }
-        }));
-      });
-    }
-
-    select(items[0]);
-  }
-
-  /* ---- Scroll-linked rails -------------------------------------------------- *
-     Home's engineering journey and the Products system flow are the same
-     device on the same markup, so they run off one function and cannot drift
-     apart.
-
-     Progress is measured from the RAIL, not from the section. Measured off the
-     section, a tall one stretched the fill: it began as soon as the section
-     peeked in at the bottom of the window and only finished once the section
-     was most of the way past, so the rail was still filling after the reader
-     had scrolled on. Off the rail it always takes the same 40% of a viewport
-     height of scrolling, and it completes while the rail is still in the upper
-     half of the screen.                                                      */
-  var scrollRail = function (root, cls) {
-    var line = root.querySelector('.' + cls + '-line');
-    var steps = root.querySelectorAll('.' + cls + '-step');
-    var track = root.querySelector('.' + cls + '-track');
-    if (!steps.length) return;
-
-    var light = function (p) {
-      if (line) line.style.setProperty('--p', p.toFixed(3));
-      Array.prototype.forEach.call(steps, function (s, i) {
-        s.classList.toggle('is-in', p >= (i + 0.5) / steps.length);
-      });
-    };
-
-    var tick = function () {
-      /* The rail scrolls sideways on mobile, so light every stage rather than
-         leaving half the swipe view dimmed. */
-      if (track && track.scrollWidth > track.clientWidth + 8) { light(1); return; }
-      var vh = window.innerHeight;
-      var top = (track || root).getBoundingClientRect().top;
-      var from = vh * 0.76;   /* p = 0 — the rail has just cleared the fold   */
-      var to = vh * 0.36;     /* p = 1 — still well inside the readable window */
-      light(Math.max(0, Math.min(1, (from - top) / (from - to))));
-    };
-
-    window.addEventListener('scroll', tick, { passive: true });
-    window.addEventListener('resize', tick);
-    tick();
-  };
-
-  var lightAll = function (root, cls) {
-    Array.prototype.forEach.call(root.querySelectorAll('.' + cls + '-step'), function (s) {
-      s.classList.add('is-in');
-    });
-    var l = root.querySelector('.' + cls + '-line');
-    if (l) l.style.setProperty('--p', '1');
-  };
-
-  Array.prototype.forEach.call(
-    [[doc.querySelector('[data-journey]'), 'jrn'], [doc.querySelector('[data-flow]'), 'flow']],
-    function (pair) {
-      if (!pair[0]) return;
-      if (reduced) lightAll(pair[0], pair[1]);
-      else scrollRail(pair[0], pair[1]);
-    }
-  );
-
   /* ---- Global projects filter --------------------------------------------- *
      The chip row is built from the data-industry values already on the rows,
      so a project is added by adding a row — there is no list to keep in
@@ -516,34 +372,68 @@
     apply('');
   }
 
-  /* ---- Component gallery (Products) --------------------------------------- *
-     Each component is already a <button> carrying data-component. Until a
-     detail page or panel exists there is nothing to open, so pressing one
-     dispatches `comp:open` and does nothing else — wiring a modal or a route
-     later means listening for that event, not re-authoring the markup.      */
-  var compGrid = doc.querySelector('[data-comp-grid]');
-  if (compGrid) {
-    compGrid.addEventListener('click', function (ev) {
-      var btn = ev.target.closest ? ev.target.closest('.comp') : null;
-      if (!btn) return;
-      compGrid.dispatchEvent(new CustomEvent('comp:open', {
-        bubbles: true,
-        detail: {
-          component: btn.getAttribute('data-component'),
-          name: (btn.querySelector('.nm') || {}).textContent
-        }
-      }));
-    });
+  /* ---- Home hero slider ---------------------------------------------------- *
+     Three slides, cross-faded, matching the rotator on linkk.com.my. The
+     markup carries slide 1 as .is-on, so with no JS the hero is simply the
+     first slide and the dots never appear. Auto-advance stops on hover, on
+     focus and under prefers-reduced-motion.                                  */
+  var slider = doc.querySelector('[data-slider]');
+  if (slider) {
+    var figs = slider.querySelectorAll('[data-slide]');
+    var copies = slider.querySelectorAll('[data-slide-copy]');
+    var dots = slider.querySelector('[data-slide-dots]');
+    if (figs.length > 1 && dots) {
+      var at = 0, timer = null;
+      var show = function (i) {
+        at = (i + figs.length) % figs.length;
+        Array.prototype.forEach.call(figs, function (f, n) { f.classList.toggle('is-on', n === at); });
+        Array.prototype.forEach.call(copies, function (c, n) { c.classList.toggle('is-on', n === at); });
+        Array.prototype.forEach.call(dots.children, function (b, n) {
+          b.setAttribute('aria-current', String(n === at));
+        });
+      };
+      Array.prototype.forEach.call(figs, function (f, n) {
+        var b = doc.createElement('button');
+        b.type = 'button';
+        b.setAttribute('aria-label', 'Slide ' + (n + 1));
+        b.setAttribute('aria-current', String(n === 0));
+        b.addEventListener('click', function () { show(n); rest(); });
+        dots.appendChild(b);
+      });
+      dots.hidden = false;
+      var tick = function () { show(at + 1); };
+      var rest = function () {
+        if (timer) clearInterval(timer);
+        if (!reduced) timer = setInterval(tick, 6500);
+      };
+      slider.addEventListener('mouseenter', function () { if (timer) clearInterval(timer); });
+      slider.addEventListener('mouseleave', rest);
+      slider.addEventListener('focusin', function () { if (timer) clearInterval(timer); });
+      slider.addEventListener('focusout', rest);
+      rest();
+    }
   }
 
-  /* ---- Instrument trace --------------------------------------------------- *
-     Sets each path's own length as --len so the dash animation in CSS draws
-     it exactly, whatever the path.                                           */
-  Array.prototype.forEach.call(doc.querySelectorAll('.trace-path'), function (p) {
-    if (typeof p.getTotalLength === 'function') {
-      p.style.setProperty('--len', Math.ceil(p.getTotalLength()));
+  /* ---- Component page gallery ---------------------------------------------- *
+     Swaps the main render for the pressed thumbnail. With no JS every
+     thumbnail is still a link to its own full-size file.                      */
+  var pdp = doc.querySelector('[data-pdp]');
+  if (pdp) {
+    var main = pdp.querySelector('[data-pdp-main]');
+    var thumbs = pdp.querySelectorAll('[data-pdp-thumb]');
+    if (main && thumbs.length > 1) {
+      Array.prototype.forEach.call(thumbs, function (t, n) {
+        t.addEventListener('click', function (ev) {
+          ev.preventDefault();
+          main.src = t.getAttribute('data-full');
+          main.alt = t.getAttribute('data-alt') || main.alt;
+          Array.prototype.forEach.call(thumbs, function (o, m) {
+            o.setAttribute('aria-current', String(m === n));
+          });
+        });
+      });
     }
-  });
+  }
 
   /* ---- Footer year -------------------------------------------------------- */
   var yr = doc.querySelector('[data-year]');

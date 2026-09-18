@@ -34,30 +34,32 @@ sites have the same eight filenames.
 
 ## Pages
 
-The same eight on each site. MEGADUCT files sit at the root, LINKK files in `linkk/`.
+MEGADUCT files sit at the root, LINKK files in `linkk/`.
 
-| File | MEGADUCT | LINKK |
-| --- | --- | --- |
-| `index.html` | Hero, stats, products, sectors, CTA | Light hero, stats, what we do, products, support |
-| `about.html` | Company introduction, approach, certificates | Who we are, vision, mission, people, quality policy |
-| `products.html` | All 15 components, filterable, with lightbox | Sandwich bus duct, NSPB, components, certifications |
-| `research.html` | R&D, quality-control programme, certificate tally | Same, in LINKK's wording |
-| `support.html` | Technical / delivery / site support, four steps | Same |
-| `projects.html` | Nine sectors with references and reach stats | Twelve sectors, full project list by country |
-| `media.html` | Social channels + video wall | Same |
-| `contact.html` | Enquiry form, contact details, map | Same |
+**LINKK now follows the information architecture of `linkk.com.my` page for
+page.** Every page opens on a full-width photo banner with the title over it,
+which is the live site's signature and what makes it recognisable.
 
-LINKK carries three routes MEGADUCT does not, added to match `linkk.com.my`:
-
-| File | Content |
+| File | LINKK — sections, in the live site's order |
 | --- | --- |
-| `sandwich-busduct.html` | Advantages, the nine certifying bodies, the 19-part range |
-| `non-segregated-phase-product.html` | NSPB LV/MV description and published ratings |
-| `privacy-policy.html` | The live site's policy and terms of use, verbatim |
+| `index.html` | 3-slide hero · Introduction · company introduction video · Why choose us (4 strengths + 4 figures over the workforce photograph) |
+| `about.html` | Banner · "We are a leading bus duct trunking systems manufacturer" + the workforce photograph whole · Vision · Mission · Core Value (5) · Our People (10-photo gallery + the company photograph whole) · Our Facilities (12-photo gallery) · Quality Policy (3 cards) · Organisation Chart, drawn in the page |
+| `products.html` | Banner · Sandwich Bus duct · Non-segregated Phase Bus duct. Two blocks, as on the live site |
+| `sandwich-busduct.html` | Banner · About Product · Advantages · the 19-part catalogue, each card linking to its own page |
+| `part-*.html` | **19 component pages** — banner with breadcrumb, gallery with thumbnails, related products, CTA to engineering |
+| `non-segregated-phase-product.html` | Banner · product explanation with the real photograph · Key Offer |
+| `research.html` | Banner · R&D introduction beside the facility photograph · What We Do (3 cards) · Our Certificates (9-authority grid, the certification-body logos, link to the published files) · Quality Control with the 12-photo testing gallery |
+| `support.html` | Banner · the support statement · Technical / Delivery / Site Support |
+| `projects.html` | Banner · "We supply to over 50 countries globally" · the reach map with 23 project markers · regions · sector filters · the 44-project photo grid |
+| `media.html` | Banner · the four films · downloadable certificates · social channels |
+| `contact.html` | Banner · consultation photograph + enquiry form · map · address / telephone / email |
+| `privacy-policy.html` | Banner · the live site's policy and terms of use, verbatim |
 
-The first two hang off **Our Products** in the header (`.nav-has-sub`, CSS-only,
-opens on hover and on `:focus-within`) and are indented under it in the drawer.
-Privacy Policy is reachable from the footer, as on the live site.
+MEGADUCT keeps its own eight pages at the root, unchanged by this pass.
+
+**Media is not on the live site.** It is kept because it holds real material —
+the four published films and the four type-test certificates — but it is
+secondary and nothing on it is invented.
 
 ## Brand realignment
 
@@ -76,13 +78,118 @@ wording won.
 | Footer | One address row | Three columns: company, links, get in touch | Live footer |
 
 Sections restored from the live homepage, which the redesign had dropped:
-**Introduction** (03), and **Why choose us** (11) — the four pillars and the
-four published counters (150+ team members, 20+ awards, 5,000+ completed works,
-100+ client's feedback) over a photograph of the workforce.
+**Introduction**, the **four pillars** (Customised Solution, Facility,
+Achievements, Reliability & Recognition) and **Why choose us** with the four
+published counters (150+ team members, 20+ awards, 5,000+ completed works, 100+
+client's feedback).
 
 Because the display face changed from a condensed to a geometric sans, the
 heading steps were cut by roughly a fifth and every leading token was loosened;
 see **The type scale**.
+
+### The visual reset
+
+A second pass removed the dark bands and the gradients; see **Colour system**.
+
+### The structural rebuild
+
+A third pass rebuilt the LINKK pages around the live site's own structure,
+because the previous ones had kept the layout and changed only the skin. The
+audit that drove it, page by page:
+
+| Page | What was missing | What had been invented | Real assets restored |
+| --- | --- | --- | --- |
+| Home | the 3-slide hero, the introduction video | stats band, industries, MEGADUCT breakdown, product families, journey rail, R&D band, projects index, Legrand band, closing CTA | 3 slider photographs, 4 counter icons |
+| About | the 10-photo people gallery, the 12-photo facilities gallery, the organisation chart, the quality policy, the 5 core-value icons | stats band, a dated timeline, "Two regions, one factory", Legrand band, CTA | 22 photographs, the chart, 5 icons |
+| Our Products | — | a 4-family index with two families the client has not confirmed, a system-flow rail, an applications list, a documents section, CTA | 2 family photographs |
+| Sandwich | the 19-card catalogue linking to component pages | a text-only parts list | 19 component renders |
+| Component pages | **all 19** | — | ~60 gallery renders |
+| R&D | the certification-body logos, the 12-photo testing gallery | an SVG instrument trace, a 10-item QC list, a 5-gate flow, a conductor feature | the logo strip, 12 photographs |
+| Our Support | — | an 8-stage workflow, 6 capabilities, a getting-started block, CTA | the banner photograph |
+| Our Projects | **all 44 project photographs** | a stats band, sector index rows, a text-table presentation | 44 photographs |
+| Contact | the consultation photograph, the three detail columns | an editorial definition list | 2 photographs |
+
+163 images were available on the live site; 152 were pulled back, downscaled
+and recompressed from 70MB to 18MB, and they live in `assets/img/linkk/`.
+
+**Two things could not be taken, and are flagged rather than faked.**
+
+1. The 19 component pages carry **no descriptions and no specifications** on the
+   live site: every WooCommerce description tab is empty. The pages are
+   image-first and say which family the part belongs to. Nothing is invented to
+   fill them.
+2. WooCommerce picks **related products at random** on every page load. The
+   component pages use the next three parts in catalogue order instead, so the
+   links are stable and a visitor can walk the range.
+
+### The revision pass
+
+A fourth pass answered six specific notes from the client.
+
+**The reach map is drawn now.** The live site renders it with amCharts through
+the Interactive Geo Maps plugin, which is not part of this build — but the
+plugin's own configuration is in the page, and it carries the eighteen country
+codes and the twenty-three named projects with their coordinates. So the map is
+drawn here instead: `assets/img/linkk/map/world.svg` is Natural Earth's
+public-domain 110m country outlines on the same Miller projection theirs uses,
+with those eighteen countries picked out, and the project dots are HTML buttons
+positioned by the same projection over the top. Dots that would overlap are one
+dot naming each site, so Singapore's three projects share a marker rather than
+sitting on top of each other. Four of the eighteen — Singapore, Hong Kong,
+Bahrain and the Maldives — have no landmass at 110m; they carry dots instead of
+fill. `Equity Tower, Indonesia` is plotted at 6.2°S: the client's own map data
+has it at 6.2°N, which puts Jakarta in the Bay of Bengal.
+
+**The organisation chart is drawn in the page.** It was the client's PowerPoint
+export — bevelled orange and turquoise boxes in a PNG, unreadable below about
+900px, unselectable and unsearchable. Same structure, same names and titles, in
+the site's own type, reflowing to one column on a phone, and read by a screen
+reader as the nested list it is. The four departments' lists start on the same
+line because the director boxes share a minimum height, and each tier's
+connector is drawn by its outer nodes so it starts and stops on their centres
+at any width. The CFO sits beside the Managing Director rather than between the
+board and the four directors: the source has the CFO on the board's rail, not
+above the directors, and stacking it above them would have claimed a reporting
+line the chart does not show.
+
+**The Why-choose-us card is glass, not a white box.** It was opaque white and
+it covered four of the six people in the photograph behind it. It is now a
+diagonal tint from `.82` to `.70` and back to `.78` over `blur(12px)
+saturate(1.7) brightness(1.02)` — the saturation lift is what keeps the green
+and navy uniforms behind it reading as colour rather than as grey shapes. A lit
+top edge and left edge, two inset rules, a specular sweep across the top-left
+corner on `::after`, and an feTurbulence grain at 4.5% on `::before`, because a
+frosted sheet is not perfectly smooth. Browsers without `backdrop-filter` get a
+denser tint and no blur. The copy steps down one notch to match: the label to
+`#3b4a16`, the paragraphs to `#3b433d`. Measured on the rendered page with the
+card's own text hidden, the darkest place it ever sits on is a 189-grey — 5.5:1
+for the paragraphs, 5.2:1 for the label, 9.0:1 for the headings, at 1440, 1024,
+768 and 390. The scrim behind it was re-cut at the
+same time: light across the left where the card sits, ramping at 58% to keep
+the four white figures above 4.5:1 (measured 4.74–4.90 for the small labels).
+
+**Nobody is cropped through the head any more.** `.pbanner img` takes a
+`--focus` set per page, because a 1920×340 strip shows barely a third of a 3:2
+photograph and the default centre crop ran straight through the back row on the
+group shots. Support and Projects also get `.pbanner--people`, a taller frame.
+About's banner is the HQ photograph now: its workforce shot is 300-odd people
+filling the frame top to bottom and no strip can hold it, so it runs whole,
+uncropped, in the page instead — as does the portrait company photograph, which
+`.ppl-band` used to force into 16:7 and cut off at the knees. The photo
+galleries moved from 4:3 to 3:2, which is what every photograph in them
+actually is; 4:3 was trimming 11% off each side, and on the team photographs
+that is a person.
+
+**R&D is not a list of lists any more.** It opens on the R&D facility
+photograph beside the introduction, What We Do is three numbered cards, and the
+nine certification authorities are one grid — they used to be a bullet list and
+a counter row carrying the same nine numbers twice. The published certificates
+link through to the Media page.
+
+**The footer carries the live site's devices.** Four columns rather than three,
+green headings with a rule under them, a chevron on every link, an icon against
+every line of the office details, and both published email addresses. The
+routes are split into Links and Our Products, which is what fills the row.
 
 ## Structure
 
@@ -157,30 +264,34 @@ is no longer useful. `npm run check` does not test it.
 
 ### The 2026 system in one paragraph
 
-Dark charcoal-green (`--carbon`) dominates, warm white (`--paper`) carries the
-product, steel grey carries structure, and LINKK green is an accent — never a
-background. Type is Barlow Condensed (display) + Barlow (UI) + IBM Plex Mono
-(technical labels). Geometry is square: 2px radii, hairline rules, no cards.
-Sections are numbered `01`–`10` by the mono eyebrow.
+White is the page and one light grey alternates the bands; there are no dark
+surfaces and no gradient fills anywhere. LINKK green is an accent and never a
+background. Type is Poppins (display) + Roboto (UI and body) + IBM Plex Mono
+(technical labels). Geometry is understated rather than square: 6/10/14px radii,
+hairline rules, almost no cards, and product renders with no container at all.
 
 ### Desktop scale
 
 The system is tuned for 1440x900, 1536x864 and 1920x1080. Ordinary sections size
-from their content and land at roughly one viewport; only the hero is
-height-constrained.
+from their content; only the hero is height-constrained.
 
 | Token / rule | Value | At 1440 / 1920 |
 | --- | --- | --- |
 | `--wrap` | `1280px` | fixed |
-| `.sec` padding-block | `clamp(56px,5.6vw,96px)` | 81px / 96px |
-| `.hero` | `min-height:clamp(560px,84svh,780px)` | 756px / 780px |
+| `--flow` | `clamp(22px,2.2vw,32px)` | 32px / 32px |
+| `.sec` padding-block | `clamp(48px,4.6vw,78px)` | 66px / 78px |
+| `.hero` | `min-height:clamp(440px,62svh,600px)` | 558px / 600px |
 
-Type is a separate system — see **The type scale** below.
+Both the section rhythm and the hero came down in this pass. The old 81px
+padding was set for a page with two dark bands breaking it up; on an all-light
+page the same padding reads as the sections having drifted apart. The hero was
+`84svh` — 756px on a 900px laptop, so the Introduction never appeared without a
+scroll. 62svh puts the top of the next section just at the fold.
 
 Two rules to keep:
 
 - **No ordinary section takes a viewport height.** Only `.hero` has a
-  `min-height`, and it is capped at 780px so it does not become a slide on a
+  `min-height`, and it is capped at 600px so it does not become a slide on a
   tall monitor.
 - **`.mg-stage` plates are absolutely positioned, not grid items.** As grid
   items their square intrinsic ratio fed back into row sizing and silently
@@ -197,34 +308,45 @@ below 11px. There was no scale: each component invented a size, so the nav was
 Fourteen tokens now carry all of it. **No rule sets a raw px font size** — the
 one exception is the `×` glyph on the drawer's close button, which is an icon.
 
-Poppins sets far wider than Barlow Condensed, so when the display face changed
-the five heading steps were cut by roughly a fifth: the old 66px hero wrapped
-where the new 50px does not. The steps stay 1.20-1.44x apart at 1440.
+The heading steps have been cut twice. First when the display face moved from
+Barlow Condensed to Poppins, because a geometric sans sets far wider than a
+condensed one: the old 66px hero wrapped where a 50px one does not. Then again
+in the visual reset, by a further ~12%, because the page read as stretched — a
+50px section heading over 16px body is a magazine spread, not a manufacturer's
+website. The steps stay 1.19-1.29x apart at 1440, which is enough separation
+once the headings are this close to the body.
 
 | Token | Clamp | 390 | 768 | 1440 | 1920 |
 | --- | --- | --- | --- | --- | --- |
-| `--t-display` | `clamp(2.05rem,3.5vw,3.4rem)` | 32.8 | 32.8 | 50.4 | 54.4 |
-| `--t-h1` | `clamp(1.75rem,2.7vw,2.7rem)` | 28 | 28 | 38.9 | 43.2 |
-| `--t-h2` | `clamp(1.55rem,2.15vw,2.25rem)` | 24.8 | 24.8 | 31 | 36 |
-| `--t-h3` | `clamp(1.2rem,1.5vw,1.6rem)` | 19.2 | 19.2 | 21.6 | 25.6 |
-| `--t-h4` | `clamp(1.1rem,1.25vw,1.35rem)` | 17.6 | 17.6 | 18 | 21.6 |
+| `--t-display` | `clamp(1.95rem,3.1vw,2.95rem)` | 31.2 | 31.2 | 44.6 | 47.2 |
+| `--t-h1` | `clamp(1.65rem,2.4vw,2.35rem)` | 26.4 | 26.4 | 34.6 | 37.6 |
+| `--t-h2` | `clamp(1.45rem,1.95vw,2rem)` | 23.2 | 23.2 | 28.1 | 32 |
+| `--t-h3` | `clamp(1.1875rem,1.4vw,1.5rem)` | 19 | 19 | 20.2 | 24 |
+| `--t-h4` | `clamp(1.05rem,1.18vw,1.15rem)` | 16.8 | 16.8 | 17 | 18.4 |
 | `--t-h5` | `clamp(1.02rem,.85vw,1.15rem)` | 16.3 | 16.3 | 17.2 | 18.4 |
 | `--t-body-lg` | `clamp(1.0625rem,1.25vw,1.1875rem)` | 17 | 17 | 18 | 19 |
 | `--t-body` | `clamp(1rem,.35vw + .72rem,1.125rem)` | 16 | 16 | 16.6 | 18 |
 | `--t-body-sm` | `clamp(.9375rem,.25vw + .78rem,1rem)` | 15 | 15 | 16 | 16 |
-| `--t-nav` | `clamp(.9375rem,.08vw + .91rem,1rem)` | — | — | 15.7 | 16 |
-| `--t-button` | `clamp(.875rem,.1vw + .84rem,.9375rem)` | 14 | 14 | 14.9 | 15 |
+| `--t-nav` | `clamp(.875rem,.06vw + .85rem,.9375rem)` | 14 | 14 | 14.5 | 15 |
+| `--t-button` | `clamp(.8125rem,.09vw + .79rem,.875rem)` | 13 | 13 | 13.6 | 14 |
 | `--t-label` | `clamp(.75rem,.12vw + .705rem,.8125rem)` | 12 | 12 | 13 | 13 |
 | `--t-technical` | `clamp(.71875rem,.1vw + .68rem,.78125rem)` | 11.5 | 11.5 | 12.3 | 12.5 |
 | `--t-micro` | `clamp(.6875rem,.08vw + .665rem,.75rem)` | 11 | 11 | 11.8 | 12 |
 
-Barlow Condensed carries display through h4, Barlow carries h5 and everything
-you read, IBM Plex Mono carries label/technical/micro.
+Poppins carries display through h4, Roboto carries h5 and everything you read,
+IBM Plex Mono carries label/technical/micro.
 
-Leading and tracking are tokens too: `--lh-display` 1.0, `--lh-head` 1.06,
-`--lh-head-sm` 1.16, `--lh-head-xs` 1.35, `--lh-body` 1.65, `--lh-body-sm` 1.6,
-`--lh-dense` 1.45, `--lh-label` 1.4; `--ls-display` -.018em, `--ls-head`
--.012em, `--ls-label` .14em, `--ls-tech` .12em, `--ls-btn` .04em.
+Leading and tracking are tokens too: `--lh-display` 1.12, `--lh-head` 1.2,
+`--lh-head-sm` 1.3, `--lh-head-xs` 1.45, `--lh-body` 1.65, `--lh-body-sm` 1.6,
+`--lh-dense` 1.45, `--lh-label` 1.4; `--ls-display` -.022em, `--ls-head`
+-.01em, `--ls-label` .14em, `--ls-tech` .12em, `--ls-btn` .04em.
+
+**Two of the clamps have a boundary rather than a preference behind them.**
+`--t-h3`'s floor is 19px exactly, because below 19px a heading falls into the
+band that needs body leading (>=1.42) and h3 carries `--lh-head` at 1.2.
+`--t-h4`'s ceiling is 18.4px for the mirror-image reason: it carries 1.45
+leading, which is too loose once a heading passes 19px. Move either and the
+type audit fails at 390 or 1920.
 
 Four rules to keep:
 
@@ -250,98 +372,75 @@ held at 60-68`ch`, which lands at roughly 68-72 actual characters in Barlow —
 
 ### Colour system
 
-`linkk-2026.css` carries the LINKK house atmosphere from `linkk.css` — bright,
-white-led, with a pale green-grey tint for alternate bands — on the modern
-industrial layout. Dark is used **twice** on the page and nowhere else.
+The palette is the live site's: `linkk.com.my` is built on `#ffffff` and
+`#f9f9f9` with green used only as an accent, and this is that palette. **There
+are no dark surfaces anywhere on the site** — not the hero, not a content band,
+not the footer — and no gradient fills. Every band is a flat colour.
 
 | Token | Value | Used for |
 | --- | --- | --- |
-| `--section-light` | `#ffffff` | Statistics, Systems we build, Legrand |
-| `--page-bg` | `#f7f8f5` | Hero base, Industries, Global projects, `<body>` |
-| `--section-soft` | `#f1f4ee` | Top bar, the MEGADUCT breakdown |
-| `--section-muted` | `#e8eee5` | Testing — the deepest light tone |
-| `--surface` | `#ffffff` | Plates, panels, the header |
-| `--linkk-green` | `#97b63b` | Fills, rules, accents on dark (6.6:1 on `--dark-section`) |
-| `--linkk-green-bright` | `#b3cd3d` | The logo mark exactly — hovers, accents on dark |
-| `--linkk-green-dark` | `#556b1f` | Green **text** on a light surface (5.07:1 on `--section-muted`) |
-
-The greens are sampled, not chosen: `#b3cd3d` is the logo mark in
-`logo-LINKK.png` and `#839e34` is the live site's UI green. Both are
-yellow-greens; the `#6aae2c` this file used to carry was noticeably cooler and
-did not match the lockup it sat beside.
-
-`.why` carries a photograph rather than a flat tone, so it is **not**
-`.sec--dark` and the dark-section overrides do not reach it. Anything placed
-there needs its own on-dark colour — the section's eyebrow numeral was missed
-the first time and audited at 2.71:1.
-| `--text-primary` | `#1d241f` | Headings and key figures (13.4:1 worst case) |
-| `--text-secondary` | `#4d564f` | Body copy (6.5:1 worst case) |
-| `--text-muted` | `#5f6a61` | Mono labels and numerals (4.78:1 worst case) |
-| `--border` | `#dde4da` | Hairlines |
-| `--border-soft` | `#e9eee7` | Section seams and inner dividers |
-| `--dark-section` | `#202720` | 06 Engineering journey |
-| `--dark-section-2` | `#1b211c` | 10 Closing CTA |
-| `--dark-deep` | `#171c17` | Footer |
-| `--dark-rule` | `#333c33` | Hairlines on dark |
-| `--on-dark` / `--on-dark-body` / `--on-dark-muted` | `#ffffff` / `#d6ddd6` / `#a3ada4` | Text on the two dark bands |
-| `--linkk-green` | `#6aae2c` | Button fills, dark-section accents |
-| `--linkk-green-bright` | `#7cc636` | Hover |
-| `--linkk-green-dark` | `#44741a` | Green that is **text or an icon on light** |
-| `--linkk-green-soft` | `#eaf4df` | Row hover wash, spec chips |
+| `--page-bg` / `--section-light` / `--surface` | `#ffffff` | The page, white bands, panels, inputs |
+| `--section-soft` | `#f5f6f2` | The alternating light grey band |
+| `--section-muted` | `#eef1eb` | The closing CTA and the map surround — one deeper step |
+| `--text-primary` | `#1b1e1c` | Headings and key figures (14.7:1 worst case) |
+| `--text-secondary` | `#545d56` | Body copy (5.99:1 worst case) |
+| `--text-muted` | `#646d66` | Mono labels and numerals (4.70:1 worst case) |
+| `--border` | `#e1e5df` | Hairlines |
+| `--border-soft` | `#ecefe9` | Section seams and inner dividers |
+| `--linkk-green` | `#97b63b` | Button fills, the active nav rule, 2px ticks |
+| `--linkk-green-bright` | `#b3cd3d` | The logo mark exactly — hover |
+| `--linkk-green-dark` | `#556b1f` | Green **text** on a light surface (5.25:1 on `--section-muted`) |
+| `--linkk-green-soft` | `#eff4de` | Selection, pressed filter chip, form notice |
 | `--legrand` | `#e30613` | Sampled from the supplied logo artwork |
 
-The band sequence, top to bottom. Every light-to-light step is under 1.2:1:
+The greens are sampled, not chosen: `#b3cd3d` is the logo mark in
+`logo-LINKK.png` and `#839e34` is the live site's UI green.
 
-| Band | Colour |
+**Green is an accent and nothing else** — buttons, the active nav underline,
+small labels, a key numeral, a 2px tick under a heading. It is never a section
+background, never a gradient and never a large fill.
+
+Bands alternate white → grey down every page and the closing CTA takes the one
+deeper grey, so a page ends on a step rather than on a slab. Two same-tone bands
+in a row get a hairline; adjacent siblings only, so a band that follows a
+different tone is not given a redundant rule.
+
+| Page | Band sequence |
 | --- | --- |
-| top bar | `--section-soft` |
-| header | `rgba(255,255,255,.88)` |
-| 01 hero | gradient `#fff` → `--page-bg` → `--section-soft` |
-| 02 statistics | `--section-light` |
-| 03 industries | `--page-bg` |
-| 04 one system | `--section-soft` |
-| 05 systems we build | `--section-light`, ramping to `--section-muted` |
-| 06 journey | **dark** `--dark-section` |
-| 07 testing | ramp from `#e3eade` into `--section-muted` |
-| 08 projects | `--page-bg` |
-| 09 legrand | `--section-light`, ramping to `--section-muted` |
-| 10 closing CTA | **dark** `--dark-section-2` |
-| footer | `--dark-deep` |
+| Home | hero photograph → Introduction `#fff` → video grey → Why choose us (photograph) |
+| About | banner → intro `#fff` → vision/mission grey → values `#fff` → people grey → facilities `#fff` → quality grey → chart `#fff` |
+| Our Products | banner → sandwich `#fff` → NSPB grey |
+| Sandwich | banner → about `#fff` → advantages grey → catalogue `#fff` |
+| Component page | banner → product `#fff` → related grey |
+| NSPB | banner → product `#fff` → key offer grey |
+| R&D | banner → intro `#fff` → certificates grey → quality control `#fff` |
+| Our Support | banner → statement and the three cards `#fff` |
+| Our Projects | banner → reach `#fff` → the grid grey |
+| Media | banner → films `#fff` → documents grey → channels `#fff` |
+| Contact | banner → enquiry `#fff` → map `#eef1eb` → details `#fff` |
+| Privacy | banner → policy `#fff` |
 
-Five rules to keep:
+The footer is `#ffffff` on every page, with a `--border` top rule. The page
+banners are photographs with a flat `rgba(16,19,22,.58)` scrim — measured, not
+chosen: see **Motion and alignment**.
 
-- **Every band is a clean full-width fill.** A band changes on a full-width
-  horizontal edge, or on a full-width vertical ramp. Nothing paints a
-  background across part of the width. An earlier `.sec--step` device did
-  exactly that — a 58%-wide, ~94px-tall block of the neighbouring tone in one
-  top corner — and it read as a background that had stopped early rather than
-  as a transition. It is retired; the class is kept as a no-op so a stale page
-  cannot bring the rectangle back.
-- **Dark is the exception, not the default.** Two bands only, and never two in
-  a row. A third dark section would put the page back where it was.
-- **`--linkk-green` is fill-only on light surfaces** — it reaches 2.9:1 on
-  white. Green text and icons on light use `--linkk-green-dark`, the only step
-  that clears 4.5:1 on `--section-muted`. On a dark band `--linkk-green` is
-  fine at 5.6:1.
-- **No hard edge into or out of a dark band.** `.sec--to-dark` fades the light
-  section above into `--section-muted`; `.sec--from-dark` fades back out; and
-  `.sec--dark` supplies a 3px `--linkk-green` top rule plus its own vertical
-  gradient. They are declared as `.sec.sec--to-dark` so they outrank a
-  section's own background, which is declared later in the sheet.
-  `--to-dark` paints **only the fade** — the top stop is the destination colour
-  at zero alpha, so it composes onto `--light`, `--soft` or `--surface` alike
-  and every page can approach its dark section the same way. Use the
-  destination colour at `0` alpha, never the keyword `transparent`, which
-  interpolates through transparent black and greys the middle of the ramp.
-- **A band class owns the background; a layout class must not.** `.gp` used to
-  set one too, and it silently outranked `.sec--surface` on Our Projects,
-  producing two adjacent bands of the same tone.
-- **No text carries `opacity` below 1.** Anything that needs to look secondary
-  uses `--text-muted`.
+#### What was removed, and why
 
-Every rendered text node on the home page passes WCAG AA at its own size.
-`scripts/` has no checker for this; it was verified in-browser against
-computed styles.
+The previous sheet was a dark-and-gradient system. Each of these was defensible
+on its own; together they are what made an ordinary manufacturer's site read as
+a generated concept rather than a designed one.
+
+| Removed | What it was |
+| --- | --- |
+| `.sec--dark` | Two full near-black bands — the Home journey and every page's closing CTA — each with a 3px green top rule, a three-stop vertical gradient and an inverted engineering grid over the top |
+| `.sec--to-dark` / `.sec--from-dark` | Vertical ramps on the light bands either side of a dark one. With flat bands they have nothing to soften, and a partially-filled ramp on an otherwise flat page was itself the "missing background block" it looked like |
+| `.why` overlay | A full-bleed factory photograph behind a near-black overlay held at .86–.94 alpha so white body copy could clear 4.5:1 on it. The photograph is now a photograph, in the layout, at its own brightness |
+| Hero washes | A green radial across the top right, a three-stop diagonal gradient, a masked 78px engineering grid and a white radial "light pool" behind the product — four decorative layers under one headline and one photograph |
+| Product stage washes | A soft dark radial behind every render on every page. They existed because the renders were white-background JPEGs multiplied into a tinted section; they carry real alpha now |
+| Guide lines and ticks | Floating vertical datum lines and "measurement ticks" beside the renders — drawing annotations on pages that are not drawings |
+| `.hero-scroll` | A SCROLL cue with a green line sweeping across it forever in the corner of the page |
+| The dark footer | A near-black slab the closing CTA used to run into while the CTA was dark too. White now, separated from the CTA's grey by a rule. The `--dark-*` and `--on-dark-*` tokens were deleted rather than left declared and unused, so nothing can quietly start painting on a dark ground again |
+| `.eyebrow .idx` | The running section number (`01`, `02`, …). Not on the live site, and numbering ordinary corporate bands is what made the page read as a systems diagram. Hidden, not deleted — the markup keeps the span |
 
 ### The aspect-ratio trap
 
@@ -366,40 +465,35 @@ A ratio box whose children are all `position:absolute` is safe, because an
 absolutely-positioned child contributes nothing to intrinsic sizing. That is
 why `.mg-stage`, `.pfeat-media` and `.vshell` were never affected.
 
-### Geometry and the blend rule
+### Geometry, and why there is no blend rule any more
 
 The layout is industrial but not boxed: product renders have no container at
-all. Three radii exist — `--r-btn: 5px` (buttons, chips), `--r-sm: 7px` (small
-surfaces), `--r-md: 10px` (large media panels) — and most visuals never touch
-them. Depth comes from a soft wash plus a contact shadow behind each render,
-and the industrial character is carried by linework (datum lines, baselines,
-registration marks, index numerals) rather than by enclosure.
+all. Three radii exist — `--r-btn: 6px` (buttons, chips, inputs), `--r-sm: 10px`
+(thumbnails, menus), `--r-md: 14px` (large media panels, photographs) — and most
+visuals never touch them. They were 5/7/10px, which left every surface reading as
+a hard rectangle; nothing here is a pill and nothing is over 14px.
 
-**The blend rule. Every product photograph in `assets/` is a JPEG shot on
-white with no alpha channel.** They sit directly on tinted sections only
-because `mix-blend-mode: multiply` makes their white margin take the section
-colour. That is the whole reason the cards could be deleted, and it is fragile
-in one specific way:
+**The blend rule is retired.** Every product photograph in `assets/` was
+originally a JPEG shot on white with no alpha channel, and the whole of the
+previous system was built around `mix-blend-mode: multiply` making that white
+margin take the section colour — which is what let the cards be deleted. It was
+fragile in one specific way: anything between the image and the section
+background that formed an isolated group killed the blend and the white
+rectangle came straight back. `opacity` below 1, `isolation: isolate`, `filter`,
+`backdrop-filter`, `will-change`, `contain: paint`, or `position` with a
+non-`auto` `z-index` all did it, and four separate regressions came from that
+list.
 
-> Anything between the image and the section background that forms an isolated
-> group kills the blend, and the white rectangle comes straight back.
+The renders in `assets/img/products/cut/` carry **real alpha** now, so none of
+that applies: an image with a transparent background sits on any surface, inside
+any stacking context, with any opacity, and stays correct. The constraint is
+gone from the codebase and the rules that worked around it went with it — the
+faint dark "lift" washes behind every render existed only because a near-white
+wash would multiply back to near-white, and with real alpha there is nothing to
+lift.
 
-In practice that means **none of the following may appear on the image or any
-ancestor up to the section**: `opacity` below 1, `isolation: isolate`,
-`filter`, `backdrop-filter`, `will-change: opacity|filter`, `contain: paint`,
-or `position` + a non-`auto` `z-index`. Four separate regressions during this
-pass came from exactly that list:
-
-| Cause | Symptom |
-| --- | --- |
-| `z-index: 2` on `.hero .wrap` | Hero render showed a white rectangle. Fixed by moving the green wash into the `background` shorthand so `.wrap` needs no `z-index` |
-| `z-index: 1` on `.mg-stage` | Same, in the MEGADUCT section |
-| `will-change: opacity` on the plates | Same — it makes the element its own isolated group |
-| `[data-reveal]` fading opacity 0→1 | White rectangle *during the transition only*. `[data-reveal="shift"]` and the hero panel's `data-enter` move without fading for this reason |
-
-A white or near-white wash behind a render causes the same visible result by a
-different route: multiply against near-white returns near-white. The washes are
-therefore faint **dark** lifts, not light ones.
+If a white-background JPEG is ever added back to a tinted band, cut it instead of
+blending it.
 
 ### Logo
 
@@ -580,6 +674,32 @@ Skipped when `navigator.connection` reports Save-Data or a 2G-class connection.
 
 ## Motion and alignment
 
+**Photographic banners carry their own contrast.** Twelve banners range from a
+near-black product shot to a white sky, so the title cannot rely on the
+photograph. The scrim was set by measuring: at `rgba(16,19,22,.46)` the
+brightest banner left white type on a 145-grey — 3.1:1, which clears the
+large-text threshold and nothing else, and the breadcrumb above the title is
+small text. At `.58` the worst banner on the site measures **4.56:1** and the
+best 5.48:1. Same method for the Why-choose-us figures over the workforce
+photograph: worst measured background 4.92:1.
+
+The probe that did this (`scratchpad/px.mjs`) hides the text, screenshots the
+element's box and scans every second pixel for the brightest one. Two things
+about it are worth keeping:
+
+- `Page.captureScreenshot` with `captureBeyondViewport` **drops negative
+  `z-index` pseudo-elements**. The scrim vanished and every sample came back
+  pure white. Scroll the element into view and take an ordinary viewport
+  screenshot instead.
+- Chrome returns the screenshot as RGB (colour type 2), not RGBA. A decoder
+  that assumes 4 bytes per pixel reads pure red, green and blue and looks
+  plausible enough to believe.
+
+**`--linkk-green-dark` is for green text on a LIGHT surface.** The counters'
+"+" suffix kept it when the band became a photograph and measured 2.7:1 — the
+figures read as "150" with a smudge after them. On a dark ground the step is
+`--linkk-green-bright`.
+
 **`transform` replaces `translate`, it does not compose with it.** Both play
 buttons were centred with the individual `translate: -50% -50%` property and
 then scaled on hover with `transform: translate(-50%,-50%) scale(...)`. The two
@@ -618,6 +738,53 @@ they read as mistakes rather than as composition: the alternating indent on
 every second workflow stage (`.wf-step:nth-child(even) .wf-body`), which put
 eight headings on two different left edges, and the downward nudge on the
 second family row's copy.
+
+**`order: -1` on an element that is already first does nothing.** Two
+alternating layouts had never alternated, at any width, since they were
+written:
+
+| Rule | What it was meant to do | What it did |
+| --- | --- | --- |
+| `.fam-row:nth-child(even) .fam-media{order:-1}` | Mirror every second product-family row on Home | `.fam-media` is already the first child in the markup, so this asked it to move ahead of something it was already ahead of. Both rows rendered media-left |
+| `.pfeat--right .pfeat-stage{order:-1}` | Put the render on the right in a `--right` feature block | Same defect. Every `--right` block on Our Products, R&D and Our Support rendered identically to a `--left` one |
+
+Both are `order: 2` now, which pushes the media to the end of the row. If you
+add a new mirrored layout, check the DOM order first — the modifier has to move
+the element it is *not* already next to.
+
+**The rail steps no longer dim.** A pending stage used to sit at `opacity: .42`,
+which was legible against a near-black band and is not against a light one: at
+.42 the body copy is 1.9:1 on the grey band, and the opacity that would clear
+4.5:1 is .90 — a dim you cannot see. The step's state is carried entirely by its
+dot and by the line filling between dots, so stages you have not reached yet are
+simply readable.
+
+**Hover states are states, not animations.** `.ind-row` and `.findex-row` each
+ran three mechanics at once: the padding grew by 9px so the whole list below
+shifted down, a pale green panel wiped in from the left over half a second, and
+the numeral, the name and the reference list each slid right by a different
+distance. Both now tint the band, show a green rule at the left edge and take
+the green on the name — no reflow, no wipe, no sliding text. The product renders
+that used to lift and scale under the cursor (`.hero-panel`, `.mg-plate`,
+`.fam-media`) no longer move at all; they are photographs, not controls.
+
+**Duplicated figures.** Home, About and Our Projects each carried a three-item
+fact rail in the hero *and* a five-item stats band immediately beneath it,
+repeating two or three of the same numbers at two different sizes within one
+screen. The rails are gone; the band is the larger and more complete of the two.
+
+**Other alignment fixes in the visual reset.** The About timeline's node sat on
+the last digit of each year (`1992`, `2013`) because the year is right-aligned to
+the rail and the 9px node is centred *on* it — the year column now has 16px of
+right padding. `.mg-cap` was 9% narrower than `.mg-stage`, so the rule under the
+MEGADUCT render stopped short of the image above it. `.mg-list` was pulled up to
+64px left and 54px down so the section would "read as layered", which in practice
+left a gap down the right edge and started the list where nothing else on the
+page starts. The `.phero-rail` was a wrapping flex row, so three items on Our
+Support and R&D did not fit one line and the third dropped to a row of its own;
+it is an auto-fit grid now. Contact's hero was `align-items: center` with a
+details list taller than the copy beside it, so the list started *above* the
+breadcrumb — `.phero-grid--top` aligns that one page to the top.
 
 ## Image protection
 
